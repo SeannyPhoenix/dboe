@@ -2,3 +2,5 @@ github.com/google/uuid v1.6.0 h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=
 github.com/google/uuid v1.6.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/seannyphoenix/binarytime v0.0.0-20260113062523-8838aec7efde h1:Yq+/9lKzir1QY/V32WfhwRaZ33ask+B5UhGVOsdO/+A=
 github.com/seannyphoenix/binarytime v0.0.0-20260113062523-8838aec7efde/go.mod h1:2ICZK6Ge8iUm4qmmAv3xPSWIMqRq+twtX+pr+UTsIq0=
+github.com/seannyphoenix/binarytime v0.0.0-20260602204728-64aaaf16c8fe h1:xAq+kA6doIKb+zOzy+N2dV5Fslg9E5y7eULB4P2yCV8=
+github.com/seannyphoenix/binarytime v0.0.0-20260602204728-64aaaf16c8fe/go.mod h1:2ICZK6Ge8iUm4qmmAv3xPSWIMqRq+twtX+pr+UTsIq0=

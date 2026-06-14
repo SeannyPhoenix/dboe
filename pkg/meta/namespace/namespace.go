@@ -5,6 +5,13 @@ import (
 	"strings"
 )
 
+type (
+	Distribution string
+	Domain       string
+	Kind         string
+	Name         string
+)
+
 type Prefix struct {
 	Distribution string
 	Domain       string
@@ -44,22 +51,6 @@ func (ns Namespace) String() string {
 		return "<Invalid Namespace>"
 	}
 	return ns.Distribution + ":" + ns.Domain + ":" + ns.Kind + ":" + ns.Name
-}
-
-func (ns Namespace) MarshalText() ([]byte, error) {
-	if !ns.IsValid() {
-		return nil, fmt.Errorf("namespace: cannot marshal invalid namespace")
-	}
-	return []byte(ns.String()), nil
-}
-
-func (ns *Namespace) UnmarshalText(data []byte) error {
-	parsed, err := Parse(string(data))
-	if err != nil {
-		return err
-	}
-	*ns = parsed
-	return nil
 }
 
 func NamespaceFromPrefix(prefix Prefix, name string) Namespace {

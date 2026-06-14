@@ -1,0 +1,32 @@
+{
+  "name": "@seannyphoenix/dboe",
+  "version": "0.1.0",
+  "description": "The Database of Everything, an append-only graph database",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node esbuild.config.mjs",
+    "build": "node esbuild.config.mjs production"
+  },
+  "keywords": [],
+  "author": "Seanny Drakon Phoenix",
+  "license": "ISC",
+  "packageManager": "pnpm@10.32.1",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.19",
+    "esbuild": "^0.25.12",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@seannyphoenix/binarytime": "link:../binarytime",
+    "obsidian": "latest",
+    "uuid": "^13.0.2",
+    "yaml": "^2.9.0",
+    "zod": "^4.4.3"
+  }
+}
