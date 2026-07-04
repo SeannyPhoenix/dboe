@@ -26,7 +26,7 @@ type recordHeader struct {
 // UnmarshalBinary implements encoding.BinaryUnmarshaler
 func (rh *recordHeader) UnmarshalBinary(data []byte) error {
 	if len(data) != recordHeaderSize {
-		return ErrorInvalidHeader
+		return &InvalidRecordHeaderLengthError{len: len(data)}
 	}
 	rh.t = record.Type(data[0])
 

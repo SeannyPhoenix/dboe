@@ -71,13 +71,13 @@ func writeRecord(w io.Writer, r record.Record) error {
 func writeValue(w io.Writer, r record.Record) error {
 	v, ok := r.Value()
 	if !ok {
-		return fmt.Errorf("record is not a value record")
+		return &RecordTypeMismatchError{actual: r.Type(), expected: record.TypeValue}
 	}
 
 	data := v.Data()
 	size := len(data)
 	if size > math.MaxInt32 {
-		return fmt.Errorf("value size %d exceeds maximum allowed size of %d bytes", size, math.MaxInt32)
+		return &InvalidValueSizeError{actualSize: size, maxSize: math.MaxInt32}
 	}
 
 	var sb [4]byte
@@ -96,7 +96,7 @@ func writeValue(w io.Writer, r record.Record) error {
 func writeLink(w io.Writer, r record.Record) error {
 	l, ok := r.Link()
 	if !ok {
-		return fmt.Errorf("record is not a link record")
+		return &RecordTypeMismatchError{actual: r.Type(), expected: record.TypeLink}
 	}
 
 	ab, err := l.A().MarshalBinary()

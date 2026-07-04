@@ -72,7 +72,7 @@ The final 16 bytes are the 128-bit timestamp in [Binary Time](https://github.com
 
 ### Entity Record
 
-An Entity Record has no additional fields, so the length of an binary-encoded Entity is 33 bytes.
+An Entity Record has no additional fields, so the length of a binary-encoded Entity is 33 bytes.
 
 #### Entity Byte Layout
 
@@ -91,7 +91,7 @@ A Value Record also has a data field. This field has its own header, the length 
 ```
  + Header (33 bytes)
  |
- |  | + Size (4 bytes)
+ |  + Size (4 bytes)
  |  |
  |  |     + Content (N bytes)
  |  |     |

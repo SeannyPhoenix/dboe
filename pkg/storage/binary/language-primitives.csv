@@ -1,0 +1,23 @@
+Java,Go,JavaScript
+,,null
+,,undefined
+byte,"int8",
+,uint8 (byte),
+short,int16,
+,uint16,
+int,int32,
+,uint32 (rune),
+long,int64,
+,uint64,
+,uintptr,
+,int,
+,uint,
+float,float32,
+double,float64,number
+,complex64,
+,complex128,
+,,bigint
+boolean,bool,boolean
+char,,
+,string,string
+,,symbol

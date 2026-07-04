@@ -38,7 +38,7 @@ func parseVersion(b []byte) (version, error) {
 	}
 	v, ok := versions[uid]
 	if !ok {
-		return version{}, fmt.Errorf("unknown version: %x", b)
+		return version{}, &UnknownVersionError{uuid: uid}
 	}
 	return v, nil
 }
