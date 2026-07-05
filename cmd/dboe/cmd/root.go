@@ -5,8 +5,10 @@ package cmd
 
 import (
 	"context"
+	"fmt"
 	"os"
 
+	"github.com/seannyphoenix/dboe/internal/config"
 	"github.com/spf13/cobra"
 )
 
@@ -15,6 +17,13 @@ var rootCmd = &cobra.Command{
 	Short:   "DBOE Database Manager",
 	Long:    `Manage a DBOE database. Read, add, update, and delete data with the CLI.`,
 	Version: "0.1.0",
+	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		_, err := config.Ensure()
+		if err != nil {
+			return fmt.Errorf("ensure config: %w", err)
+		}
+		return nil
+	},
 }
 
 func Execute() {
@@ -27,7 +36,8 @@ func Execute() {
 
 func init() {
 	rootCmd.AddCommand(addCmd)
-	rootCmd.AddCommand(updateCmd)
 	rootCmd.AddCommand(deleteCmd)
 	rootCmd.AddCommand(getCmd)
+	rootCmd.AddCommand(printCmd)
+	rootCmd.AddCommand(updateCmd)
 }

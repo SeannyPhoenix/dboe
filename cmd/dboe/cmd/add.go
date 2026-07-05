@@ -4,10 +4,10 @@ Copyright © 2026 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/google/uuid"
+	"github.com/seannyphoenix/dboe/internal/config"
 	"github.com/seannyphoenix/dboe/pkg/record"
 	"github.com/spf13/cobra"
 )
@@ -41,12 +41,17 @@ var addEntityCmd = &cobra.Command{
 	Long:  `Add an entity record to the database.`,
 	Args:  cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		r := record.NewEntity()
-		b, err := json.Marshal(r)
+		cfg, err := config.Get()
 		if err != nil {
-			return fmt.Errorf("marshal entity: %w", err)
+			return fmt.Errorf("get config: %w", err)
 		}
-		fmt.Println(string(b))
+
+		r := record.NewEntity()
+		err = cfg.AddRecord(r)
+		if err != nil {
+			return fmt.Errorf("add record: %w", err)
+		}
+
 		return nil
 	},
 }
@@ -57,12 +62,17 @@ var addValueCmd = &cobra.Command{
 	Long:  `Add a value record to the database.`,
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		r := record.NewValue([]byte(args[0]))
-		b, err := json.Marshal(r)
+		cfg, err := config.Get()
 		if err != nil {
-			return fmt.Errorf("marshal value: %w", err)
+			return fmt.Errorf("get config: %w", err)
 		}
-		fmt.Println(string(b))
+
+		r := record.NewValue([]byte(args[0]))
+		err = cfg.AddRecord(r)
+		if err != nil {
+			return fmt.Errorf("add record: %w", err)
+		}
+
 		return nil
 	},
 }
@@ -73,16 +83,21 @@ var addLinkCmd = &cobra.Command{
 	Long:  `Add a link record to the database.`,
 	Args:  cobra.ExactArgs(2),
 	RunE: func(cmd *cobra.Command, args []string) error {
+		cfg, err := config.Get()
+		if err != nil {
+			return fmt.Errorf("get config: %w", err)
+		}
+
 		a, b, err := parseLinkArgs(args)
 		if err != nil {
 			return err
 		}
 		r := record.NewLink(a, b)
-		j, err := json.Marshal(r)
+
+		err = cfg.AddRecord(r)
 		if err != nil {
-			return fmt.Errorf("marshal link: %w", err)
+			return fmt.Errorf("add record: %w", err)
 		}
-		fmt.Println(string(j))
 		return nil
 	},
 }
