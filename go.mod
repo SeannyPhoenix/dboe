@@ -5,7 +5,7 @@ go 1.26.1
 require github.com/google/uuid v1.6.0
 
 require (
-	github.com/seannyphoenix/binarytime v0.0.0-20260627204610-6ed1178cc991
+	github.com/seannyphoenix/binarytime v0.0.0-20260706230422-a8c135009c35
 	github.com/spf13/cobra v1.10.2
 	github.com/stretchr/testify v1.11.1
 )

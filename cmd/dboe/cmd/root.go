@@ -36,8 +36,8 @@ func Execute() {
 
 func init() {
 	rootCmd.AddCommand(addCmd)
-	rootCmd.AddCommand(deleteCmd)
 	rootCmd.AddCommand(getCmd)
-	rootCmd.AddCommand(printCmd)
 	rootCmd.AddCommand(updateCmd)
+	rootCmd.AddCommand(deleteCmd)
+	rootCmd.AddCommand(printCmd)
 }

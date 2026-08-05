@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
+	"github.com/seannyphoenix/dboe/internal/config"
 	"github.com/spf13/cobra"
 )
 
@@ -17,7 +18,27 @@ var getCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		fmt.Printf("Getting record with ID %s\n", id)
+
+		cfg, err := config.Get()
+		if err != nil {
+			return fmt.Errorf("get config: %w", err)
+		}
+
+		db, err := cfg.LoadDatabase()
+		if err != nil {
+			return fmt.Errorf("load database: %w", err)
+		}
+
+		record, exists := db.GetRecordByID(id)
+		if !exists {
+			return fmt.Errorf("record with ID %s not found", id)
+		}
+
+		err = cfg.Print(record)
+		if err != nil {
+			return fmt.Errorf("print record: %w", err)
+		}
+
 		return nil
 	},
 }

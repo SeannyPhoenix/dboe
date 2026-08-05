@@ -4,6 +4,8 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
+	"github.com/seannyphoenix/dboe/internal/config"
+	"github.com/seannyphoenix/dboe/pkg/record"
 	"github.com/spf13/cobra"
 )
 
@@ -17,7 +19,37 @@ var deleteCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		fmt.Printf("Deleting record with ID %s\n", id)
+
+		cfg, err := config.Get()
+		if err != nil {
+			return fmt.Errorf("get config: %w", err)
+		}
+
+		db, err := cfg.LoadDatabase()
+		if err != nil {
+			return fmt.Errorf("load database: %w", err)
+		}
+
+		rec, exists := db.GetRecordByID(id)
+		if !exists {
+			return fmt.Errorf("record with ID %s not found", id)
+		}
+
+		deleted, err := record.DeleteRecord(rec)
+		if err != nil {
+			return fmt.Errorf("create delete record: %w", err)
+		}
+
+		err = cfg.AddRecord(deleted)
+		if err != nil {
+			return fmt.Errorf("add delete record: %w", err)
+		}
+
+		err = cfg.Print(deleted)
+		if err != nil {
+			return fmt.Errorf("print record: %w", err)
+		}
+
 		return nil
 	},
 }

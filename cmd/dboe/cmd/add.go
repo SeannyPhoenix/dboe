@@ -4,6 +4,7 @@ Copyright © 2026 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/google/uuid"
@@ -46,10 +47,15 @@ var addEntityCmd = &cobra.Command{
 			return fmt.Errorf("get config: %w", err)
 		}
 
-		r := record.NewEntity()
-		err = cfg.AddRecord(r)
+		newRecord := record.NewEntity()
+		err = cfg.AddRecord(newRecord)
 		if err != nil {
 			return fmt.Errorf("add record: %w", err)
+		}
+
+		err = cfg.Print(newRecord)
+		if err != nil {
+			return fmt.Errorf("print record: %w", err)
 		}
 
 		return nil
@@ -73,6 +79,12 @@ var addValueCmd = &cobra.Command{
 			return fmt.Errorf("add record: %w", err)
 		}
 
+		b, err := json.MarshalIndent(r, "", "  ")
+		if err != nil {
+			return fmt.Errorf("marshal record: %w", err)
+		}
+
+		fmt.Println(string(b))
 		return nil
 	},
 }
@@ -92,12 +104,19 @@ var addLinkCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		r := record.NewLink(a, b)
 
+		r := record.NewLink(a, b)
 		err = cfg.AddRecord(r)
 		if err != nil {
 			return fmt.Errorf("add record: %w", err)
 		}
+
+		bytes, err := json.MarshalIndent(r, "", "  ")
+		if err != nil {
+			return fmt.Errorf("marshal record: %w", err)
+		}
+
+		fmt.Println(string(bytes))
 		return nil
 	},
 }

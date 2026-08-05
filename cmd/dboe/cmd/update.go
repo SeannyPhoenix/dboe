@@ -4,6 +4,8 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
+	"github.com/seannyphoenix/dboe/internal/config"
+	"github.com/seannyphoenix/dboe/pkg/record"
 	"github.com/spf13/cobra"
 )
 
@@ -18,7 +20,37 @@ var updateCmd = &cobra.Command{
 			return err
 		}
 		newValue := args[1]
-		fmt.Printf("Updating record with ID %s to new value: %s\n", id, newValue)
+
+		cfg, err := config.Get()
+		if err != nil {
+			return fmt.Errorf("get config: %w", err)
+		}
+
+		db, err := cfg.LoadDatabase()
+		if err != nil {
+			return fmt.Errorf("load database: %w", err)
+		}
+
+		existing, exists := db.GetRecordByID(id)
+		if !exists {
+			return fmt.Errorf("record with ID %s does not exist", id)
+		}
+
+		updated, err := record.UpdateValue(existing, []byte(newValue))
+		if err != nil {
+			return fmt.Errorf("update record: %w", err)
+		}
+
+		err = cfg.AddRecord(updated)
+		if err != nil {
+			return fmt.Errorf("add updated record: %w", err)
+		}
+
+		err = cfg.Print(updated)
+		if err != nil {
+			return fmt.Errorf("print record: %w", err)
+		}
+
 		return nil
 	},
 }
