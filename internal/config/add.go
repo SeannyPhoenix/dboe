@@ -10,7 +10,7 @@ import (
 	"github.com/seannyphoenix/dboe/pkg/storage/binary"
 )
 
-func (cfg Config) AddRecord(r record.Record) error {
+func (cfg Config) AddRecord(r record.Record) (retErr error) {
 	for _, file := range cfg.Files {
 		fp := filepath.Join(cfg.Root, file.Name)
 		switch file.Type {
@@ -22,7 +22,13 @@ func (cfg Config) AddRecord(r record.Record) error {
 				if err != nil {
 					return fmt.Errorf("create binary file: %w", err)
 				}
-				defer f.Close()
+				defer func() {
+					err := f.Close()
+					if err != nil {
+						retErr = errors.Join(retErr, fmt.Errorf("close binary file: %w", err))
+					}
+				}()
+
 				err = binary.Write(f, []record.Record{r})
 				if err != nil {
 					return fmt.Errorf("write binary record: %w", err)
@@ -32,7 +38,12 @@ func (cfg Config) AddRecord(r record.Record) error {
 			if err != nil {
 				return fmt.Errorf("open binary file: %w", err)
 			}
-			defer f.Close()
+			defer func() {
+				err := f.Close()
+				if err != nil {
+					retErr = errors.Join(retErr, fmt.Errorf("close binary file: %w", err))
+				}
+			}()
 
 			err = binary.Add(f, r)
 			if err != nil {

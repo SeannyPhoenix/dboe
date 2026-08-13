@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+
+	"github.com/seannyphoenix/dboe/pkg/database"
 )
 
 const EnvConfigDir = "DBOE_CONFIG_DIR"
@@ -19,6 +21,8 @@ type Config struct {
 	Root         string       `json:"root"`
 	Files        []File       `json:"files"`
 	OutputFormat OutputFormat `json:"outputFormat"`
+
+	DB database.DB
 }
 
 func Default() Config {

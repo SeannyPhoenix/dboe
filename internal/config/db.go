@@ -12,7 +12,7 @@ import (
 )
 
 // In internal/config/config.go
-func (cfg Config) LoadDatabase() (db database.DB, retErr error) {
+func (cfg *Config) LoadDatabase() (db database.DB, retErr error) {
 	var rr []record.Record
 	for _, f := range cfg.Files {
 		if f.Type == FileTypeBinary {
@@ -34,6 +34,6 @@ func (cfg Config) LoadDatabase() (db database.DB, retErr error) {
 			break
 		}
 	}
-	db = database.LoadDB(rr)
-	return db, nil
+	cfg.DB = database.LoadDB(rr)
+	return cfg.DB, nil
 }
