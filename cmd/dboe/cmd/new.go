@@ -1,10 +1,6 @@
-/*
-Copyright © 2026 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/google/uuid"
@@ -13,33 +9,28 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var addCmd = &cobra.Command{
-	Use:   "add <type> [args]",
-	Short: "Add a record to the database",
-	Long: `Add a record of the given type to the database.
+var newCmd = &cobra.Command{
+	Use:   "new <type> [args]",
+	Short: "Create and add a new record to the database",
+	Long: `Create and add a new record of the given type to the database.
 	
 	For example: 
-	  dboe add entity
-		dboe add value "42"
-		dboe add link UUIDA UUIDB`,
-	RunE: func(cmd *cobra.Command, args []string) error {
-		if len(args) < 1 {
-			return fmt.Errorf("missing record type")
-		}
-		return fmt.Errorf("unknown record type %s", args[0])
-	},
+	  dboe new entity
+		dboe new value "42"
+		dboe new link UUIDA UUIDB`,
+	Args: cobra.NoArgs,
 }
 
 func init() {
-	addCmd.AddCommand(addEntityCmd)
-	addCmd.AddCommand(addValueCmd)
-	addCmd.AddCommand(addLinkCmd)
+	newCmd.AddCommand(newEntityCmd)
+	newCmd.AddCommand(newValueCmd)
+	newCmd.AddCommand(newLinkCmd)
 }
 
-var addEntityCmd = &cobra.Command{
+var newEntityCmd = &cobra.Command{
 	Use:   "entity",
-	Short: "Add an entity record to the database",
-	Long:  `Add an entity record to the database.`,
+	Short: "Create and add a new entity record to the database",
+	Long:  `Create and add a new entity record to the database.`,
 	Args:  cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		cfg, err := config.Get()
@@ -47,13 +38,13 @@ var addEntityCmd = &cobra.Command{
 			return fmt.Errorf("get config: %w", err)
 		}
 
-		newRecord := record.NewEntity()
-		err = cfg.AddRecord(newRecord)
+		entity := record.NewEntity()
+		err = cfg.AddRecord(entity)
 		if err != nil {
 			return fmt.Errorf("add record: %w", err)
 		}
 
-		err = cfg.Print(newRecord)
+		err = cfg.Print(entity)
 		if err != nil {
 			return fmt.Errorf("print record: %w", err)
 		}
@@ -62,10 +53,10 @@ var addEntityCmd = &cobra.Command{
 	},
 }
 
-var addValueCmd = &cobra.Command{
+var newValueCmd = &cobra.Command{
 	Use:   "value <value>",
-	Short: "Add a value record to the database",
-	Long:  `Add a value record to the database.`,
+	Short: "Create and add a new value record to the database",
+	Long:  `Create and add a new value record to the database.`,
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		cfg, err := config.Get()
@@ -73,26 +64,25 @@ var addValueCmd = &cobra.Command{
 			return fmt.Errorf("get config: %w", err)
 		}
 
-		r := record.NewValue([]byte(args[0]))
-		err = cfg.AddRecord(r)
+		value := record.NewValue([]byte(args[0]))
+		err = cfg.AddRecord(value)
 		if err != nil {
 			return fmt.Errorf("add record: %w", err)
 		}
 
-		b, err := json.MarshalIndent(r, "", "  ")
+		err = cfg.Print(value)
 		if err != nil {
-			return fmt.Errorf("marshal record: %w", err)
+			return fmt.Errorf("print record: %w", err)
 		}
 
-		fmt.Println(string(b))
 		return nil
 	},
 }
 
-var addLinkCmd = &cobra.Command{
+var newLinkCmd = &cobra.Command{
 	Use:   "link <recordID A> <recordID B>",
-	Short: "Add a link record to the database",
-	Long:  `Add a link record to the database.`,
+	Short: "Create and add a new link record to the database",
+	Long:  `Create and add a new link record to the database.`,
 	Args:  cobra.ExactArgs(2),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		cfg, err := config.Get()
@@ -105,18 +95,17 @@ var addLinkCmd = &cobra.Command{
 			return err
 		}
 
-		r := record.NewLink(a, b)
-		err = cfg.AddRecord(r)
+		link := record.NewLink(a, b)
+		err = cfg.AddRecord(link)
 		if err != nil {
 			return fmt.Errorf("add record: %w", err)
 		}
 
-		bytes, err := json.MarshalIndent(r, "", "  ")
+		err = cfg.Print(link)
 		if err != nil {
-			return fmt.Errorf("marshal record: %w", err)
+			return fmt.Errorf("print record: %w", err)
 		}
 
-		fmt.Println(string(bytes))
 		return nil
 	},
 }

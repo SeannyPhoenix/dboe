@@ -35,9 +35,10 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.AddCommand(addCmd)
+	rootCmd.AddCommand(newCmd)
 	rootCmd.AddCommand(getCmd)
 	rootCmd.AddCommand(updateCmd)
 	rootCmd.AddCommand(deleteCmd)
 	rootCmd.AddCommand(printCmd)
+	rootCmd.AddCommand(serveCmd)
 }

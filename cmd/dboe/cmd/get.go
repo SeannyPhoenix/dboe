@@ -46,7 +46,7 @@ var getCmd = &cobra.Command{
 func parseGetArgs(args []string) (uuid.UUID, error) {
 	id, err := uuid.Parse(args[0])
 	if err != nil {
-		return uuid.Nil, fmt.Errorf("invalid record ID: %v", err)
+		return uuid.Nil, fmt.Errorf("invalid record ID: %w", err)
 	}
 	return id, nil
 }
