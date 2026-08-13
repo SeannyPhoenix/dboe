@@ -19,7 +19,7 @@ var (
 type Config struct {
 	Name         string       `json:"name,omitempty"`
 	Root         string       `json:"root"`
-	Files        []File       `json:"files"`
+	DBFile       string       `json:"dbFile"`
 	OutputFormat OutputFormat `json:"outputFormat"`
 
 	DB database.DB
@@ -27,11 +27,8 @@ type Config struct {
 
 func Default() Config {
 	return Config{
-		Root: root(),
-		Files: []File{
-			{"db.dboe", FileTypeBinary},
-			{"db.jsonl", FileTypeJSONL},
-		},
+		Root:         root(),
+		DBFile:       "db.dboe",
 		OutputFormat: OutputFormatJSON,
 	}
 }
