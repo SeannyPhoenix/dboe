@@ -1,16 +1,10 @@
+/*
+Copyright © 2026 NAME HERE <EMAIL ADDRESS>
+*/
 package main
 
-import (
-	"context"
-	"log"
-
-	"github.com/seannyphoenix/dboe/internal/cli"
-)
+import "github.com/seannyphoenix/dboe/cmd/dboe/cmd"
 
 func main() {
-	ctx := context.Background()
-	err := cli.Run(ctx)
-	if err != nil {
-		log.Fatalf("error: %v", err)
-	}
+	cmd.Execute()
 }

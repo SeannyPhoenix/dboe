@@ -56,21 +56,6 @@ func (r Record) Link() (Link, bool) {
 	return r.l, true
 }
 
-func (r Record) IsValid() bool {
-	switch r.t {
-	case TypeEntity:
-		return r.id != uuid.Nil && !r.ts.IsZero() && r.v.data == nil && r.l.a == uuid.Nil && r.l.b == uuid.Nil
-	case TypeValue:
-		return r.id != uuid.Nil && !r.ts.IsZero() && r.v.data != nil && r.l.a == uuid.Nil && r.l.b == uuid.Nil
-	case TypeLink:
-		return r.id != uuid.Nil && !r.ts.IsZero() && r.v.data == nil && r.l.a != uuid.Nil && r.l.b != uuid.Nil
-	case TypeTombstone:
-		return r.id != uuid.Nil && !r.ts.IsZero() && r.v.data == nil && r.l.a == uuid.Nil && r.l.b == uuid.Nil
-	default:
-		return false
-	}
-}
-
 type recordJSON struct {
 	Type      Type            `json:"t"`
 	ID        uuid.UUID       `json:"id"`
