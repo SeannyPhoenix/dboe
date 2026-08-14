@@ -26,12 +26,23 @@ var updateCmd = &cobra.Command{
 			return fmt.Errorf("get config: %w", err)
 		}
 
-		db, err := cfg.LoadDatabase()
+		err = cfg.OpenDBFile()
+		if err != nil {
+			return fmt.Errorf("open database file: %w", err)
+		}
+		defer func() {
+			err := cfg.CloseDBFile()
+			if err != nil {
+				fmt.Printf("close database file: %v\n", err)
+			}
+		}()
+
+		err = cfg.LoadDatabase()
 		if err != nil {
 			return fmt.Errorf("load database: %w", err)
 		}
 
-		existing, exists := db.GetRecordByID(id)
+		existing, exists := cfg.DB.GetRecordByID(id)
 		if !exists {
 			return fmt.Errorf("record with ID %s does not exist", id)
 		}

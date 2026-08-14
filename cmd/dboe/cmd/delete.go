@@ -25,12 +25,12 @@ var deleteCmd = &cobra.Command{
 			return fmt.Errorf("get config: %w", err)
 		}
 
-		db, err := cfg.LoadDatabase()
+		err = cfg.LoadDatabase()
 		if err != nil {
 			return fmt.Errorf("load database: %w", err)
 		}
 
-		rec, exists := db.GetRecordByID(id)
+		rec, exists := cfg.DB.GetRecordByID(id)
 		if !exists {
 			return fmt.Errorf("record with ID %s not found", id)
 		}

@@ -38,7 +38,7 @@ var newEntityCmd = &cobra.Command{
 			return fmt.Errorf("get config: %w", err)
 		}
 
-		_, err = cfg.LoadDatabase()
+		err = cfg.LoadDatabase()
 		if err != nil {
 			return fmt.Errorf("load database: %w", err)
 		}
@@ -69,7 +69,7 @@ var newValueCmd = &cobra.Command{
 			return fmt.Errorf("get config: %w", err)
 		}
 
-		_, err = cfg.LoadDatabase()
+		err = cfg.LoadDatabase()
 		if err != nil {
 			return fmt.Errorf("load database: %w", err)
 		}
@@ -100,7 +100,7 @@ var newLinkCmd = &cobra.Command{
 			return fmt.Errorf("get config: %w", err)
 		}
 
-		_, err = cfg.LoadDatabase()
+		err = cfg.LoadDatabase()
 		if err != nil {
 			return fmt.Errorf("load database: %w", err)
 		}

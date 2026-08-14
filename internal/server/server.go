@@ -14,7 +14,7 @@ import (
 	"github.com/seannyphoenix/dboe/internal/config"
 )
 
-func Serve() error {
+func Serve(port int) error {
 	log.Print("Reading config\n")
 	cfg, err := config.Get()
 	if err != nil {
@@ -35,7 +35,7 @@ func Serve() error {
 	}()
 
 	log.Print("Loading database\n")
-	_, err = cfg.LoadDatabase()
+	err = cfg.LoadDatabase()
 	if err != nil {
 		return fmt.Errorf("load database: %w", err)
 	}
@@ -43,10 +43,9 @@ func Serve() error {
 	log.Printf("Registering routes")
 	registerRouter(cfg)
 
-	port := "8080"
-	log.Printf("Starting DBOE server on port %s", port)
+	log.Printf("Starting DBOE server on port %d", port)
 
-	srv := &http.Server{Addr: fmt.Sprintf(":%s", port), Handler: nil}
+	srv := &http.Server{Addr: fmt.Sprintf(":%d", port), Handler: nil}
 	errCh := make(chan error, 1)
 
 	go func() {

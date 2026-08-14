@@ -18,12 +18,23 @@ var printCmd = &cobra.Command{
 			return fmt.Errorf("get config: %w", err)
 		}
 
-		db, err := cfg.LoadDatabase()
+		err = cfg.OpenDBFile()
+		if err != nil {
+			return fmt.Errorf("open database file: %w", err)
+		}
+		defer func() {
+			err := cfg.CloseDBFile()
+			if err != nil {
+				fmt.Printf("close database file: %v\n", err)
+			}
+		}()
+
+		err = cfg.LoadDatabase()
 		if err != nil {
 			return fmt.Errorf("load database: %w", err)
 		}
 
-		err = cfg.Print(db)
+		err = cfg.Print(cfg.DB)
 		if err != nil {
 			return fmt.Errorf("print record: %w", err)
 		}
