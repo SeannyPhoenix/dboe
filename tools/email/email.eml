@@ -1,0 +1,131 @@
+Delivered-To: seannyphoenix@gmail.com
+Received: by 2002:a17:906:615:b0:c12:af23:b7b7 with SMTP id s21csp3094636ejb;
+        Tue, 7 Jul 2026 11:55:23 -0700 (PDT)
+X-Received: by 2002:a05:620a:4455:b0:915:e12d:19ed with SMTP id af79cd13be357-92ebb594f5cmr759497185a.52.1783450523589;
+        Tue, 07 Jul 2026 11:55:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783450523; cv=none;
+        d=google.com; s=arc-20260327;
+        b=m8yJuVVlNaFm75uRn06ERfhF0JrtBuTGJUmlLaG7sQDSzHV3PTqnym5vOC8zneqA66
+         h4GOkDQKSlqxkqoiYPXTH9yBi6cwvV28eFe8NrNS3FzNb5iLJbz8uUtz9IuGHM/aYr1z
+         VYlUmHXRM9n5ZKZeEHUEJ3mLJBggzYY/50Ig6ozcojlMvDPTVWtlIXNrlTytFyrrfmPf
+         OXb5Ti2M+7E9IYFq3rB9jAztgiCFujN0DCwfcS/x+NFMfFNXITk+fRWOOTXqg2Cm15m5
+         wJRaGPHE/C5UekfRj9b20r6+wKlVXVDTGu87nXcJpcTOGDXNQv+QoRAa/tFD4y2x3sDw
+         yyCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=feedback-id:date:message-id:content-transfer-encoding:mime-version
+         :subject:to:from:dkim-signature:dkim-signature;
+        bh=aOOt0CwIHuyDyocpvjtQVotwIHYdAFhxpiOT5QRf1Dg=;
+        fh=7gVNjsIWomLeKtkf/WxUaCxQ8bS5NbUGV8Rjc1pL3VQ=;
+        b=HWuvcZLRJoOvU3c6vzHJP1XRzdysL4b6ZU1IFWFDaLzjrYTctOz/hzsIFh9j7sdXNv
+         4h9f8fS096n3w1F39r157zFAnUYv7mT8p6rf57O/U9YAOa/FdUX0J97gilEiScd9b6Vg
+         XDt0q1Yksn7caX4Vt2qEUxXPAbn7DrSa9anEat9bm4OhEQtAvSEEupR1MIbFvLOyHV5z
+         gX/QYPrXxgOdu1g8hKdZp1F5bZFEEGj0uI9M6qWgPKlgoxq/Wj+xNZrmzMULpwonAHAl
+         NkGGmOGz85eUhRsMYVIX4MjCWyBqCf+Ki488euipiwBx59gu/uwYzqobG8p/HpywODO2
+         Be/Q==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@accounts.nintendo.com header.s=vn5b6nuqz7tqcy3ko5zccwqpontpc4z3 header.b="xJ9g/yDm";
+       dkim=pass header.i=@amazonses.com header.s=224i4yxa5dv7c2xz3womw6peuasteono header.b=Bo8VxYw9;
+       spf=pass (google.com: domain of 0100019f3def55ed-b8d4e9fc-2bb5-46b8-808c-41cf47a061ba-000000@amazonses.com designates 54.240.11.70 as permitted sender) smtp.mailfrom=0100019f3def55ed-b8d4e9fc-2bb5-46b8-808c-41cf47a061ba-000000@amazonses.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=nintendo.com
+Return-Path: <0100019f3def55ed-b8d4e9fc-2bb5-46b8-808c-41cf47a061ba-000000@amazonses.com>
+Received: from a11-70.smtp-out.amazonses.com (a11-70.smtp-out.amazonses.com. [54.240.11.70])
+        by mx.google.com with ESMTPS id af79cd13be357-92e90cfde02si1403619085a.285.2026.07.07.11.55.23
+        for <seannyphoenix@gmail.com>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jul 2026 11:55:23 -0700 (PDT)
+Received-SPF: pass (google.com: domain of 0100019f3def55ed-b8d4e9fc-2bb5-46b8-808c-41cf47a061ba-000000@amazonses.com designates 54.240.11.70 as permitted sender) client-ip=54.240.11.70;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@accounts.nintendo.com header.s=vn5b6nuqz7tqcy3ko5zccwqpontpc4z3 header.b="xJ9g/yDm";
+       dkim=pass header.i=@amazonses.com header.s=224i4yxa5dv7c2xz3womw6peuasteono header.b=Bo8VxYw9;
+       spf=pass (google.com: domain of 0100019f3def55ed-b8d4e9fc-2bb5-46b8-808c-41cf47a061ba-000000@amazonses.com designates 54.240.11.70 as permitted sender) smtp.mailfrom=0100019f3def55ed-b8d4e9fc-2bb5-46b8-808c-41cf47a061ba-000000@amazonses.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=nintendo.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=vn5b6nuqz7tqcy3ko5zccwqpontpc4z3; d=accounts.nintendo.com;
+	t=1783450523;
+	h=From:To:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+	bh=aOOt0CwIHuyDyocpvjtQVotwIHYdAFhxpiOT5QRf1Dg=;
+	b=xJ9g/yDmnu9sB8hy9WWlPYU/tU0kpwkICp0ryamSK2C8EHq6ywHijhEs2eXo+sDU
+	cDGPVSAjfwQ4YbmkslEvBtDmJgl24KWH3bkv9XrjFTwwANevNq2RXObtuOYaKYAm9Gb
+	sholJAtdb4xhePebrzjtkQDcj2HlcqeSe7AGunxc=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=224i4yxa5dv7c2xz3womw6peuasteono; d=amazonses.com; t=1783450523;
+	h=From:To:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+	bh=aOOt0CwIHuyDyocpvjtQVotwIHYdAFhxpiOT5QRf1Dg=;
+	b=Bo8VxYw9IAImI9WrLEBaN5pFAB1KdEOkfdY7nRiyH0M397M0B2XhxZF13hsEJYE+
+	WVZ4pa9Z5m8VkAyQso0em54R8TeCzmMVchXffAvxWfpAPNV/dBhd470rTcc43/yEtYP
+	dYYGI+fHNRd9cGXtWksWz/HTJjU3wzFOIIIoYzkA=
+From: =?UTF-8?B?TmludGVuZG8=?= <no-reply@accounts.nintendo.com>
+To: seannyphoenix@gmail.com
+Subject: Confirmation of digital purchase from Nintendo
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+Message-ID: <0100019f3def55ed-b8d4e9fc-2bb5-46b8-808c-41cf47a061ba-000000@email.amazonses.com>
+Date: Tue, 7 Jul 2026 18:55:23 +0000
+Feedback-ID: ::1.us-east-1.YTPOJdyurkmmbyxK9AJk2pAlUUwjPTowIoryjAKHWzw=:AmazonSES
+X-SES-Outgoing: 2026.07.07-54.240.11.70
+
+ Thank you for your recent digital purchase from Nintendo. Details of this =
+transaction are below:
+
+Transaction ID: 52535701073
+Transaction Date: 7/7/2026 11:55:18 (24H PDT)
+
+Purchased Item: The Legend of Zelda=E2=84=A2: Breath of the Wild =E2=80=93 =
+Nintendo Switch=E2=84=A2 2 Edition=20
+
+=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=
+=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=
+=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91
+
+Device Type: Nintendo Switch 2
+
+Unit Price: $48.99
+Total: $48.99
+Payment Method: Nintendo eShop Funds
+Associated Nintendo Account: seannyphoenix@gmail.com US=20
+
+Purchase history can be accessed here: https://ec.nintendo.com/my/transacti=
+ons
+
+Alternatively, your purchase history can be viewed by signing in to the ass=
+ociated Nintendo Account at https://accounts.nintendo.com/portal and access=
+ing Transaction History under Funds and Payment Methods
+
+=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=
+=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=
+=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91
+
+Nintendo of America Inc.
+4600 150th Ave NE Redmond, WA 98052
+855=E2=80=91830=E2=80=915616
+http://support.nintendo.com
+
+=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=
+=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=
+=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91=E2=80=91
+
+Funds added to your Nintendo Account and all purchases are final, non=E2=80=
+=91refundable, and cannot be redeemed for cash, unless required by law.
+
+The Purchase and Subscription Terms are available at http://www.nintendo.co=
+m/purchase-terms (or http://www.nintendo.com/fr_CA/purchase-terms for Frenc=
+h).
+
+For information about Nintendo privacy practices, see http://www.nintendo.c=
+om/privacy-policy (or http://www.nintendo.com/fr_CA/privacy-policy for Fren=
+ch).
+
+
+Game trademarks and copyrights are properties of their respective owners. N=
+intendo trademarks are property of Nintendo.
+=C2=A9 Nintendo
+
+
+Please do not reply to this email.
+
+If you have any questions, or if you received this email by mistake, you ca=
+n contact us via the link below.
+
+http://support.nintendo.com/contactus
