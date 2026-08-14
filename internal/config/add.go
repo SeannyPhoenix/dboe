@@ -9,7 +9,7 @@ import (
 	"github.com/seannyphoenix/dboe/pkg/storage/binary"
 )
 
-func (cfg *Config) AddRecord(r record.Record) error {
+func (cfg *Config) AddRecord(r record.Record) (retErr error) {
 	cfg.fileMu.Lock()
 	defer cfg.fileMu.Unlock()
 
@@ -28,7 +28,11 @@ func (cfg *Config) AddRecord(r record.Record) error {
 		if err != nil {
 			return fmt.Errorf("open database file: %w", err)
 		}
-		defer f.Close()
+		defer func() {
+			if cerr := f.Close(); cerr != nil && retErr == nil {
+				retErr = fmt.Errorf("close database file: %w", cerr)
+			}
+		}()
 	}
 
 	// Write to file

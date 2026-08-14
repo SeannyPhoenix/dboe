@@ -12,7 +12,7 @@ const (
 )
 
 // Print outputs data to stdout in the configured format (default: JSON)
-func (cfg Config) Print(data any) error {
+func (cfg *Config) Print(data any) error {
 	switch cfg.OutputFormat {
 	case OutputFormatJSON:
 		return cfg.printJSON(data)
@@ -21,7 +21,7 @@ func (cfg Config) Print(data any) error {
 	}
 }
 
-func (cfg Config) printJSON(data any) error {
+func (cfg *Config) printJSON(data any) error {
 	b, err := json.MarshalIndent(data, "", "  ")
 	if err != nil {
 		return fmt.Errorf("marshal: %w", err)

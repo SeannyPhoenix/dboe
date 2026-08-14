@@ -59,7 +59,7 @@ func Ensure() (*Config, error) {
 	return cfg, nil
 }
 
-func (cfg *Config) ensureDBFile() error {
+func (cfg *Config) ensureDBFile() (retErr error) {
 	fp := filepath.Join(cfg.Root, cfg.DBFile)
 
 	// Check if file exists
@@ -78,7 +78,11 @@ func (cfg *Config) ensureDBFile() error {
 	if err != nil {
 		return fmt.Errorf("create database file: %w", err)
 	}
-	defer f.Close()
+	defer func() {
+		if cerr := f.Close(); cerr != nil && retErr == nil {
+			retErr = fmt.Errorf("close database file: %w", cerr)
+		}
+	}()
 
 	// Write header with empty record list
 	err = binary.Write(f, []record.Record{})
