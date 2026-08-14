@@ -7,7 +7,7 @@ import (
 	"github.com/seannyphoenix/dboe/internal/config"
 )
 
-func dumpDBHandler(cfg *config.Config) http.HandlerFunc {
+func newDumpDBHandler(cfg *config.Config) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		b, err := json.Marshal(cfg.DB)

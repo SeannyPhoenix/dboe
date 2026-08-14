@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DBOE Local App</title>
+    <style>
+      :root {
+        --bg: #0b1117;
+        --surface: #121a24;
+        --ink: #e8eef5;
+        --accent: #24c08a;
+        --accent-ink: #03140e;
+        --muted: #9da9b8;
+        --border: #2a3442;
+        --warn: #ff7a7a;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Avenir Next", "Segoe UI", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at top left, #122437 0%, transparent 45%),
+          radial-gradient(circle at bottom right, #102320 0%, transparent 40%),
+          var(--bg);
+        min-height: 100vh;
+      }
+
+      main {
+        max-width: 920px;
+        margin: 2rem auto;
+        padding: 0 1rem 2rem;
+      }
+
+      h1 {
+        margin: 0 0 0.5rem;
+        font-size: clamp(1.8rem, 4vw, 2.6rem);
+      }
+
+      p.lead {
+        margin-top: 0;
+        color: var(--muted);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+        gap: 1rem;
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1rem;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.32);
+      }
+
+      .card h2 {
+        margin-top: 0;
+        font-size: 1.1rem;
+      }
+
+      label {
+        display: block;
+        margin: 0.5rem 0 0.25rem;
+        font-weight: 600;
+      }
+
+      input,
+      select,
+      textarea,
+      button {
+        width: 100%;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 0.6rem 0.7rem;
+        font: inherit;
+      }
+
+      input,
+      select,
+      textarea {
+        background: #0e1520;
+        color: var(--ink);
+      }
+
+      input::placeholder,
+      textarea::placeholder {
+        color: #7f8a98;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus,
+      button:focus {
+        outline: 2px solid #3fd2a0;
+        outline-offset: 1px;
+      }
+
+      textarea {
+        min-height: 140px;
+        resize: vertical;
+      }
+
+      button {
+        margin-top: 0.7rem;
+        background: var(--accent);
+        border: none;
+        color: var(--accent-ink);
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      button:hover {
+        filter: brightness(1.08);
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .status {
+        margin: 0.6rem 0;
+        font-weight: 600;
+      }
+
+      .status.error {
+        color: var(--warn);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>DBOE Local App</h1>
+      <p class="lead">Simple local read/write UI for your running DBOE server.</p>
+
+      <section class="grid">
+        <article class="card">
+          <h2>Health + Dump</h2>
+          <button id="healthBtn" type="button">Check Health</button>
+          <div id="healthOut" class="status muted">No check yet.</div>
+          <button id="dumpBtn" type="button">Dump Database</button>
+        </article>
+
+        <article class="card">
+          <h2>Get Record</h2>
+          <label for="recordId">Record ID</label>
+          <input id="recordId" type="text" placeholder="UUID" />
+          <button id="getBtn" type="button">Fetch Record</button>
+        </article>
+
+        <article class="card">
+          <h2>Create Record</h2>
+          <label for="kind">Kind</label>
+          <select id="kind">
+            <option value="entity">entity</option>
+            <option value="value">value</option>
+            <option value="link">link</option>
+          </select>
+
+          <div id="valueFields">
+            <label for="valueInput">Value text</label>
+            <input id="valueInput" type="text" placeholder="hello world" />
+          </div>
+
+          <div id="linkFields" class="hidden">
+            <label for="linkA">A UUID</label>
+            <input id="linkA" type="text" placeholder="UUID A" />
+            <label for="linkB">B UUID</label>
+            <input id="linkB" type="text" placeholder="UUID B" />
+          </div>
+
+          <button id="createBtn" type="button">Create Record</button>
+        </article>
+      </section>
+
+      <section class="card" style="margin-top: 1rem">
+        <h2>Response</h2>
+        <textarea id="out" readonly></textarea>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

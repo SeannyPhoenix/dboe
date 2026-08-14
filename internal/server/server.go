@@ -16,9 +16,9 @@ import (
 
 func Serve(port int) error {
 	log.Print("Reading config\n")
-	cfg, err := config.Get()
+	cfg, err := config.Ensure()
 	if err != nil {
-		return fmt.Errorf("read config: %w", err)
+		return fmt.Errorf("ensure config: %w", err)
 	}
 
 	log.Print("Opening db file\n")
@@ -41,14 +41,13 @@ func Serve(port int) error {
 	}
 
 	log.Printf("Registering routes")
-	registerRouter(cfg)
+	handler := registerRoutes(cfg)
 
-	log.Printf("Starting DBOE server on port %d", port)
-
-	srv := &http.Server{Addr: fmt.Sprintf(":%d", port), Handler: nil}
+	srv := &http.Server{Addr: fmt.Sprintf(":%d", port), Handler: handler}
 	errCh := make(chan error, 1)
 
 	go func() {
+		log.Printf("Starting DBOE server on port %d", port)
 		err := srv.ListenAndServe()
 		if err != nil && !errors.Is(err, http.ErrServerClosed) {
 			errCh <- fmt.Errorf("start server: %w", err)

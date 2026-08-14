@@ -1,39 +1,14 @@
 import { JSONType } from "zod";
 import { binaryTimeNow } from "@seannyphoenix/binarytime";
-import { Database } from "../database/types";
-import { writeRecord } from "../database/database";
-import { Link, Value } from "./types";
+import { TypeValue, Value } from "./types";
 
-export function updateValueRecord(
-  db: Database,
-  record: Value,
-  newValue: JSONType,
-): Value {
-  const updated = {
+export function updateValueRecord(record: Value, newValue: JSONType): Value {
+  const updated: Value = {
+    t: TypeValue,
     id: record.id,
-    t: binaryTimeNow(),
-    v: newValue,
+    ts: binaryTimeNow(),
+    v: JSON.stringify(newValue),
   };
-
-  writeRecord(db, updated);
-
-  return updated;
-}
-
-export function updateLinkRecord(
-  db: Database,
-  record: Link,
-  a: string,
-  b: string,
-): Link {
-  const updated = {
-    id: record.id,
-    t: binaryTimeNow(),
-    a,
-    b,
-  };
-
-  writeRecord(db, updated);
 
   return updated;
 }

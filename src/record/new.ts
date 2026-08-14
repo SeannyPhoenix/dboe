@@ -1,42 +1,39 @@
-import { v4 } from "uuid";
-import { Entity, Link, Value } from "./types";
+import { v4 as uuid } from "uuid";
+import { Entity, Link, TypeEntity, TypeLink, TypeValue, Value } from "./types";
 import { binaryTimeNow } from "@seannyphoenix/binarytime";
 import { JSONType } from "zod";
-import { Database } from "../database/types";
-import { writeRecord } from "../database/database";
 
-export function newEntityRecord(db: Database): Entity {
-  const record = {
-    id: v4(),
-    t: binaryTimeNow(),
+export function newEntity(): Entity {
+  const record: Entity = {
+    t: TypeEntity,
+    id: uuid(),
+    ts: binaryTimeNow(),
   };
-
-  writeRecord(db, record);
 
   return record;
 }
 
-export function newValueRecord(db: Database, value: JSONType): Value {
-  const record = {
-    id: v4(),
-    t: binaryTimeNow(),
-    v: value,
+export function newValue(value: JSONType): Value {
+  const record: Value = {
+    t: TypeValue,
+    id: uuid(),
+    ts: binaryTimeNow(),
+    v: btoa(JSON.stringify(value)),
   };
-
-  writeRecord(db, record);
 
   return record;
 }
 
-export function newLinkRecord(db: Database, a: string, b: string): Link {
-  const record = {
-    id: v4(),
-    t: binaryTimeNow(),
-    a,
-    b,
+export function newLink(a: string, b: string): Link {
+  const record: Link = {
+    t: TypeLink,
+    id: uuid(),
+    ts: binaryTimeNow(),
+    l: {
+      a,
+      b,
+    },
   };
-
-  writeRecord(db, record);
 
   return record;
 }

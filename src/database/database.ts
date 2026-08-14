@@ -1,4 +1,4 @@
-import { AnyRecord, zAnyRecord } from "../record/types";
+import { AnyRecord, TypeTombstone, zAnyRecord } from "../record/types";
 import * as z from "zod";
 import { Database } from "./types";
 
@@ -100,11 +100,11 @@ export function lookupRecord(db: Database, id: string): AnyRecord | null {
 export function writeRecord(db: Database, record: AnyRecord): void {
   db.data.push(record);
 
-  if ("d" in record) {
+  if (record.t === TypeTombstone) {
     db.index.delete(record.id);
   } else {
     db.index.set(record.id, {
-      t: record.t,
+      t: record.ts,
       i: db.data.length - 1,
     });
   }

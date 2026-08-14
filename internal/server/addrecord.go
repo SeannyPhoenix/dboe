@@ -9,7 +9,7 @@ import (
 	"github.com/seannyphoenix/dboe/pkg/record"
 )
 
-func addRecordHandler(cfg *config.Config) http.HandlerFunc {
+func newAddRecordHandler(cfg *config.Config) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		b := make([]byte, r.ContentLength)
 		_, err := r.Body.Read(b)

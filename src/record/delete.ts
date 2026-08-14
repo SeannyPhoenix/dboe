@@ -1,15 +1,12 @@
 import { binaryTimeNow } from "@seannyphoenix/binarytime";
-import { AnyRecord, Tombstone } from "./types";
-import { Database } from "../database/types";
-import { writeRecord } from "../database/database";
+import { AnyRecord, TypeTombstone, Tombstone } from "./types";
 
-export function deleteRecord(db: Database, record: AnyRecord): Tombstone {
-  const deleted = {
+export function deleteRecord(record: AnyRecord): Tombstone {
+  const deleted: Tombstone = {
+    t: TypeTombstone,
     id: record.id,
-    d: binaryTimeNow(),
+    ts: binaryTimeNow(),
   };
-
-  writeRecord(db, deleted);
 
   return deleted;
 }
