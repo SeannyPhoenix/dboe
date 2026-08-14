@@ -38,6 +38,11 @@ var newEntityCmd = &cobra.Command{
 			return fmt.Errorf("get config: %w", err)
 		}
 
+		_, err = cfg.LoadDatabase()
+		if err != nil {
+			return fmt.Errorf("load database: %w", err)
+		}
+
 		entity := record.NewEntity()
 		err = cfg.AddRecord(entity)
 		if err != nil {
@@ -64,6 +69,11 @@ var newValueCmd = &cobra.Command{
 			return fmt.Errorf("get config: %w", err)
 		}
 
+		_, err = cfg.LoadDatabase()
+		if err != nil {
+			return fmt.Errorf("load database: %w", err)
+		}
+
 		value := record.NewValue([]byte(args[0]))
 		err = cfg.AddRecord(value)
 		if err != nil {
@@ -88,6 +98,11 @@ var newLinkCmd = &cobra.Command{
 		cfg, err := config.Get()
 		if err != nil {
 			return fmt.Errorf("get config: %w", err)
+		}
+
+		_, err = cfg.LoadDatabase()
+		if err != nil {
+			return fmt.Errorf("load database: %w", err)
 		}
 
 		a, b, err := parseLinkArgs(args)

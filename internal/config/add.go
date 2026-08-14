@@ -1,7 +1,6 @@
 package config
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -10,40 +9,39 @@ import (
 	"github.com/seannyphoenix/dboe/pkg/storage/binary"
 )
 
-func (cfg Config) AddRecord(r record.Record) (retErr error) {
-	fp := filepath.Join(cfg.Root, cfg.DBFile)
-	f, err := os.OpenFile(fp, os.O_WRONLY|os.O_APPEND, 0644)
-	if errors.Is(err, os.ErrNotExist) {
-		f, err := os.OpenFile(fp, os.O_WRONLY|os.O_CREATE, 0644)
-		if err != nil {
-			return fmt.Errorf("create database file: %w", err)
-		}
-		defer func() {
-			err := f.Close()
-			if err != nil {
-				retErr = errors.Join(retErr, fmt.Errorf("close database file: %w", err))
-			}
-		}()
+func (cfg *Config) AddRecord(r record.Record) error {
+	cfg.fileMu.Lock()
+	defer cfg.fileMu.Unlock()
 
-		err = binary.Write(f, []record.Record{r})
-		if err != nil {
-			return fmt.Errorf("write record: %w", err)
-		}
-		return nil
-	}
-	if err != nil {
-		return fmt.Errorf("open database file: %w", err)
-	}
-	defer func() {
-		err := f.Close()
-		if err != nil {
-			retErr = errors.Join(retErr, fmt.Errorf("close database file: %w", err))
-		}
-	}()
+	var f *os.File
+	var err error
 
+	// If file is already open (server mode), use it
+	if cfg.dbFile != nil {
+		f = cfg.dbFile
+	} else {
+		// Otherwise, open for this operation (CLI mode)
+		fp := filepath.Join(cfg.Root, cfg.DBFile)
+
+		// Open the file - it must already exist (created by Ensure())
+		f, err = os.OpenFile(fp, os.O_WRONLY|os.O_APPEND, 0644)
+		if err != nil {
+			return fmt.Errorf("open database file: %w", err)
+		}
+		defer f.Close()
+	}
+
+	// Write to file
 	err = binary.Add(f, r)
 	if err != nil {
-		return fmt.Errorf("add record: %w", err)
+		return fmt.Errorf("add record to file: %w", err)
 	}
+
+	// Update in-memory database
+	err = cfg.DB.AddRecord(r)
+	if err != nil {
+		return fmt.Errorf("add record to database: %w", err)
+	}
+
 	return nil
 }
