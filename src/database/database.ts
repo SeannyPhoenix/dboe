@@ -1,6 +1,7 @@
-import { AnyRecord, TypeTombstone, zAnyRecord } from "../record/types";
-import * as z from "zod";
-import { Database } from "./types";
+import * as z from 'zod';
+
+import { AnyRecord, TypeTombstone, zAnyRecord } from '../record/types';
+import { Database } from './types';
 
 export function loadDatabase(rawDb: string): Database {
   const db: Database = {
@@ -9,29 +10,29 @@ export function loadDatabase(rawDb: string): Database {
   };
 
   if (!rawDb.length) {
-    const cause = { line: { index: 0, value: "" } };
-    throw new Error("Malformed database: empty input", { cause });
+    const cause = { line: { index: 0, value: '' } };
+    throw new Error('Malformed database: empty input', { cause });
   }
 
-  const lines = rawDb.split("\n");
+  const lines = rawDb.split('\n');
   let eof = false;
   for (let i = 0; i < lines.length; i++) {
     const value = lines[i];
     try {
       const cause = { line: { index: i + 1, value } };
       if (eof) {
-        throw new Error("Malformed database: data after trailing newline", {
+        throw new Error('Malformed database: data after trailing newline', {
           cause,
         });
       }
 
-      if (value === "") {
+      if (value === '') {
         eof = true;
         continue;
       }
 
-      if (!value.startsWith("{") || !value.endsWith("}")) {
-        throw new Error("Malformed database: line is not a JSON object", {
+      if (!value.startsWith('{') || !value.endsWith('}')) {
+        throw new Error('Malformed database: line is not a JSON object', {
           cause,
         });
       }
@@ -55,8 +56,8 @@ export function loadDatabase(rawDb: string): Database {
   }
 
   if (!eof) {
-    const cause = { line: { index: lines.length, value: "" } };
-    throw new Error("Malformed database: missing trailing newline", { cause });
+    const cause = { line: { index: lines.length, value: '' } };
+    throw new Error('Malformed database: missing trailing newline', { cause });
   }
 
   return db;
@@ -66,7 +67,7 @@ export function dumpDatabase(db: Database): string {
   const records: string[] = [];
 
   if (!db.data.length) {
-    throw new Error("Database is empty: no records to dump.");
+    throw new Error('Database is empty: no records to dump.');
   }
 
   for (let index = 0; index < db.data.length; index++) {
@@ -77,16 +78,16 @@ export function dumpDatabase(db: Database): string {
     } catch (error) {
       const cause = { record: { index, record }, error };
       if (error instanceof z.ZodError) {
-        throw new Error("Failed to encode database records.", { cause });
+        throw new Error('Failed to encode database records.', { cause });
       }
       if (error instanceof TypeError) {
-        throw new Error("Failed to encode database records.", { cause });
+        throw new Error('Failed to encode database records.', { cause });
       }
-      throw new Error("Failed to encode database records.", { cause });
+      throw new Error('Failed to encode database records.', { cause });
     }
   }
 
-  return `${records.join("\n")}\n`;
+  return `${records.join('\n')}\n`;
 }
 
 export function lookupRecord(db: Database, id: string): AnyRecord | null {

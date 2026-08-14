@@ -66,26 +66,3 @@ func (i LinkIndex) Remove(a, b uuid.UUID) bool {
 	}
 	return false
 }
-
-// get retrieves the set of UUIDs associated with a given UUID in the index.
-// It returns nil if the UUID does not exist in the index.
-func (i LinkIndex) get(a uuid.UUID) (map[uuid.UUID]struct{}, bool) {
-	m, ok := i[a]
-	return m, ok
-}
-
-// exists checks if a relationship between two UUIDs exists in the index.
-// It returns true if the relationship exists, false otherwise.
-func (i LinkIndex) exists(a, b uuid.UUID) bool {
-	if _, ok := i[a]; ok {
-		if _, exists := i[a][b]; exists {
-			return true
-		}
-	}
-	if _, ok := i[b]; ok {
-		if _, exists := i[b][a]; exists {
-			return true
-		}
-	}
-	return false
-}

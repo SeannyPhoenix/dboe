@@ -1,4 +1,4 @@
-import { dumpDatabase, loadDatabase } from "./database/database";
+import { dumpDatabase, loadDatabase } from './database/database';
 
 const data = `{"id":"519447ac-094a-4227-b395-ccf32ae54e99","t":"0000080000005030.24d76b549327104e","v":"dboe:type:string"}
 {"id":"87d99886-b70a-4df8-b7b1-34153a5bb196","t":"0000080000005030.24d76b549327104e","v":"name"}

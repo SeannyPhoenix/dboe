@@ -3,7 +3,7 @@ export class DatabaseError extends Error {
 
   constructor(message: string, cause?: unknown) {
     super(message);
-    this.name = "DatabaseError";
+    this.name = 'DatabaseError';
     this._cause = cause;
   }
 

@@ -1,6 +1,7 @@
-import * as z from "zod";
-import { zAnyRecord } from "../record/types";
-import { zBinaryTime } from "@seannyphoenix/binarytime";
+import { zBinaryTime } from '@seannyphoenix/binarytime';
+import * as z from 'zod';
+
+import { zAnyRecord } from '../record/types';
 
 export const zIndex = z.map(
   z.uuid(),

@@ -1,5 +1,6 @@
-import { binaryTimeNow } from "@seannyphoenix/binarytime";
-import { AnyRecord, TypeTombstone, Tombstone } from "./types";
+import { binaryTimeNow } from '@seannyphoenix/binarytime';
+
+import { AnyRecord, TypeTombstone, Tombstone } from './types';
 
 export function deleteRecord(record: AnyRecord): Tombstone {
   const deleted: Tombstone = {

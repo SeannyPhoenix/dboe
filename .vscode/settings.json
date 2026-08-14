@@ -1,0 +1,21 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.oxc": "always",
+    "source.format.oxc": "explicit"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "gplane.dprint2"
+  },
+  "[makefile]": {
+    "editor.insertSpaces": false
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  }
+}

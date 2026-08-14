@@ -1,5 +1,5 @@
-import { zBinaryTime } from "@seannyphoenix/binarytime";
-import * as z from "zod";
+import { zBinaryTime } from '@seannyphoenix/binarytime';
+import * as z from 'zod';
 
 export const TypeEntity = 1;
 export const TypeValue = 2;
@@ -15,10 +15,9 @@ const zEntity = z.strictObject({
 export type Entity = z.infer<typeof zEntity>;
 
 // A Value has a single additional field "v" with base64-encoded bytes
-const encoder = new TextEncoder();
 const zByteArray = z.codec(z.string(), z.instanceof(Uint8Array), {
-  decode: (s) => encoder.encode(s),
-  encode: (b) => new TextDecoder().decode(b),
+  decode: (s) => Uint8Array.fromBase64(s),
+  encode: (b) => b.toBase64(),
 });
 const zValue = z.strictObject({
   t: z.literal(TypeValue),
