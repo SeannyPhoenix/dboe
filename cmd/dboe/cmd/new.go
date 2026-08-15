@@ -38,6 +38,17 @@ var newEntityCmd = &cobra.Command{
 			return fmt.Errorf("get config: %w", err)
 		}
 
+		err = cfg.OpenDBFile()
+		if err != nil {
+			return fmt.Errorf("open database file: %w", err)
+		}
+		defer func() {
+			err := cfg.CloseDBFile()
+			if err != nil {
+				fmt.Printf("close database file: %v\n", err)
+			}
+		}()
+
 		err = cfg.LoadDatabase()
 		if err != nil {
 			return fmt.Errorf("load database: %w", err)
@@ -69,6 +80,17 @@ var newValueCmd = &cobra.Command{
 			return fmt.Errorf("get config: %w", err)
 		}
 
+		err = cfg.OpenDBFile()
+		if err != nil {
+			return fmt.Errorf("open database file: %w", err)
+		}
+		defer func() {
+			err := cfg.CloseDBFile()
+			if err != nil {
+				fmt.Printf("close database file: %v\n", err)
+			}
+		}()
+
 		err = cfg.LoadDatabase()
 		if err != nil {
 			return fmt.Errorf("load database: %w", err)
@@ -99,6 +121,17 @@ var newLinkCmd = &cobra.Command{
 		if err != nil {
 			return fmt.Errorf("get config: %w", err)
 		}
+
+		err = cfg.OpenDBFile()
+		if err != nil {
+			return fmt.Errorf("open database file: %w", err)
+		}
+		defer func() {
+			err := cfg.CloseDBFile()
+			if err != nil {
+				fmt.Printf("close database file: %v\n", err)
+			}
+		}()
 
 		err = cfg.LoadDatabase()
 		if err != nil {

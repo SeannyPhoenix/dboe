@@ -3,6 +3,7 @@ package server
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 
 	"github.com/seannyphoenix/dboe/internal/config"
@@ -11,8 +12,7 @@ import (
 
 func newAddRecordHandler(cfg *config.Config) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		b := make([]byte, r.ContentLength)
-		_, err := r.Body.Read(b)
+		b, err := io.ReadAll(r.Body)
 		if err != nil {
 			http.Error(w, "Failed to read request body", http.StatusInternalServerError)
 			return
