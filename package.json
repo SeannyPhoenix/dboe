@@ -7,6 +7,9 @@
   "author": "Seanny Drakon Phoenix",
   "type": "module",
   "main": "dist/index.js",
+  "imports": {
+    "#client/jsx-runtime": "./src/jsx/jsx-runtime/index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node esbuild.config.mjs",
