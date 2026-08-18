@@ -7,7 +7,7 @@ import (
 	"github.com/seannyphoenix/dboe/internal/config"
 )
 
-func newDumpDBHandler(cfg *config.Config) http.HandlerFunc {
+func newDumpDBHandler(cfg *config.Config) (http.HandlerFunc, error) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		b, err := json.Marshal(cfg.DB)
@@ -20,5 +20,5 @@ func newDumpDBHandler(cfg *config.Config) http.HandlerFunc {
 			http.Error(w, "Failed to write response", http.StatusInternalServerError)
 			return
 		}
-	}
+	}, nil
 }

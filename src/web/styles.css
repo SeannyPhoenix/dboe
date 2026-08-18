@@ -1,0 +1,13 @@
+#app {
+  height: 100vh;
+  width: 100vw;
+  padding: 0.5rem;
+}
+
+.portal {
+  height: stretch;
+  width: stretch;
+  margin: 1rem;
+
+  background-color: #333333;
+}

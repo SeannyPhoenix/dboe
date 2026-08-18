@@ -1,3 +1,4 @@
+import App from './components/App';
 import './reset.css';
 import './styles.css';
 
@@ -8,7 +9,3 @@ if (!appRoot) {
 }
 
 appRoot.replaceChildren(<App />);
-
-export default function App() {
-  return <div>The Database of Everything</div>
-}

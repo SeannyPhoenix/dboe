@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/seannyphoenix/dboe/internal/config"
+	"github.com/seannyphoenix/dboe/internal/server/web"
 )
 
 type method string
@@ -30,11 +31,10 @@ func (p pattern) String() string {
 	return fmt.Sprintf("%s %s", p.method, p.path)
 }
 
-type newHandler func(cfg *config.Config) http.HandlerFunc
+type newHandler func(cfg *config.Config) (http.HandlerFunc, error)
 
-var uiRoutes = map[pattern]newHandler{
-	{MethodGet, "/"}:       newUIIndexHandler,
-	{MethodGet, "/app.js"}: newUIAppJSHandler,
+var webRoutes = map[pattern]newHandler{
+	{MethodGet, "/"}: web.NewStaticWebHandler,
 }
 
 var apiRoutes = map[pattern]newHandler{
@@ -48,21 +48,29 @@ var apiRoutes = map[pattern]newHandler{
 func registerRoutes(cfg *config.Config) http.Handler {
 	api := http.NewServeMux()
 	for pattern, newHandler := range apiRoutes {
-		api.HandleFunc(pattern.String(), newHandler(cfg))
+		handler, err := newHandler(cfg)
+		if err != nil {
+			panic(fmt.Sprintf("Failed to create handler for %s: %v", pattern.String(), err))
+		}
+		api.HandleFunc(pattern.String(), handler)
 	}
 
-	ui := http.NewServeMux()
-	for pattern, newHandler := range uiRoutes {
-		ui.HandleFunc(pattern.String(), newHandler(cfg))
+	webServer := http.NewServeMux()
+	for pattern, newHandler := range webRoutes {
+		handler, err := newHandler(cfg)
+		if err != nil {
+			panic(fmt.Sprintf("Failed to create handler for %s: %v", pattern.String(), err))
+		}
+		webServer.HandleFunc(pattern.String(), handler)
 	}
 
 	root := http.NewServeMux()
 	root.Handle("/api/", http.StripPrefix("/api", api))
-	root.Handle("/", ui)
+	root.Handle("/", webServer)
 	return root
 }
 
-func newHealthHandler(cfg *config.Config) http.HandlerFunc {
+func newHealthHandler(cfg *config.Config) (http.HandlerFunc, error) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		_, err := w.Write([]byte("DBOE server is running"))
@@ -70,11 +78,11 @@ func newHealthHandler(cfg *config.Config) http.HandlerFunc {
 			http.Error(w, "Failed to write response", http.StatusInternalServerError)
 			return
 		}
-	}
+	}, nil
 }
 
-func newNotFoundHandler(cfg *config.Config) http.HandlerFunc {
+func newNotFoundHandler(cfg *config.Config) (http.HandlerFunc, error) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Not Found", http.StatusNotFound)
-	}
+	}, nil
 }

@@ -10,7 +10,7 @@ import (
 	"github.com/seannyphoenix/dboe/pkg/record"
 )
 
-func newAddRecordHandler(cfg *config.Config) http.HandlerFunc {
+func newAddRecordHandler(cfg *config.Config) (http.HandlerFunc, error) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		b, err := io.ReadAll(r.Body)
 		if err != nil {
@@ -46,5 +46,5 @@ func newAddRecordHandler(cfg *config.Config) http.HandlerFunc {
 			http.Error(w, "Failed to write response", http.StatusInternalServerError)
 			return
 		}
-	}
+	}, nil
 }

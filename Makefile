@@ -1,6 +1,11 @@
-.PHONY: setup serve lint-ts lint-go lint fmt
+.PHONY: setup serve lint-ts lint-go lint fmt gen build
 
 GOLANGCI_LINT := $(shell which golangci-lint 2>/dev/null || echo $(shell go env GOPATH)/bin/golangci-lint)
+
+build: gen
+
+gen:
+	@go generate ./...
 
 setup:
 	@pnpm install
@@ -18,3 +23,4 @@ fmt:
 
 serve: 
 	@go run ./cmd/dboe serve
+

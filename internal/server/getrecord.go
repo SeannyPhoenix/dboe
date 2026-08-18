@@ -8,7 +8,7 @@ import (
 	"github.com/seannyphoenix/dboe/internal/config"
 )
 
-func newGetRecordHandler(cfg *config.Config) http.HandlerFunc {
+func newGetRecordHandler(cfg *config.Config) (http.HandlerFunc, error) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		recordID, err := uuid.Parse(r.PathValue("recordID"))
@@ -34,5 +34,5 @@ func newGetRecordHandler(cfg *config.Config) http.HandlerFunc {
 			http.Error(w, "Failed to write response", http.StatusInternalServerError)
 			return
 		}
-	}
+	}, nil
 }
