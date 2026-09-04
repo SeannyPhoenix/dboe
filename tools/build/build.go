@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 
@@ -15,7 +16,7 @@ func build() int {
 		return 1
 	}
 
-	opts := api.BuildOptions{
+	opt := api.BuildOptions{
 		EntryPoints: []string{
 			filepath.Join(root, "src/web/app.tsx"),
 			filepath.Join(root, "src/web/index.html"),
@@ -31,7 +32,26 @@ func build() int {
 		Sourcemap: api.SourceMapExternal,
 		Platform:  api.PlatformBrowser,
 	}
-	res := api.Build(opts)
+
+	if len(os.Args) > 1 && os.Args[1] == "--watch" {
+		log.Println("building in watch mode")
+		ctx, err := api.Context(opt)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Failed to create build context: %s\n", err)
+			return 1
+		}
+		watchErr := ctx.Watch(api.WatchOptions{})
+		if watchErr != nil {
+			fmt.Fprintf(os.Stderr, "Build error: %s\n", watchErr)
+			return 1
+		}
+
+		<-make(chan struct{})
+		return 0
+	}
+
+	log.Println("building")
+	res := api.Build(opt)
 	if len(res.Errors) > 0 {
 		for _, err := range res.Errors {
 			fmt.Fprintf(os.Stderr, "Build error: %s\n", err.Text)

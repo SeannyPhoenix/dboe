@@ -1,4 +1,4 @@
-// ../../../src/jsx/jsx-runtime/html.ts
+// src/jsx/jsx-runtime/html.ts
 var SVG_NS = "http://www.w3.org/2000/svg";
 var SVG_ELEMENTS = {
   svg: "svg",
@@ -6,7 +6,7 @@ var SVG_ELEMENTS = {
   g: "g"
 };
 
-// ../../../src/jsx/jsx-runtime/index.ts
+// src/jsx/jsx-runtime/index.ts
 var elementFactory = null;
 function setElementFactory(factory) {
   elementFactory = factory;
@@ -93,12 +93,12 @@ function appendChildren(parent, children) {
   parent.appendChild(textNode);
 }
 
-// ../../../src/web/components/App.tsx
+// src/web/components/App.tsx
 function App() {
   return /* @__PURE__ */ jsx("div", { class: "portal", children: /* @__PURE__ */ jsx("div", { children: "The Database of Everything" }) });
 }
 
-// ../../../src/web/app.tsx
+// src/web/app.tsx
 var appRoot = document.getElementById("app");
 if (!appRoot) {
   throw new Error("Could not find #app root element");
