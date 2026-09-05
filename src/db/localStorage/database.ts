@@ -1,19 +1,34 @@
-import { Value, ValueType, ValueID, ValueTypeID, AnyEntry, Tombstone } from '../types/types';
+import { z } from 'zod';
 
-export type DatabaseData = {
-  values: Record<ValueID, Value>;
-  valueTypes: Record<ValueTypeID, ValueType>;
-  history: Array<AnyEntry>;
-};
+import {
+  Value,
+  ValueType,
+  ValueID,
+  ValueTypeID,
+  AnyEntry,
+  Tombstone,
+  ValueSchema,
+  ValueTypeSchema,
+  AnyEntrySchema,
+  zValueID,
+  zValueTypeID,
+} from '../types/types';
 
-const emptyDatabase: DatabaseData = {
+const DatabaseSchema = z.strictObject({
+  values: z.record(zValueID, ValueSchema),
+  valueTypes: z.record(zValueTypeID, ValueTypeSchema),
+  history: z.array(AnyEntrySchema),
+});
+export type DatabaseSchemaType = z.infer<typeof DatabaseSchema>;
+
+const emptyDatabase: DatabaseSchemaType = {
   values: {},
   valueTypes: {},
   history: [],
 };
 
 export class Database {
-  private data: DatabaseData;
+  private data: DatabaseSchemaType;
 
   constructor() {
     this.data = { ...emptyDatabase };
@@ -38,13 +53,11 @@ export class Database {
       throw new Error(`Value "${valueId}" not found`);
     }
     delete this.data.values[valueId];
-    if (entry) {
-      const tombstone: Tombstone = {
-        id: entry.id,
-        timestamp: new Date(),
-      };
-      this.data.history.push(tombstone);
-    }
+    const tombstone: Tombstone = {
+      id: entry.id,
+      timestamp: new Date(),
+    };
+    this.data.history.push(tombstone);
   }
 
   getValuesByType(typeId: ValueTypeID): Value[] {
@@ -72,13 +85,11 @@ export class Database {
       throw new Error(`ValueType "${typeId}" not found`);
     }
     delete this.data.valueTypes[typeId];
-    if (entry) {
-      const tombstone: Tombstone = {
-        id: entry.id,
-        timestamp: new Date(),
-      };
-      this.data.history.push(tombstone);
-    }
+    const tombstone: Tombstone = {
+      id: entry.id,
+      timestamp: new Date(),
+    };
+    this.data.history.push(tombstone);
   }
 
   getAllValueTypes(): ValueType[] {
@@ -89,7 +100,7 @@ export class Database {
     return Object.values(this.data.values);
   }
 
-  getData(): DatabaseData {
+  getData(): DatabaseSchemaType {
     return this.data;
   }
 
@@ -100,7 +111,11 @@ export class Database {
   load(): void {
     const data = localStorage.getItem('database');
     if (data) {
-      this.data = JSON.parse(data);
+      try {
+        this.data = DatabaseSchema.parse(JSON.parse(data));
+      } catch (error) {
+        console.error('Failed to load database from localStorage:', error);
+      }
     }
   }
 

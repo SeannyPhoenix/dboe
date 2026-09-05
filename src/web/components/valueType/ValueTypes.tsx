@@ -16,9 +16,12 @@ export default function ValueTypes({ state }: { state: AppState }) {
         </button>
 
         <div class="vt-list">
-          {state.get().database.getAllValueTypes().map((vt) => (
-            <ValueTypeDisplay state={state} valueType={vt} />
-          ))}
+          {state
+            .get()
+            .database.getAllValueTypes()
+            .map((vt) => (
+              <ValueTypeDisplay state={state} valueType={vt} />
+            ))}
         </div>
       </>
     );
