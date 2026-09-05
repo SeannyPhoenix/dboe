@@ -1,7 +1,7 @@
 import { v7 as uuidV7 } from 'uuid';
 
-import { State } from './state';
-import { Value } from './types';
+import { Value, ValueID } from '../../db/types/types';
+import type { AppState } from './appState';
 
 type ValueComponents = {
   entity?: string;
@@ -9,7 +9,7 @@ type ValueComponents = {
   value: unknown;
 };
 
-export function newValue(state: State, { entity, type, value }: ValueComponents): Value {
+export function newValue(state: AppState, { entity, type, value }: ValueComponents): Value {
   if (!entity) {
     entity = uuidV7();
   }
@@ -23,14 +23,14 @@ export function newValue(state: State, { entity, type, value }: ValueComponents)
   };
 
   const currentState = state.get();
-  currentState.items.push(newVal);
+  currentState.database.putValue(newVal);
   state.notify();
 
   return newVal;
 }
 
-export function deleteValue(state: State, index: number): void {
+export function deleteValue(state: AppState, id: ValueID): void {
   const currentState = state.get();
-  currentState.items.splice(index, 1);
+  currentState.database.deleteValue(id);
   state.notify();
 }

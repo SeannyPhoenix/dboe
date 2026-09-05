@@ -1,9 +1,9 @@
 import { v7 as uuidV7 } from 'uuid';
 
-import { State } from './state';
-import { SerDe, ValueType, ValueTypeID } from './types';
+import {  ValueType, ValueTypeID } from '../../db/types/types';
+import { AppState } from './appState';
 
-export function newValueType(state: State): ValueType {
+export function newValueType(state: AppState): ValueType {
   const newVT: ValueType = {
     id: uuidV7(),
     description: '',
@@ -11,26 +11,20 @@ export function newValueType(state: State): ValueType {
   };
 
   const currentState = state.get();
-  currentState.valuetypes.push(newVT);
+  currentState.database.putValueType(newVT);
   state.notify();
 
   return newVT;
 }
 
-export function deleteValueType(state: State, id: ValueTypeID): void {
+export function deleteValueType(state: AppState, id: ValueTypeID): void {
   const currentState = state.get();
-  const index = currentState.valuetypes.findIndex((vt) => vt.id === id);
-  if (index !== -1) {
-    currentState.valuetypes.splice(index, 1);
-    state.notify();
-  }
+  currentState.database.deleteValueType(id);
+  state.notify();
 }
 
-export function setValueType(state: State, updatedValueType: ValueType): void {
+export function setValueType(state: AppState, updatedValueType: ValueType): void {
   const currentState = state.get();
-  const index = currentState.valuetypes.findIndex((vt) => vt.id === updatedValueType.id);
-  if (index !== -1) {
-    currentState.valuetypes[index] = updatedValueType;
-    state.notify();
-  }
+  currentState.database.putValueType(updatedValueType);
+  state.notify();
 }

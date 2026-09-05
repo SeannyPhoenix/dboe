@@ -1,12 +1,12 @@
+import { SerDe, ValueType } from '../../../db/types/types';
 import { reactiveComponent } from '../../reactive/component';
 import { createReactive } from '../../reactive/reactive';
-import { State } from '../state';
-import { SerDe, ValueType } from '../types';
+import { DB } from '../appState';
 import { setValueType } from '../valuetype';
 import { deleteValueType } from '../valuetype';
 
 type Props = {
-  state: State;
+  state: DB;
   valueType: ValueType;
 };
 

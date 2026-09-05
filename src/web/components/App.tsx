@@ -1,9 +1,9 @@
-import { initState, State } from './state';
+import { initAppState } from './appState';
 import Values from './value/Values';
 import ValueTypes from './valueType/ValueTypes';
 
 export default function App() {
-  const state = initState();
+  const state = initAppState();
 
   return (
     <div class="portal">

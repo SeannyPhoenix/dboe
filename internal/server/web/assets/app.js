@@ -1,3 +1,92 @@
+// src/db/localStorage/database.ts
+var emptyDatabase = {
+  values: {},
+  valueTypes: {},
+  history: []
+};
+var Database = class {
+  data;
+  constructor() {
+    this.data = { ...emptyDatabase };
+    this.load();
+  }
+  getValue(valueId) {
+    return this.data.values[valueId];
+  }
+  putValue(value) {
+    if (!this.data.valueTypes[value.type]) {
+      throw new Error(`ValueType "${value.type}" not found`);
+    }
+    this.data.values[value.id] = value;
+    this.data.history.push(value);
+  }
+  deleteValue(valueId) {
+    const entry = this.data.values[valueId];
+    if (!entry) {
+      throw new Error(`Value "${valueId}" not found`);
+    }
+    delete this.data.values[valueId];
+    if (entry) {
+      const tombstone = {
+        id: entry.id,
+        timestamp: /* @__PURE__ */ new Date()
+      };
+      this.data.history.push(tombstone);
+    }
+  }
+  getValuesByType(typeId) {
+    return Object.values(this.data.values).filter((v) => v.type === typeId);
+  }
+  getValueType(typeId) {
+    return this.data.valueTypes[typeId];
+  }
+  putValueType(valueType) {
+    this.data.valueTypes[valueType.id] = valueType;
+    this.data.history.push(valueType);
+  }
+  deleteValueType(typeId) {
+    const usedByValues = this.getValuesByType(typeId);
+    if (usedByValues.length) {
+      throw new Error(
+        `Cannot delete ValueType "${typeId}": ${usedByValues.length} value(s) still reference it`
+      );
+    }
+    const entry = this.data.valueTypes[typeId];
+    if (!entry) {
+      throw new Error(`ValueType "${typeId}" not found`);
+    }
+    delete this.data.valueTypes[typeId];
+    if (entry) {
+      const tombstone = {
+        id: entry.id,
+        timestamp: /* @__PURE__ */ new Date()
+      };
+      this.data.history.push(tombstone);
+    }
+  }
+  getAllValueTypes() {
+    return Object.values(this.data.valueTypes);
+  }
+  getAllValues() {
+    return Object.values(this.data.values);
+  }
+  getData() {
+    return this.data;
+  }
+  isValid() {
+    return Object.values(this.data.values).every((v) => this.data.valueTypes[v.type]);
+  }
+  load() {
+    const data = localStorage.getItem("database");
+    if (data) {
+      this.data = JSON.parse(data);
+    }
+  }
+  save() {
+    localStorage.setItem("database", JSON.stringify(this.data));
+  }
+};
+
 // src/web/reactive/reactive.ts
 function createReactive(initialState) {
   let state = initialState;
@@ -24,25 +113,27 @@ function createReactive(initialState) {
   };
 }
 
-// src/web/components/state.ts
-var defaultState = {
-  items: [],
-  valuetypes: []
-};
-function initState() {
-  const savedState = loadState();
-  const state = createReactive({ ...defaultState, ...savedState });
-  state.subscribe(() => {
-    persistState(state.get());
-  });
+// src/web/components/appState.ts
+function initAppState() {
+  const stateData = {
+    database: new Database()
+  };
+  const state = createReactive(stateData);
+  state.subscribe(() => state.get().database.save());
   return state;
 }
-function loadState() {
-  const data = localStorage.getItem("appState");
-  return data ? JSON.parse(data) : {};
-}
-function persistState(state) {
-  localStorage.setItem("appState", JSON.stringify(state));
+
+// src/web/reactive/component.ts
+function reactiveComponent(subscriptions, render) {
+  const container = document.createElement("div");
+  function update() {
+    container.innerHTML = "";
+    const content = render();
+    container.append(...Array.isArray(content) ? content : [content]);
+  }
+  subscriptions.forEach((sub) => sub.subscribe(update));
+  update();
+  return container;
 }
 
 // node_modules/.pnpm/uuid@13.0.2/node_modules/uuid/dist/stringify.js
@@ -129,19 +220,6 @@ function v7Bytes(rnds, msecs, seq, buf, offset = 0) {
 }
 var v7_default = v7;
 
-// src/web/reactive/component.ts
-function reactiveComponent(subscriptions, render) {
-  const container = document.createElement("div");
-  function update() {
-    container.innerHTML = "";
-    const content = render();
-    container.append(...Array.isArray(content) ? content : [content]);
-  }
-  subscriptions.forEach((sub) => sub.subscribe(update));
-  update();
-  return container;
-}
-
 // src/web/components/value.ts
 function newValue(state, { entity, type, value }) {
   if (!entity) {
@@ -155,13 +233,13 @@ function newValue(state, { entity, type, value }) {
     value
   };
   const currentState = state.get();
-  currentState.items.push(newVal);
+  currentState.database.putValue(newVal);
   state.notify();
   return newVal;
 }
-function deleteValue(state, index) {
+function deleteValue(state, id) {
   const currentState = state.get();
-  currentState.items.splice(index, 1);
+  currentState.database.deleteValue(id);
   state.notify();
 }
 
@@ -269,12 +347,12 @@ function Values({ state }) {
         "button",
         {
           onclick: () => {
-            newValue(state, { type: v7_default(), value: `item-${Date.now()}` });
+            newValue(state, { type: "01a072b6-0ffb-758b-a6d9-4c4f4336be8a", value: `item-${Date.now()}` });
           },
           children: "Add New Value"
         }
       ),
-      /* @__PURE__ */ jsx("div", { children: state.get().items.map((item, index) => /* @__PURE__ */ jsxs("div", { style: { border: "1px solid #ccc", padding: "10px", margin: "10px 0" }, children: [
+      /* @__PURE__ */ jsx("div", { children: state.get().database.getAllValues().map((item) => /* @__PURE__ */ jsxs("div", { style: { border: "1px solid #ccc", padding: "10px", margin: "10px 0" }, children: [
         /* @__PURE__ */ jsxs("p", { children: [
           /* @__PURE__ */ jsx("strong", { children: "Entity:" }),
           " ",
@@ -299,7 +377,7 @@ function Values({ state }) {
           "button",
           {
             onclick: () => {
-              deleteValue(state, index);
+              deleteValue(state, item.id);
             },
             children: "Delete"
           }
@@ -317,25 +395,19 @@ function newValueType(state) {
     serde: "string"
   };
   const currentState = state.get();
-  currentState.valuetypes.push(newVT);
+  currentState.database.putValueType(newVT);
   state.notify();
   return newVT;
 }
 function deleteValueType(state, id) {
   const currentState = state.get();
-  const index = currentState.valuetypes.findIndex((vt) => vt.id === id);
-  if (index !== -1) {
-    currentState.valuetypes.splice(index, 1);
-    state.notify();
-  }
+  currentState.database.deleteValueType(id);
+  state.notify();
 }
 function setValueType(state, updatedValueType) {
   const currentState = state.get();
-  const index = currentState.valuetypes.findIndex((vt) => vt.id === updatedValueType.id);
-  if (index !== -1) {
-    currentState.valuetypes[index] = updatedValueType;
-    state.notify();
-  }
+  currentState.database.putValueType(updatedValueType);
+  state.notify();
 }
 
 // src/web/components/valueType/ValueTypeDisplay.tsx
@@ -454,14 +526,14 @@ function ValueTypes({ state }) {
           children: "New Value Type"
         }
       ),
-      /* @__PURE__ */ jsx("div", { class: "vt-list", children: state.get().valuetypes.map((vt) => /* @__PURE__ */ jsx(ValueTypeDisplay, { state, valueType: vt })) })
+      /* @__PURE__ */ jsx("div", { class: "vt-list", children: state.get().database.getAllValueTypes().map((vt) => /* @__PURE__ */ jsx(ValueTypeDisplay, { state, valueType: vt })) })
     ] });
   });
 }
 
 // src/web/components/App.tsx
 function App() {
-  const state = initState();
+  const state = initAppState();
   return /* @__PURE__ */ jsxs("div", { class: "portal", children: [
     /* @__PURE__ */ jsx("div", { children: "The Database of Everything V3" }),
     /* @__PURE__ */ jsxs("div", { style: { display: "flex", gap: "20px" }, children: [

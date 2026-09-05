@@ -6,6 +6,7 @@ export type ValueTypeID = string;
 export type ValueID = string;
 export type LinkTypeID = string;
 export type LinkID = string;
+export type TombstoneID = EntityID | ValueTypeID | ValueID | LinkTypeID | LinkID;
 
 export type ValueType = {
   id: ValueTypeID;
@@ -33,3 +34,10 @@ export type Link = {
   a: EntityID;
   b: EntityID;
 };
+
+export type Tombstone = {
+  id: TombstoneID;
+  timestamp: Date;
+};
+
+export type AnyEntry = Value | ValueType | Link | LinkType | Tombstone;

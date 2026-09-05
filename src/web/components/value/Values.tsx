@@ -1,22 +1,22 @@
 import { v7 as uuidV7 } from 'uuid';
 
 import { reactiveComponent } from '../../reactive/component';
-import { State } from '../state';
+import { AppState } from '../appState';
 import { newValue, deleteValue } from '../value';
 
-export default function Values({ state }: { state: State }) {
+export default function Values({ state }: { state: AppState }) {
   return reactiveComponent([state], () => {
     return (
       <>
         <button
           onclick={() => {
-            newValue(state, { type: uuidV7(), value: `item-${Date.now()}` });
+            newValue(state, { type: "01a072b6-0ffb-758b-a6d9-4c4f4336be8a", value: `item-${Date.now()}` });
           }}
         >
           Add New Value
         </button>
         <div>
-          {state.get().items.map((item, index) => (
+          {state.get().database.getAllValues().map((item) => (
             <div style={{ border: '1px solid #ccc', padding: '10px', margin: '10px 0' }}>
               <p>
                 <strong>Entity:</strong> {item.entity}
@@ -32,7 +32,7 @@ export default function Values({ state }: { state: State }) {
               </p>
               <button
                 onclick={() => {
-                  deleteValue(state, index);
+                  deleteValue(state, item.id);
                 }}
               >
                 Delete
