@@ -1,6 +1,6 @@
 import { v7 } from 'uuid';
 
-import { Value } from './types';
+import { Value, ValueType } from './types';
 import { newValue } from './value';
 
 export type StateListener = () => void;
@@ -8,6 +8,7 @@ export type StateListener = () => void;
 export type State = {
   count: number;
   items: Value[];
+  valuetypes: ValueType[];
   listeners: Set<StateListener>;
   notify(): void;
 };
@@ -16,6 +17,7 @@ export function createState(): State {
   const state: State = {
     count: 0,
     items: [],
+    valuetypes: [],
     listeners: new Set(),
     notify() {
       this.listeners.forEach((fn) => fn());

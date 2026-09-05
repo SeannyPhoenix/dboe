@@ -1,12 +1,22 @@
 import { createState, State } from './state';
 import Values from './Values';
+import ValueTypes from './ValueTypes';
 
 export default function App() {
   const state = createState();
   return (
     <div class="portal">
       <div>The Database of Everything V3</div>
-      <Values state={state} />
+      <div style={{ display: 'flex', gap: '20px' }}>
+        <div style={{ flex: '1' }}>
+          <h2>Value Types</h2>
+          <ValueTypes state={state} />
+        </div>
+        <div style={{ flex: '1' }}>
+          <h2>Values</h2>
+          <Values state={state} />
+        </div>
+      </div>
     </div>
   );
 }
