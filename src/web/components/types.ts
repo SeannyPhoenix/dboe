@@ -1,11 +1,11 @@
 const validSerDe = ['string', 'number', 'boolean'] as const;
-type SerDe = (typeof validSerDe)[number];
+export type SerDe = (typeof validSerDe)[number];
 
-type EntityID = string;
-type ValueTypeID = string;
-type ValueID = string;
-type LinkTypeID = string;
-type LinkID = string;
+export type EntityID = string;
+export type ValueTypeID = string;
+export type ValueID = string;
+export type LinkTypeID = string;
+export type LinkID = string;
 
 export type ValueType = {
   id: ValueTypeID;

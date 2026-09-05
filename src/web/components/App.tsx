@@ -1,6 +1,6 @@
 import { createState, State } from './state';
-import Values from './Values';
-import ValueTypes from './ValueTypes';
+import Values from './value/Values';
+import ValueTypes from './valueType/ValueTypes';
 
 export default function App() {
   const state = createState();

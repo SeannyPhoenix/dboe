@@ -22,13 +22,15 @@ export function newValue(state: State, { entity, type, value }: ValueComponents)
     value,
   };
 
-  state.items.push(newVal);
+  const currentState = state.get();
+  currentState.items.push(newVal);
   state.notify();
 
   return newVal;
 }
 
 export function deleteValue(state: State, index: number): void {
-  state.items.splice(index, 1);
+  const currentState = state.get();
+  currentState.items.splice(index, 1);
   state.notify();
 }

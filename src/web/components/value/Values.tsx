@@ -1,15 +1,12 @@
 import { v7 as uuidV7 } from 'uuid';
 
-import { State, subscribe } from './state';
-import { newValue, deleteValue } from './value';
+import { reactiveComponent } from '../../reactive/component';
+import { State } from '../state';
+import { newValue, deleteValue } from '../value';
 
 export default function Values({ state }: { state: State }) {
-  const container = document.createElement('div');
-
-  function render() {
-    container.innerHTML = '';
-
-    container.append(
+  return reactiveComponent([state], () => {
+    return (
       <>
         <button
           onclick={() => {
@@ -18,9 +15,8 @@ export default function Values({ state }: { state: State }) {
         >
           Add New Value
         </button>
-
         <div>
-          {state.items.map((item, index) => (
+          {state.get().items.map((item, index) => (
             <div style={{ border: '1px solid #ccc', padding: '10px', margin: '10px 0' }}>
               <p>
                 <strong>Entity:</strong> {item.entity}
@@ -44,12 +40,7 @@ export default function Values({ state }: { state: State }) {
             </div>
           ))}
         </div>
-      </>,
+      </>
     );
-  }
-
-  subscribe(state, render);
-  render();
-
-  return container;
+  });
 }
