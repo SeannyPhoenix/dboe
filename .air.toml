@@ -1,0 +1,27 @@
+# air - Live reload for Go
+# https://github.com/cosmtrek/air
+
+[build]
+cmd = "go build -o ./.dev/dboe ./cmd/dboe"
+entrypoint = "./.dev/dboe"
+args_bin = ["serve"]
+include_ext = ["go", "css", "js", "html", "map"]
+exclude_dirs = [".dev", "node_modules", ".git"]
+full_bin = ""
+include_dir = []
+exclude_dir = []
+exclude_file = []
+exclude_regex = []
+
+[color]
+main = "magenta"
+watcher = "cyan"
+build = "yellow"
+running = "green"
+
+[log]
+main_only = false
+time = false
+
+[misc]
+clean_on_exit = true

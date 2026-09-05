@@ -43,7 +43,7 @@ e1 -.-> lt-eos -.-> s1
   {
     "id": "2dc5414d-00d7-4a95-8dd6-24c6c4fca319",
     "l": "Length",
-    "s": "time:duration",
+    "s": "time:duration"
   }
 ]
 ```
@@ -61,8 +61,7 @@ e1 -.-> lt-eos -.-> s1
 
 ## Data
 
-
-### Value 
+### Value
 
 ```json
 [
@@ -74,7 +73,7 @@ e1 -.-> lt-eos -.-> s1
     "v": "Polit"
   },
   {
-    "id": "f6c5b08e-c05c-4db7-b94f-0bdc30155310", 
+    "id": "f6c5b08e-c05c-4db7-b94f-0bdc30155310",
     "t": "8db36ca4-21c5-467b-a44d-1b36fee12aa7",
     "p": "a2424467-9e39-4070-ac04-5ec2892d837f",
     "ts": "now",
@@ -126,23 +125,22 @@ e1 -.-> lt-eos -.-> s1
   {
     "a2424467-9e39-4070-ac04-5ec2892d837f": {
       "d24d6ad6-6865-4d11-9914-b8230789a7f6": {
-      "atob": [
-        {
-          "linkId": "01a06dad-7d61-72ec-8e0a-23d200283a74",
-          "to": "eafa7992-c2a4-4187-966d-bd2a55034c90"
-        }
-      ],
+        "atob": [
+          {
+            "linkId": "01a06dad-7d61-72ec-8e0a-23d200283a74",
+            "to": "eafa7992-c2a4-4187-966d-bd2a55034c90"
+          }
+        ]
       }
     },
     "eafa7992-c2a4-4187-966d-bd2a55034c90": {
       "d24d6ad6-6865-4d11-9914-b8230789a7f6": {
-        "btoa": 
-        {
+        "btoa": {
           "linkId": "01a06dad-7d61-72ec-8e0a-23d200283a74",
           "to": "a2424467-9e39-4070-ac04-5ec2892d837f"
         }
-      },
-    },
+      }
+    }
   }
 ]
 ```
