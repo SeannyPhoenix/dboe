@@ -13,22 +13,38 @@ type Props = {
 export function ValueTypeDisplay({ state, valueType }: Props) {
   const shouldEdit = createReactive(false);
   const currentValueType = createReactive(valueType);
+  const formState = createReactive({
+    description: valueType.description,
+    serde: valueType.serde as SerDe,
+  });
+
+  // Manually manage form state sync when entering edit mode
+  shouldEdit.subscribe(() => {
+    if (shouldEdit.get()) {
+      const current = currentValueType.get();
+      formState.set({
+        description: current.description,
+        serde: current.serde,
+      });
+    }
+  });
 
   return reactiveComponent([state, shouldEdit], () => {
     const isEditing = shouldEdit.get();
-    const { description, serde } = currentValueType.get();
+    const { description, serde } = formState.get();
 
     return (
       <div class="vt-row">
-        <>
-          <div class="vt-serde">
-            {isEditing
-              ? (() => {
+        <div class="vt-serde">
+          {isEditing
+            ? (() => {
                 const select = (
                   <select
                     onchange={(e) => {
-                      const serde = (e.target as HTMLSelectElement).value as SerDe;
-                      currentValueType.update((vt) => ({ ...vt, serde: serde }));
+                      formState.update((f) => ({
+                        ...f,
+                        serde: (e.target as HTMLSelectElement).value as SerDe,
+                      }));
                     }}
                   >
                     <option value="string">string</option>
@@ -39,64 +55,69 @@ export function ValueTypeDisplay({ state, valueType }: Props) {
                 select.value = serde;
                 return select;
               })()
-              : serde}
-          </div>
-          <div class="vt-desc">
-            {isEditing ? (
-              <input
-                type="text"
-                value={description}
-                placeholder="Description"
-                oninput={(e) => {
-                  const description = (e.target as HTMLInputElement).value;
-                  currentValueType.update((vt) => ({ ...vt, description }));
-                }}
-              />
-            ) : (
-              description
-            )}
-          </div>
+            : currentValueType.get().serde}
+        </div>
+        <div class="vt-desc">
           {isEditing ? (
-            <button
-              class="vt-btn"
-              onclick={() => {
-                currentValueType.set(valueType);
-                shouldEdit.set(false);
+            <input
+              type="text"
+              value={description}
+              placeholder="Description"
+              oninput={(e) => {
+                formState.update((f) => ({
+                  ...f,
+                  description: (e.target as HTMLInputElement).value,
+                }));
               }}
-            >
-              Cancel
-            </button>
+            />
           ) : (
-            <button
-              class="vt-btn"
-              onclick={() => {
-                shouldEdit.set(true);
-              }}
-            >
-              Edit
-            </button>
+            currentValueType.get().description
           )}
-          {isEditing ? (
-            <button
-              class="vt-btn"
-              onclick={() => {
-                shouldEdit.set(false);
-                setValueType(state, currentValueType.get());
-              }}
-            >
-              Save
-            </button>
-          ) : (
-            <button
-              class="vt-btn"
-              onclick={() => {
-                deleteValueType(state, currentValueType.get().id);
-              }}
-            >
-              Delete
-            </button>
-          )}
-        </>
+        </div>
+        {isEditing ? (
+          <button
+            class="vt-btn"
+            onclick={() => {
+              shouldEdit.set(false);
+            }}
+          >
+            Cancel
+          </button>
+        ) : (
+          <button
+            class="vt-btn"
+            onclick={() => {
+              shouldEdit.set(true);
+            }}
+          >
+            Edit
+          </button>
+        )}
+        {isEditing ? (
+          <button
+            class="vt-btn"
+            onclick={() => {
+              shouldEdit.set(false);
+              const formValues = formState.get();
+              currentValueType.set({
+                ...currentValueType.get(),
+                ...formValues,
+              });
+              setValueType(state, currentValueType.get());
+            }}
+          >
+            Save
+          </button>
+        ) : (
+          <button
+            class="vt-btn"
+            onclick={() => {
+              deleteValueType(state, currentValueType.get().id);
+            }}
+          >
+            Delete
+          </button>
+        )}
       </div>
     );
   });

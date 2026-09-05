@@ -1,9 +1,10 @@
-import { createState, State } from './state';
+import { initState, State } from './state';
 import Values from './value/Values';
 import ValueTypes from './valueType/ValueTypes';
 
 export default function App() {
-  const state = createState();
+  const state = initState();
+
   return (
     <div class="portal">
       <div>The Database of Everything V3</div>
