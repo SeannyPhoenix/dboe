@@ -17,19 +17,17 @@ export default function ValueTypes({ state }: { state: State }) {
           Add New Value Type
         </button>
 
-        <div>
+        <div class="vt-list">
           {state.valuetypes.map((vt, index) => (
-            <div style={{ border: '1px solid #ccc', padding: '10px', margin: '10px 0' }}>
-              <p>
-                <strong>ID:</strong> {vt.id}
-              </p>
-              <p>
-                <strong>Description:</strong> {vt.description}
-              </p>
-              <p>
+            <div class="vt-row">
+              <div class="vt-serde">
                 <strong>SerDe:</strong> {vt.serde}
-              </p>
+              </div>
+              <div class="vt-desc">
+                <strong>Description:</strong> {vt.description}
+              </div>
               <button
+                class="vt-btn"
                 onclick={() => {
                   deleteValueType(state, index);
                 }}
