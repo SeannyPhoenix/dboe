@@ -7,7 +7,7 @@ export default function App() {
 
   return (
     <div class="portal">
-      <div>The Database of Everything V3</div>
+      <div>The Database of Everything</div>
       <div style={{ display: 'flex', gap: '20px' }}>
         <div style={{ flex: '1' }}>
           <h2>Value Types</h2>

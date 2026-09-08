@@ -1,10 +1,9 @@
 import { v7 as uuidV7 } from 'uuid';
 
-import { Value } from '../../db/types/types';
+import { Value } from '../../../db/types/types';
 import { reactiveComponent } from '../../reactive/component';
 import { createReactive } from '../../reactive/reactive';
 import { AppState } from '../appState';
-import { newValue } from '../value';
 import { ValueDisplay } from './ValueDisplay';
 
 export default function Values({ state }: { state: AppState }) {
@@ -32,7 +31,7 @@ export default function Values({ state }: { state: AppState }) {
           Add New Value
         </button>
 
-        <div class="val-list">
+        <div class="vt-list">
           {draft && (
             <ValueDisplay
               state={state}
@@ -49,6 +48,7 @@ export default function Values({ state }: { state: AppState }) {
           {state
             .get()
             .database.getAllValues()
+            .sort((a, b) => a.entity.localeCompare(b.entity))
             .map((val) => (
               <ValueDisplay state={state} value={val} />
             ))}

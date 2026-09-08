@@ -1,21 +1,46 @@
+import { v7 as uuidV7 } from 'uuid';
+
+import { ValueType } from '../../../db/types/types';
 import { reactiveComponent } from '../../reactive/component';
+import { createReactive } from '../../reactive/reactive';
 import { AppState } from '../appState';
-import { newValueType } from '../valuetype';
 import { ValueTypeDisplay } from './ValueTypeDisplay';
 
 export default function ValueTypes({ state }: { state: AppState }) {
-  return reactiveComponent([state], () => {
+  const draftValueType = createReactive<ValueType | null>(null);
+
+  return reactiveComponent([state, draftValueType], () => {
+    const draft = draftValueType.get();
+
     return (
       <>
         <button
           onclick={() => {
-            newValueType(state);
+            draftValueType.set({
+              id: uuidV7(),
+              description: '',
+              serde: 'string',
+            });
           }}
+          // disabled={draft !== null}
         >
           New Value Type
         </button>
 
         <div class="vt-list">
+          {draft && (
+            <ValueTypeDisplay
+              state={state}
+              valueType={draft}
+              isDraft={true}
+              onSaveDraft={() => {
+                draftValueType.set(null);
+              }}
+              onDiscardDraft={() => {
+                draftValueType.set(null);
+              }}
+            />
+          )}
           {state
             .get()
             .database.getAllValueTypes()

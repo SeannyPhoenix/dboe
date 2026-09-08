@@ -6,6 +6,7 @@ import { AppState } from './appState';
 export function newValueType(state: AppState): ValueType {
   const newVT: ValueType = {
     id: uuidV7(),
+    timestamp: new Date,
     description: '',
     serde: 'string',
   };

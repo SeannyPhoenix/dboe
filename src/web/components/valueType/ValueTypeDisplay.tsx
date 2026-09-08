@@ -1,123 +1,117 @@
-import { SerDe, ValueType } from '../../../db/types/types';
+import { ValueType } from '../../../db/types/types';
 import { reactiveComponent } from '../../reactive/component';
 import { createReactive } from '../../reactive/reactive';
 import { AppState } from '../appState';
+import { InputText } from '../form/input/Input';
+import { Select, SelectOption } from '../form/select/Select';
 import { setValueType } from '../valuetype';
 import { deleteValueType } from '../valuetype';
 
 type Props = {
   state: AppState;
   valueType: ValueType;
+  isDraft?: boolean;
+  onSaveDraft?: () => void;
+  onDiscardDraft?: () => void;
 };
 
-export function ValueTypeDisplay({ state, valueType }: Props) {
-  const shouldEdit = createReactive(false);
+export function ValueTypeDisplay({
+  state,
+  valueType,
+  isDraft = false,
+  onSaveDraft,
+  onDiscardDraft,
+}: Props) {
+  const shouldEdit = createReactive(isDraft);
   const currentValueType = createReactive(valueType);
-  const formState = createReactive({
-    description: valueType.description,
-    serde: valueType.serde as SerDe,
-  });
 
-  // Manually manage form state sync when entering edit mode
+  // Individual reactive fields for the form
+  const descriptionState = createReactive(valueType.description);
+  const serdeState = createReactive(valueType.serde);
+
+  // Reset form state when entering edit mode
   shouldEdit.subscribe(() => {
     if (shouldEdit.get()) {
       const current = currentValueType.get();
-      formState.set({
-        description: current.description,
-        serde: current.serde,
-      });
+      descriptionState.set(current.description);
+      serdeState.set(current.serde);
+    }
+  });
+
+  const serdeOptions: SelectOption[] = [
+    { label: 'string', value: 'string' },
+    { label: 'number', value: 'number' },
+    { label: 'boolean', value: 'boolean' },
+  ];
+
+  const saveDeleteButton = (
+    <button
+      class="vt-btn"
+      disabled={shouldEdit.get() && descriptionState.get().trim().length === 0}
+      onclick={() => {
+        switch (shouldEdit.get()) {
+          case true:
+            shouldEdit.set(false);
+            const updated = {
+              ...currentValueType.get(),
+              description: descriptionState.get(),
+              serde: serdeState.get(),
+            };
+            currentValueType.set(updated);
+            setValueType(state, updated);
+            if (isDraft && onSaveDraft) {
+              onSaveDraft();
+            }
+            break;
+          case false:
+            deleteValueType(state, currentValueType.get().id);
+            break;
+        }
+      }}
+    >
+      {shouldEdit.get() ? 'Save' : 'Delete'}
+    </button>
+  ) as HTMLButtonElement;
+
+  descriptionState.subscribe(() => {
+    const currentDesc = descriptionState.get();
+    if (shouldEdit.get()) {
+      const disabled = currentDesc.trim().length === 0;
+      if (saveDeleteButton.disabled !== disabled) {
+        saveDeleteButton.disabled = disabled;
+      }
+    }
+  });
+  shouldEdit.subscribe(() => {
+    const label = shouldEdit.get() ? 'Save' : 'Delete';
+    if (saveDeleteButton.innerText !== label) {
+      saveDeleteButton.innerText = label;
     }
   });
 
   return reactiveComponent([state, shouldEdit], () => {
     const isEditing = shouldEdit.get();
-    const { description, serde } = formState.get();
 
     return (
       <div class="vt-row">
         <div class="vt-serde">
-          {isEditing
-            ? (() => {
-                const select = (
-                  <select
-                    onchange={(e) => {
-                      formState.update((f) => ({
-                        ...f,
-                        serde: (e.target as HTMLSelectElement).value as SerDe,
-                      }));
-                    }}
-                  >
-                    <option value="string">string</option>
-                    <option value="number">number</option>
-                    <option value="boolean">boolean</option>
-                  </select>
-                ) as HTMLSelectElement;
-                select.value = serde;
-                return select;
-              })()
-            : currentValueType.get().serde}
+          {isEditing ? Select(serdeState, serdeOptions) : currentValueType.get().serde}
         </div>
         <div class="vt-desc">
-          {isEditing ? (
-            <input
-              type="text"
-              value={description}
-              placeholder="Description"
-              oninput={(e) => {
-                formState.update((f) => ({
-                  ...f,
-                  description: (e.target as HTMLInputElement).value,
-                }));
-              }}
-            />
-          ) : (
-            currentValueType.get().description
-          )}
+          {isEditing ? InputText(descriptionState) : currentValueType.get().description}
         </div>
-        {isEditing ? (
-          <button
-            class="vt-btn"
-            onclick={() => {
-              shouldEdit.set(false);
-            }}
-          >
-            Cancel
-          </button>
-        ) : (
-          <button
-            class="vt-btn"
-            onclick={() => {
-              shouldEdit.set(true);
-            }}
-          >
-            Edit
-          </button>
-        )}
-        {isEditing ? (
-          <button
-            class="vt-btn"
-            onclick={() => {
-              shouldEdit.set(false);
-              const formValues = formState.get();
-              currentValueType.set({
-                ...currentValueType.get(),
-                ...formValues,
-              });
-              setValueType(state, currentValueType.get());
-            }}
-          >
-            Save
-          </button>
-        ) : (
-          <button
-            class="vt-btn"
-            onclick={() => {
-              deleteValueType(state, currentValueType.get().id);
-            }}
-          >
-            Delete
-          </button>
-        )}
+        <button
+          class="vt-btn"
+          onclick={() => {
+            if (isEditing && isDraft && onDiscardDraft) {
+              onDiscardDraft();
+            }
+            shouldEdit.set(!isEditing);
+          }}
+        >
+          {isEditing ? 'Cancel' : 'Edit'}
+        </button>
+        {saveDeleteButton}
       </div>
     );
   });

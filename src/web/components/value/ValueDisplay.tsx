@@ -47,7 +47,7 @@ export function ValueDisplay({
       .get()
       .database.getAllValueTypes()
       .map((vt) => ({
-        label: vt.description || vt.id,
+        label: vt.description,
         value: vt.id,
       }));
   };
@@ -89,60 +89,63 @@ export function ValueDisplay({
     }
   };
 
-  const saveDeleteButton = (function () {
-    const isEditing = shouldEdit.get();
+  const saveDeleteButton = (
+    <button
+      class="vt-btn"
+      onclick={function () {
+        switch (shouldEdit.get()) {
+          case true:
+            shouldEdit.set(false);
+            const updated = {
+              ...currentValue.get(),
+              entity: entityState.get(),
+              type: typeState.get(),
+              value: valueState.get(),
+            };
+            currentValue.set(updated);
+            updateValue(state, updated);
+            if (isDraft && onSaveDraft) {
+              onSaveDraft();
+            }
+            break;
+          case false:
+            deleteValue(state, currentValue.get().id);
+            break;
+        }
+      }}
+    >
+      {shouldEdit.get() ? 'Save' : 'Delete'}
+    </button>
+  ) as HTMLButtonElement;
 
-    return (
-      <button
-        class="val-btn"
-        onclick={() => {
-          switch (isEditing) {
-            case true:
-              shouldEdit.set(false);
-              const updated = {
-                ...currentValue.get(),
-                entity: entityState.get(),
-                type: typeState.get(),
-                value: valueState.get(),
-              };
-              currentValue.set(updated);
-              updateValue(state, updated);
-              if (isDraft && onSaveDraft) {
-                onSaveDraft();
-              }
-              break;
-            case false:
-              deleteValue(state, currentValue.get().id);
-              break;
-          }
-        }}
-      >
-        {isEditing ? 'Save' : 'Delete'}
-      </button>
-    );
-  })() as HTMLButtonElement;
+  shouldEdit.subscribe(() => {
+    const label = shouldEdit.get() ? 'Save' : 'Delete';
+    if (saveDeleteButton.innerText !== label) {
+      saveDeleteButton.innerText = label;
+    }
+  });
 
   return reactiveComponent([state, shouldEdit], () => {
     const isEditing = shouldEdit.get();
     const current = currentValue.get();
 
     return (
-      <div class="val-row">
-        <div class="val-entity">
-          {isEditing ? Select(entityState as any, getEntityOptions()) : current.entity.substring(0, 8)}
+      <div class="vt-row">
+        <div class="vt-entity">
+          {isEditing && isDraft
+            ? Select(entityState, getEntityOptions())
+            : current.entity.substring(0, 8)}
         </div>
-        <div class="val-type">
-          {isEditing ? (
-            Select(typeState as any, getValueTypeOptions())
-          ) : (
-            <>
-              {state.get().database.getValueType(current.type as any)?.description || current.type}
-            </>
-          )}
+        <div class="vt-type">
+          {isEditing && isDraft
+            ? Select(typeState, getValueTypeOptions())
+            : state.get().database.getValueType(current.type)?.description || current.type}
         </div>
-        <div class="val-value">{isEditing ? renderValueInput() : String(current.value)}</div>
+        <div class="vt-value">
+          {isEditing ? renderValueInput() : String(current.value) || <i>empty</i>}
+        </div>
         <button
-          class="val-btn"
+          class="vt-btn"
           onclick={() => {
             if (isEditing && isDraft && onDiscardDraft) {
               onDiscardDraft();

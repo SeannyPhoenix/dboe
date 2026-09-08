@@ -51,25 +51,32 @@ function jsxElement(type: string, props: JSX.ComponentProps): Node {
   for (const name in props) {
     const value = props[name];
 
-    if (name === 'children') {
-      appendChildren(element, value);
-      continue;
+    switch (name) {
+      case 'children':
+        appendChildren(element, value);
+        continue;
+      case 'disabled':
+        if (typeof value === 'boolean') {
+          if (value) {
+            element.setAttribute('disabled', '');
+          } else {
+            element.removeAttribute('disabled');
+          }
+        }
+        continue;
+      case 'style':
+        if (typeof value === 'object' && (element instanceof HTMLElement ||
+        element instanceof SVGElement ||
+        element instanceof MathMLElement)) {
+          Object.assign(element.style, value);
+        }
+        continue;
+      default:
     }
 
     if (name.startsWith('on') && typeof value === 'function') {
       const eventName = name.slice(2).toLowerCase() as keyof HTMLElementEventMap;
       element.addEventListener(eventName, value as EventListener);
-      continue;
-    }
-
-    if (
-      name === 'style' &&
-      typeof value === 'object' &&
-      (element instanceof HTMLElement ||
-        element instanceof SVGElement ||
-        element instanceof MathMLElement)
-    ) {
-      Object.assign(element.style, value);
       continue;
     }
 
