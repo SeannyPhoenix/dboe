@@ -3,10 +3,12 @@ import { v7 as uuidV7 } from 'uuid';
 import { Value } from '../../../db/types/types';
 import { reactiveComponent } from '../../reactive/component';
 import { createReactive } from '../../reactive/reactive';
-import { AppState } from '../appState';
+import { getAppState } from '../appState';
 import { ValueDisplay } from './ValueDisplay';
 
-export default function Values({ state }: { state: AppState }) {
+export default function Values() {
+  const state = getAppState();
+
   const draftValue = createReactive<Value | null>(null);
 
   return reactiveComponent([state, draftValue], () => {
