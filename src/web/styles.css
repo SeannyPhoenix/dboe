@@ -8,6 +8,7 @@
   height: stretch;
   width: stretch;
   margin: 1rem;
+  padding: 1rem;
 
   background-color: #333333;
 }
@@ -38,4 +39,10 @@
 .vt-btn {
   padding: 4px 8px;
   font-size: 14px;
+}
+
+.options {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5em;
 }

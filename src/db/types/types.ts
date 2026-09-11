@@ -27,60 +27,47 @@ export const zSerDe = z.enum(['string', 'number', 'boolean']);
 export const validSerDes = zSerDe.options;
 export type SerDe = z.infer<typeof zSerDe>;
 
-const ValueTypeSchema = z.object({
+const zValueType = z.object({
   id: zValueTypeID,
   timestamp: z.coerce.date().optional(),
   description: z.string(),
   serde: zSerDe,
 });
-type ValueType = z.infer<typeof ValueTypeSchema>;
+type ValueType = z.infer<typeof zValueType>;
 
-const ValueSchema = z.object({
+const zValue = z.object({
   id: zValueID,
   timestamp: z.coerce.date(),
   entity: zEntityID,
   type: zValueTypeID,
   value: z.unknown(),
 });
-type Value = z.infer<typeof ValueSchema>;
+type Value = z.infer<typeof zValue>;
 
-const LinkTypeSchema = z.object({
+const zLinkType = z.object({
   id: zLinkTypeID,
   timestamp: z.coerce.date().optional(),
   description: z.string(),
 });
-type LinkType = z.infer<typeof LinkTypeSchema>;
+type LinkType = z.infer<typeof zLinkType>;
 
-const LinkSchema = z.object({
+const zLink = z.object({
   id: zLinkID,
   timestamp: z.coerce.date(),
   type: zLinkTypeID,
   a: zEntityID,
   b: zEntityID,
 });
-type Link = z.infer<typeof LinkSchema>;
+type Link = z.infer<typeof zLink>;
 
-const TombstoneSchema = z.object({
+const zTombstone = z.object({
   id: zTombstoneID,
   timestamp: z.coerce.date(),
 });
-type Tombstone = z.infer<typeof TombstoneSchema>;
+type Tombstone = z.infer<typeof zTombstone>;
 
-const AnyEntrySchema = z.union([
-  ValueSchema,
-  ValueTypeSchema,
-  LinkSchema,
-  LinkTypeSchema,
-  TombstoneSchema,
-]);
+const AnyEntrySchema = z.union([zValue, zValueType, zLink, zLinkType, zTombstone]);
 type AnyEntry = z.infer<typeof AnyEntrySchema>;
 
-export {
-  ValueTypeSchema,
-  ValueSchema,
-  LinkTypeSchema,
-  LinkSchema,
-  TombstoneSchema,
-  AnyEntrySchema,
-};
+export { zValueType, zValue, zLinkType, zLink, zTombstone, AnyEntrySchema };
 export type { ValueType, Value, LinkType, Link, Tombstone, AnyEntry };

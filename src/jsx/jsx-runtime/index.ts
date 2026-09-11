@@ -65,9 +65,12 @@ function jsxElement(type: string, props: JSX.ComponentProps): Node {
         }
         continue;
       case 'style':
-        if (typeof value === 'object' && (element instanceof HTMLElement ||
-        element instanceof SVGElement ||
-        element instanceof MathMLElement)) {
+        if (
+          typeof value === 'object' &&
+          (element instanceof HTMLElement ||
+            element instanceof SVGElement ||
+            element instanceof MathMLElement)
+        ) {
           Object.assign(element.style, value);
         }
         continue;

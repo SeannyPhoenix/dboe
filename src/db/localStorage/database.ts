@@ -2,21 +2,20 @@ import { z } from 'zod';
 
 import {
   Value,
-  ValueType,
   ValueID,
+  ValueType,
   ValueTypeID,
-  AnyEntry,
   Tombstone,
-  ValueSchema,
-  ValueTypeSchema,
-  AnyEntrySchema,
+  zValue,
+  zValueType,
   zValueID,
   zValueTypeID,
+  AnyEntrySchema,
 } from '../types/types';
 
 const DatabaseSchema = z.strictObject({
-  values: z.record(zValueID, ValueSchema),
-  valueTypes: z.record(zValueTypeID, ValueTypeSchema),
+  values: z.record(zValueID, zValue),
+  valueTypes: z.record(zValueTypeID, zValueType),
   history: z.array(AnyEntrySchema),
 });
 export type DatabaseSchemaType = z.infer<typeof DatabaseSchema>;
