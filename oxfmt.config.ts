@@ -6,4 +6,5 @@ export default defineConfig({
   singleQuote: true,
   sortImports: true,
   insertFinalNewline: true,
+  ignorePatterns: ['internal/server/web'],
 });
