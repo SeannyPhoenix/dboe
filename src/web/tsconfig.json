@@ -7,11 +7,5 @@
     "jsxImportSource": "#client",
     "lib": ["ESNext", "DOM"]
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.d.ts",
-    "../db/types/types.ts",
-    "../db/localStorage/database.ts"
-  ]
+  "include": ["**/*.ts", "**/*.tsx", "**/*.d.ts"]
 }

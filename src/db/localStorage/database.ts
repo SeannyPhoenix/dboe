@@ -1,33 +1,19 @@
-import { z } from 'zod';
+import { Value, ValueID, ValueType, ValueTypeID, Tombstone } from '../types/types';
 
-import {
-  Value,
-  ValueID,
-  ValueType,
-  ValueTypeID,
-  Tombstone,
-  zValue,
-  zValueType,
-  zValueID,
-  zValueTypeID,
-  AnyEntrySchema,
-} from '../types/types';
+type DB = {
+  values: Record<ValueID, Value>;
+  valueTypes: Record<ValueTypeID, ValueType>;
+  history: Array<Value | ValueType | Tombstone>;
+};
 
-const DatabaseSchema = z.strictObject({
-  values: z.record(zValueID, zValue),
-  valueTypes: z.record(zValueTypeID, zValueType),
-  history: z.array(AnyEntrySchema),
-});
-export type DatabaseSchemaType = z.infer<typeof DatabaseSchema>;
-
-const emptyDatabase: DatabaseSchemaType = {
+const emptyDatabase: DB = {
   values: {},
   valueTypes: {},
   history: [],
 };
 
 export class Database {
-  private data: DatabaseSchemaType;
+  private data: DB;
 
   constructor() {
     this.data = { ...emptyDatabase };
@@ -99,7 +85,7 @@ export class Database {
     return Object.values(this.data.values);
   }
 
-  getData(): DatabaseSchemaType {
+  getData(): DB {
     return this.data;
   }
 
@@ -111,7 +97,7 @@ export class Database {
     const data = localStorage.getItem('database');
     if (data) {
       try {
-        this.data = DatabaseSchema.parse(JSON.parse(data));
+        this.data = JSON.parse(data);
       } catch (error) {
         console.error('Failed to load database from localStorage:', error);
       }

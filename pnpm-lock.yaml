@@ -20,9 +20,6 @@ importers:
       yaml:
         specifier: ^2.9.0
         version: 2.9.0
-      zod:
-        specifier: ^4.4.3
-        version: 4.4.3
     devDependencies:
       '@types/node':
         specifier: ^22.19.19
@@ -570,9 +567,6 @@ packages:
     engines: {node: '>= 14.6'}
     hasBin: true
 
-  zod@4.4.3:
-    resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
-
 snapshots:
 
   '@codemirror/state@6.5.0':
@@ -921,5 +915,3 @@ snapshots:
   w3c-keyname@2.2.8: {}
 
   yaml@2.9.0: {}
-
-  zod@4.4.3: {}

@@ -19,8 +19,7 @@
     "@seannyphoenix/binarytime": "link:../binarytime",
     "obsidian": "latest",
     "uuid": "^13.0.2",
-    "yaml": "^2.9.0",
-    "zod": "^4.4.3"
+    "yaml": "^2.9.0"
   },
   "devDependencies": {
     "@types/node": "^22.19.19",
