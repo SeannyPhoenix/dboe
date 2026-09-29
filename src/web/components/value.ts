@@ -1,7 +1,7 @@
 import { v7 as uuidV7 } from 'uuid';
 
 import { Value, ID } from '../../db/types/types';
-import type { AppState } from './appState';
+import { AppState } from '../appState/appState';
 
 type ValueComponents = {
   entity?: string;

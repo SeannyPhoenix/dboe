@@ -1,4 +1,4 @@
-import { exportDatabase } from '../appState';
+import { exportDatabase } from '../../appState/appState';
 
 export default function Options() {
   return (

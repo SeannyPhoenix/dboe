@@ -1,9 +1,9 @@
 import { v7 as uuidV7 } from 'uuid';
 
 import { Value } from '../../../db/types/types';
+import { getAppState } from '../../appState/appState';
 import { reactiveComponent } from '../../reactive/component';
 import { createReactive } from '../../reactive/reactive';
-import { getAppState } from '../appState';
 import { ValueDisplay } from './ValueDisplay';
 
 export default function Values() {

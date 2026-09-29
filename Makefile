@@ -34,4 +34,3 @@ dev:
 	@(DBOE_BUILD_ROOT=$(PWD) go run ./tools/build/ --watch) & \
 	(air) & \
 	wait
-

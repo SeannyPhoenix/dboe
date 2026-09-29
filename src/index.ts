@@ -1,6 +1,4 @@
-import { dumpDatabase, loadDatabase } from './database/database';
-
-const data = `{"id":"519447ac-094a-4227-b395-ccf32ae54e99","t":"0000080000005030.24d76b549327104e","v":"dboe:type:string"}
+export const data = `{"id":"519447ac-094a-4227-b395-ccf32ae54e99","t":"0000080000005030.24d76b549327104e","v":"dboe:type:string"}
 {"id":"87d99886-b70a-4df8-b7b1-34153a5bb196","t":"0000080000005030.24d76b549327104e","v":"name"}
 {"id":"019dd552-675d-7012-a052-7c588bf9ad49","t":"0000080000005030.24d76b549327104e","v":"dboe:type:date"}
 {"id":"019dd552-6769-7aff-a0e3-4033785847ea","t":"0000080000005030.24d76b549327104e","v":"start-date"}
@@ -95,16 +93,3 @@ const data = `{"id":"519447ac-094a-4227-b395-ccf32ae54e99","t":"0000080000005030
 {"id":"019dd561-1ff5-7211-988e-13ffb5fe966c","t":"0000080000005030.2e0857fcf746ebe6","a":"019dd561-1f8b-700f-9430-4a3d59f73cd9","b":"ca0f935a-6018-4d2a-857d-820589478ca3"}
 {"id":"019dd552-6907-7e8b-9fc5-ece0965f31c4","t":"0000080000005030.33950c83fb72ea61","a":"019dd552-6769-7aff-a0e3-4033785847ea","b":"019dd552-67a9-7a26-93af-c469545d643a"}
 {"id":"019dd552-6954-70d3-9959-512f21d9b8f6","t":"0000080000005030.33950c83fb72ea61","a":"019dd552-67a9-7a26-93af-c469545d643a","b":"66b45ae4-6e7e-446c-bc64-fce6812f6e76"}`;
-
-async function main() {
-  try {
-    const db = loadDatabase(data);
-    console.log(db);
-    const out = dumpDatabase(db);
-    console.log(out);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-void main();

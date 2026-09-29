@@ -1,7 +1,7 @@
 import { ValueType } from '../../../db/types/types';
+import { AppState } from '../../appState/appState';
 import { reactiveComponent } from '../../reactive/component';
 import { createReactive } from '../../reactive/reactive';
-import { AppState } from '../appState';
 import { InputText } from '../form/input/Input';
 import { Select, SelectOption } from '../form/select/Select';
 import { setValueType } from '../valuetype';

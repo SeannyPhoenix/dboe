@@ -1,7 +1,7 @@
 import { v7 as uuidV7 } from 'uuid';
 
 import { ID, ValueType } from '../../db/types/types';
-import { AppState } from './appState';
+import { AppState } from '../appState/appState';
 
 export function newValueType(state: AppState): ValueType {
   const newVT: ValueType = {

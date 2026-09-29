@@ -1,16 +1,28 @@
 import { Database } from '../../db/localStorage/database';
+import { DBIndex } from '../../db/localStorage/dbindex';
 import { createReactive, type Reactive } from '../reactive/reactive';
 
 export type AppStateData = {
   database: Database;
+  index: DBIndex;
 };
 
 export type AppState = Reactive<AppStateData>;
 
 function initAppState(): AppState {
+  const legacyDB = new Database();
+  const index = new DBIndex();
+
+  index.addTombstones([]);
+  index.addValueTypes(legacyDB.getAllValueTypes());
+  index.addValues(legacyDB.getAllValues());
+  index.log();
+
   const stateData: AppStateData = {
-    database: new Database(),
+    database: legacyDB,
+    index,
   };
+
   const state = createReactive(stateData);
   state.subscribe(() => state.get().database.save());
   return state;

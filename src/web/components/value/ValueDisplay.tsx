@@ -1,9 +1,9 @@
 import { v7 as uuidV7 } from 'uuid';
 
 import { Value } from '../../../db/types/types';
+import { AppState } from '../../appState/appState';
 import { reactiveComponent } from '../../reactive/component';
 import { createReactive } from '../../reactive/reactive';
-import { AppState } from '../appState';
 import { InputText, InputNumber, InputCheckbox } from '../form/input/Input';
 import { Select, SelectOption } from '../form/select/Select';
 import { updateValue, deleteValue, getAllEntities, getValueTypeSerDe } from '../value';

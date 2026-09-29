@@ -1,8 +1,8 @@
-import { Value, ValueID, ValueType, ValueTypeID, Tombstone } from '../types/types';
+import { Value, ID, ValueType, Tombstone } from '../types/types';
 
 type DB = {
-  values: Record<ValueID, Value>;
-  valueTypes: Record<ValueTypeID, ValueType>;
+  values: Record<ID, Value>;
+  valueTypes: Record<ID, ValueType>;
   history: Array<Value | ValueType | Tombstone>;
 };
 
@@ -20,7 +20,7 @@ export class Database {
     this.load();
   }
 
-  getValue(valueId: ValueID): Value | undefined {
+  getValue(valueId: ID): Value | undefined {
     return this.data.values[valueId];
   }
 
@@ -32,7 +32,7 @@ export class Database {
     this.data.history.push(value);
   }
 
-  deleteValue(valueId: ValueID): void {
+  deleteValue(valueId: ID): void {
     const entry = this.data.values[valueId];
     if (!entry) {
       throw new Error(`Value "${valueId}" not found`);
@@ -45,11 +45,11 @@ export class Database {
     this.data.history.push(tombstone);
   }
 
-  getValuesByType(typeId: ValueTypeID): Value[] {
+  getValuesByType(typeId: ID): Value[] {
     return Object.values(this.data.values).filter((v) => v.type === typeId);
   }
 
-  getValueType(typeId: ValueTypeID): ValueType | undefined {
+  getValueType(typeId: ID): ValueType | undefined {
     return this.data.valueTypes[typeId];
   }
 
@@ -58,7 +58,7 @@ export class Database {
     this.data.history.push(valueType);
   }
 
-  deleteValueType(typeId: ValueTypeID): void {
+  deleteValueType(typeId: ID): void {
     const usedByValues = this.getValuesByType(typeId);
     if (usedByValues.length) {
       throw new Error(

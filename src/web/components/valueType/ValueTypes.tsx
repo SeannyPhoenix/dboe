@@ -1,9 +1,9 @@
 import { v7 as uuidV7 } from 'uuid';
 
 import { ValueType } from '../../../db/types/types';
+import { getAppState } from '../../appState/appState';
 import { reactiveComponent } from '../../reactive/component';
 import { createReactive } from '../../reactive/reactive';
-import { getAppState } from '../appState';
 import { ValueTypeDisplay } from './ValueTypeDisplay';
 
 export default function ValueTypes() {
@@ -20,6 +20,7 @@ export default function ValueTypes() {
           onclick={() => {
             draftValueType.set({
               id: uuidV7(),
+              timestamp: new Date(),
               description: '',
               serde: 'string',
             });
