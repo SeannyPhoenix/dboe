@@ -1,6 +1,6 @@
 import { v7 as uuidV7 } from 'uuid';
 
-import { ValueType, ValueTypeID } from '../../db/types/types';
+import { ID, ValueType } from '../../db/types/types';
 import { AppState } from './appState';
 
 export function newValueType(state: AppState): ValueType {
@@ -18,7 +18,7 @@ export function newValueType(state: AppState): ValueType {
   return newVT;
 }
 
-export function deleteValueType(state: AppState, id: ValueTypeID): void {
+export function deleteValueType(state: AppState, id: ID): void {
   const currentState = state.get();
   currentState.database.deleteValueType(id);
   state.notify();

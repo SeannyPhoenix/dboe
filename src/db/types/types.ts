@@ -1,43 +1,37 @@
-export type ValueID = string;
-export type EntityID = string;
-export type ValueTypeID = string;
-export type LinkTypeID = string;
-export type LinkID = string;
-export type TombstoneID = EntityID | ValueTypeID | ValueID | LinkTypeID | LinkID;
+export type ID = string;
 
 export const serDes = ['string', 'number', 'boolean'] as const;
-export type CoreSerDe = (typeof serDes)[number];
 
 export type ValueType = {
-  id: ValueTypeID;
-  timestamp?: Date;
+  id: ID;
+  timestamp: Date;
   description: string;
-  serde: CoreSerDe;
+  serde: string;
 };
 
 export type Value = {
-  id: ValueID;
+  id: ID;
   timestamp: Date;
-  entity: EntityID;
-  type: ValueTypeID;
+  entity: ID;
+  type: ID;
   value: unknown;
 };
 
 export type LinkType = {
-  id: LinkTypeID;
+  id: ID;
   timestamp: Date;
   description: string;
 };
 
 export type Link = {
-  id: LinkID;
+  id: ID;
   timestamp: Date;
-  type: LinkTypeID;
-  a: EntityID;
-  b: EntityID;
+  type: ID;
+  a: ID;
+  b: ID;
 };
 
 export type Tombstone = {
-  id: TombstoneID;
+  id: ID;
   timestamp: Date;
 };
