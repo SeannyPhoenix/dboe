@@ -1,5 +1,5 @@
+import { DBIndex } from '../../db/DBIndex/DBIndex';
 import { Database } from '../../db/localStorage/database';
-import { DBIndex } from '../../db/localStorage/dbindex';
 import { createReactive, type Reactive } from '../reactive/reactive';
 
 export type AppStateData = {

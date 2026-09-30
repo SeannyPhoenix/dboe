@@ -33,7 +33,6 @@ export default function ValueTypes() {
         <div class="vt-list">
           {draft && (
             <ValueTypeDisplay
-              state={state}
               valueType={draft}
               isDraft={true}
               onSaveDraft={() => {
@@ -48,7 +47,7 @@ export default function ValueTypes() {
             .get()
             .database.getAllValueTypes()
             .map((vt) => (
-              <ValueTypeDisplay state={state} valueType={vt} />
+              <ValueTypeDisplay valueType={vt} />
             ))}
         </div>
       </>

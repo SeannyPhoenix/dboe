@@ -1,7 +1,7 @@
 import { v7 as uuidV7 } from 'uuid';
 
 import { Value } from '../../../db/types/types';
-import { AppState } from '../../appState/appState';
+import { getAppState } from '../../appState/appState';
 import { reactiveComponent } from '../../reactive/component';
 import { createReactive } from '../../reactive/reactive';
 import { InputText, InputNumber, InputCheckbox } from '../form/input/Input';
@@ -9,20 +9,15 @@ import { Select, SelectOption } from '../form/select/Select';
 import { updateValue, deleteValue, getAllEntities, getValueTypeSerDe } from '../value';
 
 type Props = {
-  state: AppState;
   value: Value;
   isDraft?: boolean;
   onSaveDraft?: () => void;
   onDiscardDraft?: () => void;
 };
 
-export function ValueDisplay({
-  state,
-  value,
-  isDraft = false,
-  onSaveDraft,
-  onDiscardDraft,
-}: Props) {
+export function ValueDisplay({ value, isDraft = false, onSaveDraft, onDiscardDraft }: Props) {
+  const state = getAppState();
+
   const shouldEdit = createReactive(isDraft);
   const currentValue = createReactive(value);
 
@@ -52,25 +47,6 @@ export function ValueDisplay({
       }));
   };
 
-  // Helper to get all entities as options
-  const getEntityOptions = (): SelectOption[] => {
-    const entities = getAllEntities(state);
-    const currentEntity = entityState.get();
-    const options: SelectOption[] = entities
-      .filter((e) => e !== currentEntity || !isDraft)
-      .map((e) => ({
-        label: e.substring(0, 8), // Show first 8 chars of UUID
-        value: e,
-      }));
-
-    // Add "new" option at the beginning
-    options.unshift({
-      label: 'new',
-      value: uuidV7(),
-    });
-
-    return options;
-  };
 
   // Helper to render the appropriate input based on SerDe type
   const renderValueInput = () => {
@@ -131,11 +107,6 @@ export function ValueDisplay({
 
     return (
       <div class="vt-row">
-        <div class="vt-entity">
-          {isEditing && isDraft
-            ? Select(entityState, getEntityOptions())
-            : current.entity.substring(0, 8)}
-        </div>
         <div class="vt-type">
           {isEditing && isDraft
             ? Select(typeState, getValueTypeOptions())

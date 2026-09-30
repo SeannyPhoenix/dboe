@@ -22,7 +22,7 @@ export default function Values() {
           onclick={() => {
             const newDraftValue: Value = {
               id: uuidV7(),
-              entity: uuidV7() as any,
+              entity: uuidV7(),
               type: firstValueType,
               value: '',
               timestamp: new Date(),
@@ -36,7 +36,6 @@ export default function Values() {
         <div class="vt-list">
           {draft && (
             <ValueDisplay
-              state={state}
               value={draft}
               isDraft={true}
               onSaveDraft={() => {
@@ -52,7 +51,7 @@ export default function Values() {
             .database.getAllValues()
             .sort((a, b) => a.entity.localeCompare(b.entity))
             .map((val) => (
-              <ValueDisplay state={state} value={val} />
+              <ValueDisplay value={val} />
             ))}
         </div>
       </>

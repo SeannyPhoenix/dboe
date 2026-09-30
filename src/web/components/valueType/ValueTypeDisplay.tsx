@@ -1,5 +1,5 @@
 import { ValueType } from '../../../db/types/types';
-import { AppState } from '../../appState/appState';
+import { getAppState } from '../../appState/appState';
 import { reactiveComponent } from '../../reactive/component';
 import { createReactive } from '../../reactive/reactive';
 import { InputText } from '../form/input/Input';
@@ -8,7 +8,6 @@ import { setValueType } from '../valuetype';
 import { deleteValueType } from '../valuetype';
 
 type Props = {
-  state: AppState;
   valueType: ValueType;
   isDraft?: boolean;
   onSaveDraft?: () => void;
@@ -16,12 +15,13 @@ type Props = {
 };
 
 export function ValueTypeDisplay({
-  state,
   valueType,
   isDraft = false,
   onSaveDraft,
   onDiscardDraft,
 }: Props) {
+  const state = getAppState();
+
   const shouldEdit = createReactive(isDraft);
   const currentValueType = createReactive(valueType);
 

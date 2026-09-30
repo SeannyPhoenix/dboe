@@ -1,47 +1,12 @@
-import { Link, LinkType, Tombstone, Value, ValueType } from '../types/types';
-
-type DBITombstone = {
-  id: string;
-  timestamp: Date;
-};
-
-type DBIValueType = {
-  id: string;
-  timestamp: Date;
-  description: string;
-  serde: string;
-  values: Map<string, DBIValue>;
-};
-
-type DBILinkType = {
-  id: string;
-  timestamp: Date;
-  description: string;
-  links: Map<string, DBILink>;
-};
-
-type DBIValue = {
-  id: string;
-  entity: DBIEntity;
-  type: DBIValueType;
-  timestamp: Date;
-  value: any;
-};
-
-type DBILink = {
-  id: string;
-  type: DBILinkType;
-  timestamp: Date;
-  a: DBIEntity;
-  b: DBIEntity;
-};
-
-type DBIEntity = {
-  id: string;
-  atob: Map<string, DBILink>;
-  btoa: Map<string, DBILink>;
-  values: Map<string, DBIValue>;
-};
+import type { Link, LinkType, Tombstone, Value, ValueType } from '../types/types';
+import type {
+  DBITombstone,
+  DBIValueType,
+  DBILinkType,
+  DBIValue,
+  DBILink,
+  DBIEntity,
+} from './types';
 
 function newEntity(id: string): DBIEntity {
   return {
@@ -273,5 +238,9 @@ export class DBIndex {
 
   log() {
     console.log(this);
+  }
+
+  getAllEntities(): DBIEntity[] {
+    return Array.from(this.entities.values());
   }
 }

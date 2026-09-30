@@ -1,3 +1,4 @@
+import EntityList from './entity/EntityList';
 import Options from './options/Options';
 import Values from './value/Values';
 import ValueTypes from './valueType/ValueTypes';
@@ -13,8 +14,8 @@ export default function App() {
           <ValueTypes />
         </div>
         <div style={{ flex: '1' }}>
-          <h2>Values</h2>
-          <Values />
+          <h2>Entities</h2>
+          <EntityList />
         </div>
       </div>
     </div>
