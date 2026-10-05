@@ -1,4 +1,4 @@
-/* src/web/reset.css */
+/* src/web/styles/reset.css */
 *,
 *::before,
 *::after {
@@ -51,7 +51,21 @@ h6 {
   text-wrap: balance;
 }
 
-/* src/web/styles.css */
+/* src/web/styles/fonts/fonts.css */
+@font-face {
+  font-family: "Monaspace Xenon";
+  src: url("./Monaspace Xenon Var-EMPXSUJW.woff2") format("woff2");
+  font-weight: 200 800;
+  font-stretch: 100 125;
+}
+@font-face {
+  font-family: "Monaspace Neon";
+  src: url("./Monaspace Neon Var-PHOGLE6K.woff2") format("woff2");
+  font-weight: 200 800;
+  font-stretch: 100 125;
+}
+
+/* src/web/styles/styles.css */
 #app {
   height: 100vh;
   width: 100vw;
@@ -63,6 +77,13 @@ h6 {
   margin: 1rem;
   padding: 1rem;
   background-color: #333333;
+  font-family: "Monaspace Neon", monospace;
+}
+.surface {
+  display: flex;
+  position: absolute;
+  border: 1px solid #ccc;
+  padding: 1rem;
 }
 .vt-list {
   display: flex;
@@ -72,8 +93,6 @@ h6 {
   display: flex;
   align-items: center;
   gap: 15px;
-  border: 1px solid #ccc;
-  padding: 8px 12px;
   margin: 8px 0;
   border-radius: 4px;
 }
@@ -91,4 +110,25 @@ h6 {
   display: flex;
   flex-direction: row;
   gap: 0.5em;
+}
+.entity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.entity {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1em;
+  border: 1px solid #ccc;
+  border-radius: 0.5em;
+}
+.entity-id {
+  font-size: 0.8em;
+  opacity: 0.7;
+}
+.value-list {
+  display: flex;
+  flex-direction: column;
 }
