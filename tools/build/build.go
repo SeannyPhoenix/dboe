@@ -23,7 +23,8 @@ func build() int {
 		},
 		Outdir: filepath.Join(root, "internal/server/web/assets"),
 		Loader: map[string]api.Loader{
-			".html": api.LoaderCopy,
+			".html":  api.LoaderCopy,
+			".woff2": api.LoaderCopy,
 		},
 		Bundle:    true,
 		Write:     true,

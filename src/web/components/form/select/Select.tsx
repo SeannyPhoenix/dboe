@@ -1,11 +1,16 @@
 import { Reactive } from '../../../reactive/reactive';
 
-export interface SelectOption {
+export type SelectOption = {
   label: string;
   value: string | number;
-}
+};
 
-export function Select(state: Reactive<string | number>, options: SelectOption[]) {
+type Props = {
+  state: Reactive<string | number>;
+  options: SelectOption[];
+};
+
+export function Select({ state, options }: Props) {
   const select = (
     <select
       onchange={(e) => {

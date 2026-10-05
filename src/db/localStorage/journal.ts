@@ -1,3 +1,5 @@
+import { Temporal } from 'temporal-polyfill';
+
 import { Value, ValueType, Link, LinkType, Tombstone } from '../types/types';
 
 export function writeValueTypes(valueTypes: ValueType[]) {
@@ -9,7 +11,11 @@ export function readValueTypes(): ValueType[] {
   if (!data) {
     throw new Error('No valueTypes found in localStorage');
   }
-  return JSON.parse(data);
+  const raw = JSON.parse(data);
+  return raw.map((item: Record<string, string>) => ({
+    ...item,
+    timestamp: Temporal.Instant.from(item.timestamp),
+  }));
 }
 
 export function writeLinkTypes(linkTypes: LinkType[]) {
@@ -21,7 +27,11 @@ export function readLinkTypes(): LinkType[] {
   if (!data) {
     throw new Error('No linkTypes found in localStorage');
   }
-  return JSON.parse(data);
+  const raw = JSON.parse(data);
+  return raw.map((item: Record<string, string>) => ({
+    ...item,
+    timestamp: Temporal.Instant.from(item.timestamp),
+  }));
 }
 
 export function writeValues(values: Value[]) {
@@ -33,7 +43,11 @@ export function readValues(): Value[] {
   if (!data) {
     throw new Error('No values found in localStorage');
   }
-  return JSON.parse(data);
+  const raw = JSON.parse(data);
+  return raw.map((item: Record<string, string>) => ({
+    ...item,
+    timestamp: Temporal.Instant.from(item.timestamp),
+  }));
 }
 
 export function writeLinks(links: Link[]) {
@@ -45,7 +59,11 @@ export function readLinks(): Link[] {
   if (!data) {
     throw new Error('No links found in localStorage');
   }
-  return JSON.parse(data);
+  const raw = JSON.parse(data);
+  return raw.map((item: Record<string, string>) => ({
+    ...item,
+    timestamp: Temporal.Instant.from(item.timestamp),
+  }));
 }
 
 export function writeTombstones(tombstones: Tombstone[]) {
@@ -57,5 +75,9 @@ export function readTombstones(): Tombstone[] {
   if (!data) {
     throw new Error('No tombstones found in localStorage');
   }
-  return JSON.parse(data);
+  const raw = JSON.parse(data);
+  return raw.map((item: Record<string, string>) => ({
+    ...item,
+    timestamp: Temporal.Instant.from(item.timestamp),
+  }));
 }

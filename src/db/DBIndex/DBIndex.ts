@@ -1,3 +1,5 @@
+import { Temporal } from 'temporal-polyfill';
+
 import type { Link, LinkType, Tombstone, Value, ValueType } from '../types/types';
 import type {
   DBITombstone,
@@ -190,7 +192,7 @@ export class DBIndex {
 
     const tombstone: DBITombstone = {
       id: value.id,
-      timestamp: new Date(),
+      timestamp: Temporal.Now.instant(),
     };
     this.tombstones.set(value.id, tombstone);
 
@@ -207,7 +209,7 @@ export class DBIndex {
 
     const tombstone: DBITombstone = {
       id: link.id,
-      timestamp: new Date(),
+      timestamp: Temporal.Now.instant(),
     };
     this.tombstones.set(link.id, tombstone);
 
@@ -240,7 +242,7 @@ export class DBIndex {
     console.log(this);
   }
 
-  getAllEntities(): DBIEntity[] {
-    return Array.from(this.entities.values());
+  getAllEntities(): MapIterator<DBIEntity> {
+    return this.entities.values();
   }
 }

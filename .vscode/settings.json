@@ -8,7 +8,7 @@
     "editor.insertSpaces": false
   },
   "[html]": {
-    "editor.defaultFormatter": "oxc.oxc-vscode"
+    "editor.defaultFormatter": "vscode.html-language-features"
   },
   "[typescriptreact]": {
     "editor.defaultFormatter": "TypeScriptTeam.native-preview"

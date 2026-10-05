@@ -766,7 +766,7 @@ export namespace JSX {
   }
 
   export type ComponentProps = Record<string, unknown>;
-  export type Component = (props: ComponentProps) => Element | null;
+  export type Component<T extends ComponentProps = ComponentProps> = (props: T) => Element | null;
 }
 
 export const SVG_NS = 'http://www.w3.org/2000/svg';

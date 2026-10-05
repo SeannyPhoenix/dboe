@@ -1,10 +1,11 @@
+import { Temporal } from 'temporal-polyfill';
 import { v7 as uuidV7 } from 'uuid';
 
 import { Value } from '../../../db/types/types';
 import { getAppState } from '../../appState/appState';
 import { reactiveComponent } from '../../reactive/component';
 import { createReactive } from '../../reactive/reactive';
-import { ValueDisplay } from './ValueDisplay';
+import ValueDisplay from './ValueDisplay';
 
 export default function Values() {
   const state = getAppState();
@@ -25,7 +26,7 @@ export default function Values() {
               entity: uuidV7(),
               type: firstValueType,
               value: '',
-              timestamp: new Date(),
+              timestamp: Temporal.Now.instant(),
             };
             draftValue.set(newDraftValue);
           }}

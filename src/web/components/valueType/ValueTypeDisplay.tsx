@@ -95,7 +95,11 @@ export function ValueTypeDisplay({
     return (
       <div class="vt-row">
         <div class="vt-serde">
-          {isEditing ? Select(serdeState, serdeOptions) : currentValueType.get().serde}
+          {isEditing ? (
+            <Select state={serdeState} options={serdeOptions} />
+          ) : (
+            currentValueType.get().serde
+          )}
         </div>
         <div class="vt-desc">
           {isEditing ? InputText(descriptionState) : currentValueType.get().description}

@@ -1,12 +1,15 @@
 import App from './components/App';
 
-import './reset.css';
-import './styles.css';
+import './styles/reset.css';
+import './styles/fonts/fonts.css';
+import './styles/styles.css';
 
-const appRoot = document.getElementById('app');
+setTimeout(() => {
+  const appRoot = document.getElementById('app');
 
-if (!appRoot) {
-  throw new Error('Could not find #app root element');
-}
+  if (!appRoot) {
+    throw new Error('Could not find #app root element');
+  }
 
-appRoot.replaceChildren(<App />);
+  appRoot.replaceChildren(<App />);
+}, 0);

@@ -1,5 +1,6 @@
 import { DBIndex } from '../../db/DBIndex/DBIndex';
 import { Database } from '../../db/localStorage/database';
+import { readTombstones, readValueTypes, readValues } from '../../db/localStorage/journal';
 import { createReactive, type Reactive } from '../reactive/reactive';
 
 export type AppStateData = {
@@ -13,9 +14,10 @@ function initAppState(): AppState {
   const legacyDB = new Database();
   const index = new DBIndex();
 
-  index.addTombstones([]);
-  index.addValueTypes(legacyDB.getAllValueTypes());
-  index.addValues(legacyDB.getAllValues());
+  index.addTombstones(readTombstones());
+  index.addValueTypes(readValueTypes());
+  index.addValues(readValues());
+
   index.log();
 
   const stateData: AppStateData = {

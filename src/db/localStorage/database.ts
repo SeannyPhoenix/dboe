@@ -1,3 +1,5 @@
+import { Temporal } from 'temporal-polyfill';
+
 import { Value, ID, ValueType, Tombstone } from '../types/types';
 
 type DB = {
@@ -18,6 +20,7 @@ export class Database {
   constructor() {
     this.data = { ...emptyDatabase };
     this.load();
+    this.save();
   }
 
   getValue(valueId: ID): Value | undefined {
@@ -40,7 +43,7 @@ export class Database {
     delete this.data.values[valueId];
     const tombstone: Tombstone = {
       id: entry.id,
-      timestamp: new Date(),
+      timestamp: Temporal.Now.instant(),
     };
     this.data.history.push(tombstone);
   }
@@ -72,7 +75,7 @@ export class Database {
     delete this.data.valueTypes[typeId];
     const tombstone: Tombstone = {
       id: entry.id,
-      timestamp: new Date(),
+      timestamp: Temporal.Now.instant(),
     };
     this.data.history.push(tombstone);
   }
@@ -106,5 +109,11 @@ export class Database {
 
   save(): void {
     localStorage.setItem('database', JSON.stringify(this.data));
+    localStorage.setItem('valueTypes', JSON.stringify(Object.values(this.data.valueTypes)));
+    localStorage.setItem('values', JSON.stringify(Object.values(this.data.values)));
+    localStorage.setItem('tombstones', '[]');
+    localStorage.setItem('links', '[]');
+    localStorage.setItem('linkTypes', '[]');
+    localStorage.setItem('history', JSON.stringify(this.data.history));
   }
 }

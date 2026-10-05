@@ -1,3 +1,4 @@
+import { Temporal } from 'temporal-polyfill';
 import { v7 as uuidV7 } from 'uuid';
 
 import { ValueType } from '../../../db/types/types';
@@ -20,7 +21,7 @@ export default function ValueTypes() {
           onclick={() => {
             draftValueType.set({
               id: uuidV7(),
-              timestamp: new Date(),
+              timestamp: Temporal.Now.instant(),
               description: '',
               serde: 'string',
             });

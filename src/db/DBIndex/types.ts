@@ -1,11 +1,13 @@
+import { Temporal } from 'temporal-polyfill';
+
 export type DBITombstone = {
   id: string;
-  timestamp: Date;
+  timestamp: Temporal.Instant;
 };
 
 export type DBIValueType = {
   id: string;
-  timestamp: Date;
+  timestamp: Temporal.Instant;
   description: string;
   serde: string;
   values: Map<string, DBIValue>;
@@ -13,7 +15,7 @@ export type DBIValueType = {
 
 export type DBILinkType = {
   id: string;
-  timestamp: Date;
+  timestamp: Temporal.Instant;
   description: string;
   links: Map<string, DBILink>;
 };
@@ -22,14 +24,14 @@ export type DBIValue = {
   id: string;
   entity: DBIEntity;
   type: DBIValueType;
-  timestamp: Date;
-  value: any;
+  timestamp: Temporal.Instant;
+  value: unknown;
 };
 
 export type DBILink = {
   id: string;
   type: DBILinkType;
-  timestamp: Date;
+  timestamp: Temporal.Instant;
   a: DBIEntity;
   b: DBIEntity;
 };

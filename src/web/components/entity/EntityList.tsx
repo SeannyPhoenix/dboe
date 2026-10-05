@@ -7,10 +7,8 @@ export default function EntityList() {
   const entities = index.getAllEntities();
 
   return (
-    <div>
-      {entities.map((entity) => (
-        <EntityDisplay entity={entity} />
-      ))}
+    <div class="entity-list">
+      {entities.map((entity) => <EntityDisplay entity={entity} />).toArray()}
     </div>
   );
 }
