@@ -1,3 +1,87 @@
+// node_modules/.pnpm/uuid@13.0.2/node_modules/uuid/dist/stringify.js
+var byteToHex = [];
+for (let i = 0; i < 256; ++i) {
+  byteToHex.push((i + 256).toString(16).slice(1));
+}
+function unsafeStringify(arr, offset = 0) {
+  return (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + "-" + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + "-" + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + "-" + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + "-" + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
+}
+
+// node_modules/.pnpm/uuid@13.0.2/node_modules/uuid/dist/rng.js
+var getRandomValues;
+var rnds8 = new Uint8Array(16);
+function rng() {
+  if (!getRandomValues) {
+    if (typeof crypto === "undefined" || !crypto.getRandomValues) {
+      throw new Error("crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported");
+    }
+    getRandomValues = crypto.getRandomValues.bind(crypto);
+  }
+  return getRandomValues(rnds8);
+}
+
+// node_modules/.pnpm/uuid@13.0.2/node_modules/uuid/dist/v7.js
+var _state = {};
+function v7(options, buf, offset) {
+  let bytes;
+  if (options) {
+    bytes = v7Bytes(options.random ?? options.rng?.() ?? rng(), options.msecs, options.seq, buf, offset);
+  } else {
+    const now = Date.now();
+    const rnds = rng();
+    updateV7State(_state, now, rnds);
+    bytes = v7Bytes(rnds, _state.msecs, _state.seq, buf, offset);
+  }
+  return buf ?? unsafeStringify(bytes);
+}
+function updateV7State(state, now, rnds) {
+  state.msecs ??= -Infinity;
+  state.seq ??= 0;
+  if (now > state.msecs) {
+    state.seq = rnds[6] << 23 | rnds[7] << 16 | rnds[8] << 8 | rnds[9];
+    state.msecs = now;
+  } else {
+    state.seq = state.seq + 1 | 0;
+    if (state.seq === 0) {
+      state.msecs++;
+    }
+  }
+  return state;
+}
+function v7Bytes(rnds, msecs, seq, buf, offset = 0) {
+  if (rnds.length < 16) {
+    throw new Error("Random bytes length must be >= 16");
+  }
+  if (!buf) {
+    buf = new Uint8Array(16);
+    offset = 0;
+  } else {
+    if (offset < 0 || offset + 16 > buf.length) {
+      throw new RangeError(`UUID byte range ${offset}:${offset + 15} is out of buffer bounds`);
+    }
+  }
+  msecs ??= Date.now();
+  seq ??= rnds[6] * 127 << 24 | rnds[7] << 16 | rnds[8] << 8 | rnds[9];
+  buf[offset++] = msecs / 1099511627776 & 255;
+  buf[offset++] = msecs / 4294967296 & 255;
+  buf[offset++] = msecs / 16777216 & 255;
+  buf[offset++] = msecs / 65536 & 255;
+  buf[offset++] = msecs / 256 & 255;
+  buf[offset++] = msecs & 255;
+  buf[offset++] = 112 | seq >>> 28 & 15;
+  buf[offset++] = seq >>> 20 & 255;
+  buf[offset++] = 128 | seq >>> 14 & 63;
+  buf[offset++] = seq >>> 6 & 255;
+  buf[offset++] = seq << 2 & 255 | rnds[10] & 3;
+  buf[offset++] = rnds[11];
+  buf[offset++] = rnds[12];
+  buf[offset++] = rnds[13];
+  buf[offset++] = rnds[14];
+  buf[offset++] = rnds[15];
+  return buf;
+}
+var v7_default = v7;
+
 // node_modules/.pnpm/temporal-polyfill@1.0.5/node_modules/temporal-polyfill/chunks/root.js
 var NativeTemporal = globalThis.Temporal;
 
@@ -3965,102 +4049,6 @@ var DBIndex = class {
   }
 };
 
-// src/db/localStorage/database.ts
-var emptyDatabase = {
-  values: {},
-  valueTypes: {},
-  history: []
-};
-var Database = class {
-  data;
-  constructor() {
-    this.data = { ...emptyDatabase };
-    this.load();
-    this.save();
-  }
-  getValue(valueId) {
-    return this.data.values[valueId];
-  }
-  putValue(value) {
-    if (!this.data.valueTypes[value.type]) {
-      throw new Error(`ValueType "${value.type}" not found`);
-    }
-    this.data.values[value.id] = value;
-    this.data.history.push(value);
-  }
-  deleteValue(valueId) {
-    const entry = this.data.values[valueId];
-    if (!entry) {
-      throw new Error(`Value "${valueId}" not found`);
-    }
-    delete this.data.values[valueId];
-    const tombstone = {
-      id: entry.id,
-      timestamp: Temporal2.Now.instant()
-    };
-    this.data.history.push(tombstone);
-  }
-  getValuesByType(typeId) {
-    return Object.values(this.data.values).filter((v) => v.type === typeId);
-  }
-  getValueType(typeId) {
-    return this.data.valueTypes[typeId];
-  }
-  putValueType(valueType) {
-    this.data.valueTypes[valueType.id] = valueType;
-    this.data.history.push(valueType);
-  }
-  deleteValueType(typeId) {
-    const usedByValues = this.getValuesByType(typeId);
-    if (usedByValues.length) {
-      throw new Error(
-        `Cannot delete ValueType "${typeId}": ${usedByValues.length} value(s) still reference it`
-      );
-    }
-    const entry = this.data.valueTypes[typeId];
-    if (!entry) {
-      throw new Error(`ValueType "${typeId}" not found`);
-    }
-    delete this.data.valueTypes[typeId];
-    const tombstone = {
-      id: entry.id,
-      timestamp: Temporal2.Now.instant()
-    };
-    this.data.history.push(tombstone);
-  }
-  getAllValueTypes() {
-    return Object.values(this.data.valueTypes);
-  }
-  getAllValues() {
-    return Object.values(this.data.values);
-  }
-  getData() {
-    return this.data;
-  }
-  isValid() {
-    return Object.values(this.data.values).every((v) => this.data.valueTypes[v.type]);
-  }
-  load() {
-    const data = localStorage.getItem("database");
-    if (data) {
-      try {
-        this.data = JSON.parse(data);
-      } catch (error) {
-        console.error("Failed to load database from localStorage:", error);
-      }
-    }
-  }
-  save() {
-    localStorage.setItem("database", JSON.stringify(this.data));
-    localStorage.setItem("valueTypes", JSON.stringify(Object.values(this.data.valueTypes)));
-    localStorage.setItem("values", JSON.stringify(Object.values(this.data.values)));
-    localStorage.setItem("tombstones", "[]");
-    localStorage.setItem("links", "[]");
-    localStorage.setItem("linkTypes", "[]");
-    localStorage.setItem("history", JSON.stringify(this.data.history));
-  }
-};
-
 // src/db/localStorage/journal.ts
 function readValueTypes() {
   const data = localStorage.getItem("valueTypes");
@@ -4096,280 +4084,81 @@ function readTombstones() {
   }));
 }
 
-// src/web/reactive/reactive.ts
-function createReactive(initialState) {
-  let state = initialState;
-  const listeners = /* @__PURE__ */ new Set();
-  return {
-    get() {
-      return state;
-    },
-    set(value) {
-      state = value;
-      this.notify();
-    },
-    update(fn) {
-      state = fn(state);
-      this.notify();
-    },
-    subscribe(listener) {
-      listeners.add(listener);
-      return () => listeners.delete(listener);
-    },
-    notify() {
-      listeners.forEach((fn) => fn());
-    }
-  };
-}
-
-// src/jsx/jsx-runtime/html.ts
-var SVG_NS = "http://www.w3.org/2000/svg";
-var SVG_ELEMENTS = {
-  svg: "svg",
-  path: "path",
-  g: "g"
-};
-
-// src/jsx/jsx-runtime/index.ts
-var elementFactory = null;
-function setElementFactory(factory) {
-  elementFactory = factory;
-}
-function getElementFactory() {
-  if (!elementFactory) {
-    throw new Error("Element factory not set");
-  }
-  return elementFactory;
-}
-if ("document" in globalThis) {
-  setElementFactory({
-    createElement(localName) {
-      return document.createElement(localName);
-    },
-    createElementNS(namespaceURI, qualifiedName) {
-      return document.createElementNS(namespaceURI, qualifiedName);
-    },
-    createTextNode(data) {
-      return document.createTextNode(data);
-    },
-    createFragment() {
-      return document.createDocumentFragment();
-    }
-  });
-}
-function Fragment(props) {
-  const factory = getElementFactory();
-  const fragment = factory.createFragment();
-  appendChildren(fragment, props.children);
-  return fragment;
-}
-function jsxElement(type, props) {
-  const factory = getElementFactory();
-  const element = type in SVG_ELEMENTS ? factory.createElementNS(SVG_NS, type) : factory.createElement(type);
-  for (const name in props) {
-    const value = props[name];
-    switch (name) {
-      case "children":
-        appendChildren(element, value);
-        continue;
-      case "disabled":
-        if (typeof value === "boolean") {
-          if (value) {
-            element.setAttribute("disabled", "");
-          } else {
-            element.removeAttribute("disabled");
-          }
-        }
-        continue;
-      case "style":
-        if (typeof value === "object" && (element instanceof HTMLElement || element instanceof SVGElement || element instanceof MathMLElement)) {
-          Object.assign(element.style, value);
-        }
-        continue;
-      default:
-    }
-    if (name.startsWith("on") && typeof value === "function") {
-      const eventName = name.slice(2).toLowerCase();
-      element.addEventListener(eventName, value);
-      continue;
-    }
-    if (value !== void 0) {
-      element.setAttribute(name, String(value));
-    }
-  }
-  return element;
-}
-function jsx(type, props) {
-  switch (typeof type) {
-    case "function":
-      const component = type(props);
-      return component ?? Fragment({});
-    case "string":
-      return jsxElement(type, props);
-    default:
-      throw new Error(`Unsupported JSX type: ${String(type)}`);
+// src/web/portal/portal.ts
+var portals = /* @__PURE__ */ new Map();
+async function initializePortal(id) {
+  console.log("Initializing portal with ID:", id);
+  const portal = {};
+  await Promise.all([
+    buildIndex().then((index) => {
+      portal.index = index;
+      console.log("Index built");
+    }).catch((error) => {
+      console.error("Error building index:", error);
+    }),
+    initializeSharedWorker().then((worker) => {
+      portal.sharedWorker = worker;
+      console.log("Shared worker initialized");
+    }).catch((error) => {
+      console.error("Error initializing shared worker.", error);
+    })
+  ]);
+  if (portal.index && portal.sharedWorker) {
+    portals.set(id, { index: portal.index, sharedWorker: portal.sharedWorker });
   }
 }
-var jsxs = jsx;
-function appendChildren(parent, children) {
-  if (children === null || children === void 0 || children === false) {
-    return;
-  }
-  if (Array.isArray(children)) {
-    for (const child of children) {
-      appendChildren(parent, child);
-    }
-    return;
-  }
-  if (children instanceof Node) {
-    parent.appendChild(children);
-    return;
-  }
-  const factory = getElementFactory();
-  const textNode = factory.createTextNode(String(children));
-  parent.appendChild(textNode);
-}
-
-// src/web/appState/appState.tsx
-function initAppState() {
-  const legacyDB = new Database();
+async function buildIndex() {
+  console.log("Building Index");
   const index = new DBIndex();
   index.addTombstones(readTombstones());
   index.addValueTypes(readValueTypes());
   index.addValues(readValues());
-  index.log();
-  const stateData = {
-    database: legacyDB,
-    index
-  };
-  const state = createReactive(stateData);
-  state.subscribe(() => state.get().database.save());
-  return state;
+  return index;
 }
-var appState = initAppState();
-function getAppState() {
-  return appState;
+async function initializeSharedWorker() {
+  console.log("Initializing shared worker");
+  const worker = new SharedWorker("sharedWorker/dboe.shared.js", { type: "module" });
+  return worker;
 }
-
-// src/web/components/form/select/Select.tsx
-function Select({ state, options }) {
-  const select = /* @__PURE__ */ jsx(
-    "select",
-    {
-      onchange: (e) => {
-        const value = e.target.value;
-        const parsed = options.find((opt) => String(opt.value) === value)?.value;
-        if (parsed !== void 0) {
-          state.set(parsed);
-        }
-      },
-      children: options.map((option) => /* @__PURE__ */ jsx("option", { value: String(option.value), children: option.label }))
-    }
-  );
-  select.value = String(state.get());
-  state.subscribe(() => {
-    const currentValue = state.get();
-    if (select.value !== String(currentValue)) {
-      select.value = String(currentValue);
-    }
-  });
-  return select;
-}
-
-// src/web/components/value/Actions.tsx
-function Actions({ value }) {
-  const valueString = String(value.value);
-  const buttonText = createReactive("Copy");
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(valueString);
-      buttonText.set("\u2713");
-      setTimeout(() => buttonText.set("Copy"), 2e3);
-    } catch (err) {
-      console.error("Failed to copy text: ", err);
-      buttonText.set("x");
-      setTimeout(() => buttonText.set("Copy"), 2e3);
-    }
-  };
-  const copyButton = /* @__PURE__ */ jsx("button", { onclick: handleCopy, children: buttonText.get() });
-  buttonText.subscribe(() => {
-    copyButton.textContent = buttonText.get();
-  });
-  return /* @__PURE__ */ jsxs("div", { class: "actions", children: [
-    copyButton,
-    /* @__PURE__ */ jsx("button", { children: "Edit" }),
-    /* @__PURE__ */ jsx("button", { children: "Delete" })
-  ] });
-}
-
-// src/web/components/value/ValueDisplay.tsx
-function ValueDisplay({ value }) {
-  const valueString = String(value.value);
-  return /* @__PURE__ */ jsxs("tr", { children: [
-    /* @__PURE__ */ jsx("td", { children: value.type.description }),
-    /* @__PURE__ */ jsx("td", { children: valueString }),
-    /* @__PURE__ */ jsx("td", { children: /* @__PURE__ */ jsx(Actions, { value }) })
-  ] });
-}
-
-// src/web/components/entity/EntityDisplay.tsx
-var BY_TIMESTAMP = "by timestamp";
-var BY_TYPE_DESCRIPTION = "by type description";
-var BY_VALUE = "by value";
-var sortBySelectorOptions = [
-  { label: BY_TIMESTAMP, value: BY_TIMESTAMP },
-  { label: BY_TYPE_DESCRIPTION, value: BY_TYPE_DESCRIPTION },
-  { label: BY_VALUE, value: BY_VALUE }
-];
-function byTimestamp(a, b) {
-  return Temporal2.Instant.compare(a.timestamp, b.timestamp);
-}
-function byTypeDescription(a, b) {
-  return a.type.description.localeCompare(b.type.description);
-}
-function byValue(a, b) {
-  return String(a.value).localeCompare(String(b.value));
-}
-var sortFuncs = {
-  [BY_TIMESTAMP]: byTimestamp,
-  [BY_TYPE_DESCRIPTION]: byTypeDescription,
-  [BY_VALUE]: byValue
-};
-function EntityDisplay({ entity }) {
-  const values = entity.values.values().toArray().sort(byTypeDescription);
-  const sortBy = createReactive(BY_TIMESTAMP);
-  function valueItems() {
-    const sortFunc = sortFuncs[sortBy.get()] ?? byTimestamp;
-    return /* @__PURE__ */ jsx(Fragment, { children: values.sort(sortFunc).map((value) => /* @__PURE__ */ jsx(ValueDisplay, { value })) });
+function removePortal(id) {
+  const portal = portals.get(id);
+  if (portal) {
+    portal.sharedWorker.port.close();
+    portals.delete(id);
+    console.log("Portal removed with ID:", id);
+  } else {
+    console.warn("No portal found with ID:", id);
   }
-  const table = /* @__PURE__ */ jsx("table", { children: /* @__PURE__ */ jsx("tbody", { children: valueItems() }) });
-  sortBy.subscribe(() => {
-    table.replaceChildren(valueItems());
-  });
-  return /* @__PURE__ */ jsxs("div", { class: "entity", children: [
-    /* @__PURE__ */ jsx("pre", { class: "entity-id", children: entity.id }),
-    /* @__PURE__ */ jsx(Select, { state: sortBy, options: sortBySelectorOptions }),
-    table
-  ] });
+}
+function startPortal(id) {
+  const portal = portals.get(id);
+  if (portal) {
+    const { port: messagePort } = portal.sharedWorker;
+    messagePort.start();
+    messagePort.onmessage = (event) => {
+      console.log(event);
+    };
+    messagePort.postMessage({ type: "start" });
+    console.log("Portal started with ID:", id);
+  } else {
+    console.warn("No portal found with ID:", id);
+  }
 }
 
-// src/web/components/entity/EntityList.tsx
-function EntityList() {
-  const { index } = getAppState().get();
-  const entities = index.getAllEntities();
-  return /* @__PURE__ */ jsx("div", { class: "entity-list", children: entities.map((entity) => /* @__PURE__ */ jsx(EntityDisplay, { entity })).toArray() });
-}
-
-// src/web/components/App.tsx
-function App() {
-  return /* @__PURE__ */ jsx("div", { class: "portal", children: /* @__PURE__ */ jsx(EntityList, {}) });
-}
+// src/web/portal/DBOEPortalElement.ts
+var DBOEPortalElement = class extends HTMLElement {
+  id = v7_default();
+  constructor() {
+    super();
+  }
+  async connectedCallback() {
+    await initializePortal(this.id);
+    startPortal(this.id);
+  }
+  disconnectedCallback() {
+    removePortal(this.id);
+  }
+};
 
 // src/web/app.tsx
-setTimeout(() => {
-  const appRoot = document.getElementById("app");
-  if (!appRoot) {
-    throw new Error("Could not find #app root element");
-  }
-  appRoot.replaceChildren(/* @__PURE__ */ jsx(App, {}));
-}, 0);
+customElements.define("dboe-portal", DBOEPortalElement);

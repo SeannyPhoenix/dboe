@@ -6,7 +6,8 @@
     "strict": true,
     "composite": true,
     "jsx": "react-jsx",
-    "jsxImportSource": "#client"
+    "jsxImportSource": "#client",
+    "lib": ["ESNext", "WebWorker"]
   },
   "include": ["**/*.ts", "**/*.tsx"]
 }

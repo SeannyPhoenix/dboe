@@ -19,6 +19,7 @@ func build() int {
 	opt := api.BuildOptions{
 		EntryPoints: []string{
 			filepath.Join(root, "src/web/app.tsx"),
+			filepath.Join(root, "src/web/sharedWorker/dboe.shared.ts"),
 			filepath.Join(root, "src/web/index.html"),
 		},
 		Outdir: filepath.Join(root, "internal/server/web/assets"),

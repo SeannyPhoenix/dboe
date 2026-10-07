@@ -1,15 +1,6 @@
-import App from './components/App';
-
 import './styles/reset.css';
 import './styles/fonts/fonts.css';
 import './styles/styles.css';
+import DBOEPortalElement from './portal/DBOEPortalElement';
 
-setTimeout(() => {
-  const appRoot = document.getElementById('app');
-
-  if (!appRoot) {
-    throw new Error('Could not find #app root element');
-  }
-
-  appRoot.replaceChildren(<App />);
-}, 0);
+customElements.define('dboe-portal', DBOEPortalElement);

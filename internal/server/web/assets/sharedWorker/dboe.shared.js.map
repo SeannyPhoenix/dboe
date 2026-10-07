@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../../../src/web/sharedWorker/dboe.shared.ts"],
+  "sourcesContent": ["/// <reference lib=\"webworker\" />\n\nif (!('SharedWorkerGlobalScope' in self && self instanceof SharedWorkerGlobalScope)) {\n  throw new Error('Not running in SharedWorkerGlobalScope');\n}\n\nself.onconnect = (event: MessageEvent) => {\n  const port = event.ports[0];\n  port.start();\n\n  port.onmessage = (event) => {\n    port.postMessage(event.data);\n  };\n};\n"],
+  "mappings": ";AAEA,IAAI,EAAE,6BAA6B,QAAQ,gBAAgB,0BAA0B;AACnF,QAAM,IAAI,MAAM,wCAAwC;AAC1D;AAEA,KAAK,YAAY,CAAC,UAAwB;AACxC,QAAM,OAAO,MAAM,MAAM,CAAC;AAC1B,OAAK,MAAM;AAEX,OAAK,YAAY,CAACA,WAAU;AAC1B,SAAK,YAAYA,OAAM,IAAI;AAAA,EAC7B;AACF;",
+  "names": ["event"]
+}
