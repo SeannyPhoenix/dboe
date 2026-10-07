@@ -18,8 +18,16 @@
 .surface {
   display: flex;
   position: absolute;
-  border: 1px solid #ccc;
-  padding: 1rem;
+  padding: 0.5rem;
+
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(60, 60, 60, 0.4) 100%
+  );
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
 }
 
 .vt-list {

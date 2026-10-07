@@ -1,34 +1,32 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DBOE Local App V1</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        background-color: Canvas;
+        color: CanvasText;
+        font-family: system-ui, sans-serif;
+      }
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>DBOE Local App V1</title>
-  <style>
-    :root {
-      color-scheme: dark;
-      background-color: Canvas;
-      color: CanvasText;
-      font-family: system-ui, sans-serif;
-    }
+      dboe-portal {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
 
-    dboe-portal {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
+        background-color: black;
+      }
+    </style>
+    <link rel="stylesheet" href="/app.css" />
+    <script type="module" src="/app.js"></script>
+  </head>
 
-      background-color: black;
-    }
-  </style>
-  <link rel="stylesheet" href="/app.css" />
-  <script type="module" src="/app.js"></script>
-</head>
-
-<body>
-  <dboe-portal />
-</body>
-
+  <body>
+    <dboe-portal />
+  </body>
 </html>

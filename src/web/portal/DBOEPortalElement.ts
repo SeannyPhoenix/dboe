@@ -7,10 +7,11 @@ export default class DBOEPortalElement extends HTMLElement {
 
   constructor() {
     super();
+    this.setAttribute('tabindex', '0'); // Make element focusable
   }
 
   async connectedCallback() {
-    await initializePortal(this.id);
+    await initializePortal(this);
     startPortal(this.id);
   }
 

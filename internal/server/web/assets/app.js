@@ -4084,41 +4084,251 @@ function readTombstones() {
   }));
 }
 
-// src/web/portal/portal.ts
+// src/jsx/jsx-runtime/html.ts
+var SVG_NS = "http://www.w3.org/2000/svg";
+var SVG_ELEMENTS = {
+  svg: "svg",
+  path: "path",
+  g: "g"
+};
+
+// src/jsx/jsx-runtime/index.ts
+var elementFactory = null;
+function setElementFactory(factory) {
+  elementFactory = factory;
+}
+function getElementFactory() {
+  if (!elementFactory) {
+    throw new Error("Element factory not set");
+  }
+  return elementFactory;
+}
+if ("document" in globalThis) {
+  setElementFactory({
+    createElement(localName) {
+      return document.createElement(localName);
+    },
+    createElementNS(namespaceURI, qualifiedName) {
+      return document.createElementNS(namespaceURI, qualifiedName);
+    },
+    createTextNode(data) {
+      return document.createTextNode(data);
+    },
+    createFragment() {
+      return document.createDocumentFragment();
+    }
+  });
+}
+function Fragment(props) {
+  const factory = getElementFactory();
+  const fragment = factory.createFragment();
+  appendChildren(fragment, props.children);
+  return fragment;
+}
+function jsxElement(type, props) {
+  const factory = getElementFactory();
+  const element = type in SVG_ELEMENTS ? factory.createElementNS(SVG_NS, type) : factory.createElement(type);
+  for (const name in props) {
+    const value = props[name];
+    switch (name) {
+      case "children":
+        appendChildren(element, value);
+        continue;
+      case "disabled":
+        if (typeof value === "boolean") {
+          if (value) {
+            element.setAttribute("disabled", "");
+          } else {
+            element.removeAttribute("disabled");
+          }
+        }
+        continue;
+      case "style":
+        if (typeof value === "object" && (element instanceof HTMLElement || element instanceof SVGElement || element instanceof MathMLElement)) {
+          Object.assign(element.style, value);
+        }
+        continue;
+      default:
+    }
+    if (name.startsWith("on") && typeof value === "function") {
+      const eventName = name.slice(2).toLowerCase();
+      element.addEventListener(eventName, value);
+      continue;
+    }
+    if (value !== void 0) {
+      element.setAttribute(name, String(value));
+    }
+  }
+  return element;
+}
+function jsx(type, props) {
+  switch (typeof type) {
+    case "function":
+      const component = type(props);
+      return component ?? Fragment({});
+    case "string":
+      return jsxElement(type, props);
+    default:
+      throw new Error(`Unsupported JSX type: ${String(type)}`);
+  }
+}
+var jsxs = jsx;
+function appendChildren(parent, children) {
+  if (children === null || children === void 0 || children === false) {
+    return;
+  }
+  if (Array.isArray(children)) {
+    for (const child of children) {
+      appendChildren(parent, child);
+    }
+    return;
+  }
+  if (children instanceof Node) {
+    parent.appendChild(children);
+    return;
+  }
+  const factory = getElementFactory();
+  const textNode = factory.createTextNode(String(children));
+  parent.appendChild(textNode);
+}
+
+// src/web/components/Menu.tsx
+function Menu({ portal, x, y }) {
+  const existing = document.getElementById("meta-menu");
+  if (existing) {
+    return null;
+  }
+  return /* @__PURE__ */ jsxs("div", { id: "meta-menu", style: { left: `${x}px`, top: `${y}px` }, class: "surface", children: [
+    /* @__PURE__ */ jsx(
+      "button",
+      {
+        onclick: (event) => {
+          console.log("Make New Entity");
+          const menu = document.getElementById("meta-menu");
+          if (menu) {
+            portal.removeChild(menu);
+          }
+        },
+        children: "+"
+      }
+    ),
+    /* @__PURE__ */ jsx(
+      "button",
+      {
+        onclick: (event) => {
+          console.log("Open Search Screen");
+          const menu = document.getElementById("meta-menu");
+          if (menu) {
+            portal.removeChild(menu);
+          }
+        },
+        children: "*"
+      }
+    )
+  ] });
+}
+
+// src/web/portal/ui.ts
+function updateMouseState(mouse, event) {
+  mouse.x = event.clientX;
+  mouse.y = event.clientY;
+  mouse.buttons = event.buttons;
+}
+
+// src/web/portal/portal.tsx
 var portals = /* @__PURE__ */ new Map();
-async function initializePortal(id) {
+async function initializePortal(element) {
+  const { id } = element;
   console.log("Initializing portal with ID:", id);
-  const portal = {};
-  await Promise.all([
-    buildIndex().then((index) => {
-      portal.index = index;
-      console.log("Index built");
-    }).catch((error) => {
-      console.error("Error building index:", error);
-    }),
-    initializeSharedWorker().then((worker) => {
-      portal.sharedWorker = worker;
-      console.log("Shared worker initialized");
-    }).catch((error) => {
-      console.error("Error initializing shared worker.", error);
-    })
-  ]);
-  if (portal.index && portal.sharedWorker) {
-    portals.set(id, { index: portal.index, sharedWorker: portal.sharedWorker });
+  const indexPromise = buildIndex();
+  const sharedWorkerPromise = initSharedWorker();
+  const inputControlPromise = initInputControl(element);
+  try {
+    await Promise.all([indexPromise, sharedWorkerPromise, inputControlPromise]);
+  } catch (error) {
+    console.error("Error initializing portal:", error);
+  }
+  const index = await indexPromise;
+  if (!index) {
+    console.error("Failed to build index");
+    return;
+  }
+  const sharedWorker = await sharedWorkerPromise;
+  if (!sharedWorker) {
+    console.error("Failed to initialize shared worker");
+    return;
+  }
+  const inputControl = await inputControlPromise;
+  if (index && sharedWorker && inputControl) {
+    portals.set(id, {
+      index,
+      sharedWorker,
+      element,
+      inputControl
+    });
   }
 }
 async function buildIndex() {
-  console.log("Building Index");
+  console.log("Building index");
   const index = new DBIndex();
   index.addTombstones(readTombstones());
   index.addValueTypes(readValueTypes());
   index.addValues(readValues());
   return index;
 }
-async function initializeSharedWorker() {
+async function initSharedWorker() {
   console.log("Initializing shared worker");
   const worker = new SharedWorker("sharedWorker/dboe.shared.js", { type: "module" });
   return worker;
+}
+async function initInputControl(portal) {
+  console.log("Initializing input control");
+  const inputState = {
+    mouse: {
+      x: 0,
+      y: 0,
+      buttons: 0
+    },
+    keys: /* @__PURE__ */ new Set()
+  };
+  portal.onmousemove = (event) => {
+    updateMouseState(inputState.mouse, event);
+  };
+  portal.onmousedown = (event) => {
+    updateMouseState(inputState.mouse, event);
+    if (inputState.keys.has("Meta")) {
+      const { x, y } = inputState.mouse;
+      const menu = /* @__PURE__ */ jsx(Menu, { portal, x, y });
+      if (menu) {
+        portal.appendChild(menu);
+      }
+    }
+  };
+  portal.onmouseup = (event) => {
+    updateMouseState(inputState.mouse, event);
+  };
+  portal.oncontextmenu = (event) => {
+    updateMouseState(inputState.mouse, event);
+    event.preventDefault();
+    const { x, y } = inputState.mouse;
+    const menu = /* @__PURE__ */ jsx(Menu, { portal, x, y });
+    if (menu) {
+      portal.appendChild(menu);
+    }
+  };
+  portal.onkeydown = (event) => {
+    inputState.keys.add(event.key);
+    if (inputState.keys.has("Escape")) {
+      const menu = document.getElementById("meta-menu");
+      if (menu) {
+        portal.removeChild(menu);
+      }
+    }
+  };
+  portal.onkeyup = (event) => {
+    inputState.keys.delete(event.key);
+  };
+  return inputState;
 }
 function removePortal(id) {
   const portal = portals.get(id);
@@ -4132,17 +4342,17 @@ function removePortal(id) {
 }
 function startPortal(id) {
   const portal = portals.get(id);
-  if (portal) {
-    const { port: messagePort } = portal.sharedWorker;
-    messagePort.start();
-    messagePort.onmessage = (event) => {
-      console.log(event);
-    };
-    messagePort.postMessage({ type: "start" });
-    console.log("Portal started with ID:", id);
-  } else {
+  if (!portal) {
     console.warn("No portal found with ID:", id);
+    return;
   }
+  const { port: messagePort } = portal.sharedWorker;
+  messagePort.start();
+  messagePort.onmessage = (event) => {
+    console.log(event.data);
+  };
+  messagePort.postMessage({ name: "initialize", data: null });
+  console.log("Portal started with ID:", id);
 }
 
 // src/web/portal/DBOEPortalElement.ts
@@ -4150,9 +4360,10 @@ var DBOEPortalElement = class extends HTMLElement {
   id = v7_default();
   constructor() {
     super();
+    this.setAttribute("tabindex", "0");
   }
   async connectedCallback() {
-    await initializePortal(this.id);
+    await initializePortal(this);
     startPortal(this.id);
   }
   disconnectedCallback() {
