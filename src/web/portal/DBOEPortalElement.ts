@@ -11,8 +11,12 @@ export default class DBOEPortalElement extends HTMLElement {
   }
 
   async connectedCallback() {
-    await initializePortal(this);
-    startPortal(this.id);
+    try {
+      await initializePortal(this);
+      startPortal(this.id);
+    } catch (error) {
+      throw new Error('Error connecting portal element', { cause: error });
+    }
   }
 
   disconnectedCallback() {

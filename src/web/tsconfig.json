@@ -7,5 +7,10 @@
     "jsxImportSource": "#client",
     "lib": ["ESNext", "DOM"]
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.d.ts"]
+  "include": ["**/*.ts", "**/*.tsx", "**/*.d.ts"],
+  "references": [
+    {
+      "path": "../sharedWorker"
+    }
+  ]
 }
