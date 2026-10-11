@@ -1,14 +1,15 @@
-import { v7 as uuidV7 } from 'uuid';
+import { Temporal } from "temporal-polyfill";
+import { v7 as uuidV7 } from "uuid";
 
-import { ID, ValueType } from '../../db/types/types';
-import { AppState } from '../appState/appState';
+import { ID, ValueType } from "../../db/types/types";
+import { AppState } from "../appState/appState";
 
 export function newValueType(state: AppState): ValueType {
   const newVT: ValueType = {
     id: uuidV7(),
-    timestamp: new Date(),
-    description: '',
-    serde: 'string',
+    timestamp: Temporal.Now.instant(),
+    description: "",
+    serde: "string",
   };
 
   const currentState = state.get();

@@ -1,18 +1,18 @@
-import process from 'process';
+import process from "process";
 
-import esbuild from 'esbuild';
+import esbuild from "esbuild";
 
-const prod = process.argv[2] === 'production';
+const prod = process.argv[2] === "production";
 
 const context = await esbuild.context({
-  entryPoints: ['src/index.ts'],
+  entryPoints: ["src/index.ts"],
   bundle: true,
-  format: 'cjs',
-  target: 'es2020',
-  logLevel: 'info',
-  sourcemap: prod ? false : 'inline',
+  format: "cjs",
+  target: "es2020",
+  logLevel: "info",
+  sourcemap: prod ? false : "inline",
   treeShaking: true,
-  outfile: 'dist/index.js',
+  outfile: "dist/index.js",
 });
 
 if (prod) {

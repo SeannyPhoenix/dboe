@@ -34,7 +34,7 @@ export namespace JSX {
     style?: string | CSSStyleProps;
     tabIndex?: number;
     title?: string;
-    translate?: 'yes' | 'no';
+    translate?: "yes" | "no";
 
     onabort?: (this: T, ev: Event) => void;
     onanimationcancel?: (this: T, ev: AnimationEvent) => void;
@@ -110,25 +110,25 @@ export namespace JSX {
   type InputAttributes = InputAllAttributes &
     (
       | {
-          type: 'button';
+          type: "button";
           popovertarget?: string;
           popovertargetaction?: string;
           value?: string;
         }
       | {
-          type: 'checkbox';
+          type: "checkbox";
           checked?: boolean;
           required?: boolean;
           value?: string;
         }
       | {
-          type: 'color';
+          type: "color";
           colorspace?: string;
           list?: string;
           value?: string;
         }
       | {
-          type: 'date';
+          type: "date";
           list?: string;
           max?: string;
           min?: string;
@@ -138,7 +138,7 @@ export namespace JSX {
           value?: string;
         }
       | {
-          type: 'datetime-local';
+          type: "datetime-local";
           list?: string;
           max?: string;
           min?: string;
@@ -148,7 +148,7 @@ export namespace JSX {
           value?: string;
         }
       | {
-          type: 'email';
+          type: "email";
           dirname?: string;
           list?: string;
           maxlength?: number;
@@ -161,7 +161,7 @@ export namespace JSX {
           value?: string;
         }
       | {
-          type: 'file';
+          type: "file";
           accept?: string;
           capture?: boolean | string;
           list?: string;
@@ -170,11 +170,11 @@ export namespace JSX {
           value?: string;
         }
       | {
-          type: 'hidden';
+          type: "hidden";
           value?: string;
         }
       | {
-          type: 'image';
+          type: "image";
           formaction?: string;
           formenctype?: string;
           formmethod?: string;
@@ -185,7 +185,7 @@ export namespace JSX {
           width?: number | string;
         }
       | {
-          type: 'number';
+          type: "number";
           list?: string;
           max?: number | string;
           min?: number | string;
@@ -195,7 +195,7 @@ export namespace JSX {
           value?: string;
         }
       | {
-          type: 'password';
+          type: "password";
           maxlength?: number;
           minlength?: number;
           pattern?: string;
@@ -206,13 +206,13 @@ export namespace JSX {
           value?: string;
         }
       | {
-          type: 'radio';
+          type: "radio";
           checked?: boolean;
           required?: boolean;
           value?: string;
         }
       | {
-          type: 'range';
+          type: "range";
           list?: string;
           max?: number | string;
           min?: number | string;
@@ -220,11 +220,11 @@ export namespace JSX {
           value?: string;
         }
       | {
-          type: 'reset';
+          type: "reset";
           value?: string;
         }
       | {
-          type: 'search';
+          type: "search";
           dirname?: string;
           list?: string;
           maxlength?: number;
@@ -236,7 +236,7 @@ export namespace JSX {
           value?: string;
         }
       | {
-          type: 'submit';
+          type: "submit";
           formaction?: string;
           formenctype?: string;
           formmethod?: string;
@@ -245,7 +245,7 @@ export namespace JSX {
           value?: string;
         }
       | {
-          type: 'tel';
+          type: "tel";
           dirname?: string;
           list?: string;
           maxlength?: number;
@@ -257,7 +257,7 @@ export namespace JSX {
           value?: string;
         }
       | {
-          type: 'text';
+          type: "text";
           dirname?: string;
           list?: string;
           maxlength?: number;
@@ -270,7 +270,7 @@ export namespace JSX {
           value?: string;
         }
       | {
-          type: 'time';
+          type: "time";
           list?: string;
           max?: string;
           min?: string;
@@ -280,7 +280,7 @@ export namespace JSX {
           value?: string;
         }
       | {
-          type: 'url';
+          type: "url";
           dirname?: string;
           list?: string;
           maxlength?: number;
@@ -294,15 +294,15 @@ export namespace JSX {
     );
 
   type ReferrerPolicy =
-    | ''
-    | 'no-referrer'
-    | 'no-referrer-when-downgrade'
-    | 'origin'
-    | 'origin-when-cross-origin'
-    | 'same-origin'
-    | 'strict-origin'
-    | 'strict-origin-when-cross-origin'
-    | 'unsafe-url';
+    | ""
+    | "no-referrer"
+    | "no-referrer-when-downgrade"
+    | "origin"
+    | "origin-when-cross-origin"
+    | "same-origin"
+    | "strict-origin"
+    | "strict-origin-when-cross-origin"
+    | "unsafe-url";
 
   export type IntrinsicElements = {
     a: ParentAttributes<HTMLAnchorElement> & {
@@ -367,7 +367,7 @@ export namespace JSX {
     };
     bdi: ParentAttributes<HTMLElement>;
     bdo: ParentAttributes<HTMLElement> & {
-      dir?: 'ltr' | 'rtl' | 'auto';
+      dir?: "ltr" | "rtl" | "auto";
     };
     blockquote: ParentAttributes<HTMLQuoteElement> & {
       cite?: string;
@@ -384,7 +384,7 @@ export namespace JSX {
       formnovalidate?: boolean;
       formtarget?: string;
       name?: string;
-      type?: 'button' | 'submit' | 'reset';
+      type?: "button" | "submit" | "reset";
       value?: string;
     };
     canvas: ParentAttributes<HTMLCanvasElement> & {
@@ -420,7 +420,7 @@ export namespace JSX {
     dfn: ParentAttributes<HTMLElement>;
     dialog: ParentAttributes<HTMLDialogElement> & {
       open?: boolean;
-      closedby?: 'any' | 'closerequest' | 'none';
+      closedby?: "any" | "closerequest" | "none";
     };
     div: ParentAttributes<HTMLDivElement>;
     dl: ParentAttributes<HTMLDListElement>;
@@ -437,11 +437,11 @@ export namespace JSX {
     form: ParentAttributes<HTMLFormElement> & {
       acceptCharset?: string;
       action?: string;
-      autocomplete?: 'on' | 'off';
+      autocomplete?: "on" | "off";
       name?: string;
       rel?: string;
       enctype?: string;
-      method?: 'get' | 'post';
+      method?: "get" | "post";
       noValidate?: boolean;
       target?: string;
     };
@@ -464,7 +464,7 @@ export namespace JSX {
       allow?: string;
       allowFullscreen?: boolean;
       height?: number | string;
-      loading?: 'eager' | 'lazy';
+      loading?: "eager" | "lazy";
       name?: string;
       referrerpolicy?: ReferrerPolicy;
       sandbox?: string;
@@ -477,7 +477,7 @@ export namespace JSX {
       crossorigin?: string;
       height?: number | string;
       ismap?: boolean;
-      loading?: 'eager' | 'lazy';
+      loading?: "eager" | "lazy";
       referrerpolicy?: ReferrerPolicy;
       sizes?: string;
       src?: string;
@@ -500,23 +500,23 @@ export namespace JSX {
     };
     link: GlobalAttributes<HTMLLinkElement> & {
       as?:
-        | 'audioworklet'
-        | 'fetch'
-        | 'font'
-        | 'image'
-        | 'json'
-        | 'paintworklet'
-        | 'script'
-        | 'serviceworker'
-        | 'sharedworker'
-        | 'style'
-        | 'text'
-        | 'track'
-        | 'worker';
-      blocking?: 'render';
+        | "audioworklet"
+        | "fetch"
+        | "font"
+        | "image"
+        | "json"
+        | "paintworklet"
+        | "script"
+        | "serviceworker"
+        | "sharedworker"
+        | "style"
+        | "text"
+        | "track"
+        | "worker";
+      blocking?: "render";
       crossorigin?: string;
       disabled?: boolean;
-      fetchpriority?: 'high' | 'low' | 'auto';
+      fetchpriority?: "high" | "low" | "auto";
       href?: string;
       hreflang?: string;
       imagesizes?: string;
@@ -563,7 +563,7 @@ export namespace JSX {
     ol: ParentAttributes<HTMLOListElement> & {
       reversed?: boolean;
       start?: number;
-      type?: '1' | 'A' | 'a' | 'I' | 'i';
+      type?: "1" | "A" | "a" | "I" | "i";
     };
     optgroup: ParentAttributes<HTMLOptGroupElement> & {
       disabled?: boolean;
@@ -600,10 +600,10 @@ export namespace JSX {
     samp: ParentAttributes<HTMLElement>;
     script: GlobalAttributes<HTMLScriptElement> & {
       async?: boolean;
-      blocking?: 'render';
+      blocking?: "render";
       crossorigin?: string;
       defer?: boolean;
-      fetchpriority?: 'high' | 'low' | 'auto';
+      fetchpriority?: "high" | "low" | "auto";
       integrity?: string;
       nomodule?: boolean;
       nonce?: string;
@@ -640,7 +640,7 @@ export namespace JSX {
     span: ParentAttributes<HTMLSpanElement>;
     strong: ParentAttributes<HTMLElement>;
     style: GlobalAttributes<HTMLStyleElement> & {
-      blocking?: 'render';
+      blocking?: "render";
       media?: string;
       nonce?: string;
       title?: string;
@@ -657,7 +657,7 @@ export namespace JSX {
       rowspan?: number;
     };
     template: ParentAttributes<HTMLTemplateElement> & {
-      shadowrootmode?: 'open' | 'closed';
+      shadowrootmode?: "open" | "closed";
       shadowrootclonable?: boolean;
       shadowrootcustomelementregistry?: boolean;
       shadowrootdelegatesfocus?: boolean;
@@ -676,8 +676,8 @@ export namespace JSX {
       readonly?: boolean;
       required?: boolean;
       rows?: number;
-      spellcheck?: 'true' | 'default' | 'false';
-      wrap?: 'hard' | 'soft' | 'off';
+      spellcheck?: "true" | "default" | "false";
+      wrap?: "hard" | "soft" | "off";
       children?: string | null | undefined;
     };
     tfoot: ParentAttributes<HTMLTableSectionElement>;
@@ -686,7 +686,7 @@ export namespace JSX {
       colspan?: number;
       headers?: string;
       rowspan?: number;
-      scope?: 'col' | 'row' | 'colgroup' | 'rowgroup';
+      scope?: "col" | "row" | "colgroup" | "rowgroup";
     };
     thead: ParentAttributes<HTMLTableSectionElement>;
     time: ParentAttributes<HTMLTimeElement> & {
@@ -698,7 +698,7 @@ export namespace JSX {
     tr: ParentAttributes<HTMLTableRowElement>;
     track: GlobalAttributes<HTMLTrackElement> & {
       default?: boolean;
-      kind?: 'subtitles' | 'captions' | 'descriptions' | 'chapters' | 'metadata';
+      kind?: "subtitles" | "captions" | "descriptions" | "chapters" | "metadata";
       label?: string;
       src?: string;
       srclang?: string;
@@ -710,7 +710,7 @@ export namespace JSX {
       autoplay?: boolean;
       controls?: boolean;
       controlslist?: string;
-      crossorigin?: 'anonymous' | 'use-credentials';
+      crossorigin?: "anonymous" | "use-credentials";
       disablepictureinpicture?: boolean;
       disableremoteplayback?: boolean;
       height?: number | string;
@@ -718,7 +718,7 @@ export namespace JSX {
       muted?: boolean;
       playsinline?: boolean;
       poster?: string;
-      preload?: 'auto' | 'metadata' | 'none';
+      preload?: "auto" | "metadata" | "none";
       src?: string;
       width?: number;
 
@@ -769,9 +769,9 @@ export namespace JSX {
   export type Component<T extends ComponentProps = ComponentProps> = (props: T) => Element | null;
 }
 
-export const SVG_NS = 'http://www.w3.org/2000/svg';
+export const SVG_NS = "http://www.w3.org/2000/svg";
 export const SVG_ELEMENTS = {
-  svg: 'svg',
-  path: 'path',
-  g: 'g',
+  svg: "svg",
+  path: "path",
+  g: "g",
 };

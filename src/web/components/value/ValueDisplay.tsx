@@ -1,5 +1,5 @@
-import { DBIValue } from '../../../db/DBIndex/types';
-import Actions from './Actions';
+import { DBIValue } from "../../../db/DBIndex/types";
+import Actions from "./Actions";
 
 type Props = {
   value: DBIValue;

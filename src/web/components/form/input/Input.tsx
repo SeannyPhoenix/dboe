@@ -1,4 +1,4 @@
-import { Reactive } from '../../../reactive/reactive';
+import { Reactive } from "../../../reactive/reactive";
 
 export function InputText(state: Reactive<string>) {
   const input = (
@@ -74,23 +74,23 @@ export interface RadioOption {
 }
 
 export function InputRadio(state: Reactive<string | number>, options: RadioOption[]) {
-  const container = document.createElement('fieldset');
-  container.style.border = 'none';
-  container.style.padding = '0';
-  container.style.margin = '0';
+  const container = document.createElement("fieldset");
+  container.style.border = "none";
+  container.style.padding = "0";
+  container.style.margin = "0";
 
   options.forEach((option) => {
-    const label = document.createElement('label');
-    label.style.marginRight = '1rem';
-    label.style.cursor = 'pointer';
+    const label = document.createElement("label");
+    label.style.marginRight = "1rem";
+    label.style.cursor = "pointer";
 
-    const input = document.createElement('input');
-    input.type = 'radio';
+    const input = document.createElement("input");
+    input.type = "radio";
     input.name = Math.random().toString(36).substr(2, 9); // Unique group name
     input.value = String(option.value);
     input.checked = state.get() === option.value;
 
-    input.addEventListener('change', (e) => {
+    input.addEventListener("change", (e) => {
       const target = e.target as HTMLInputElement;
       if (target.checked) {
         state.set(option.value);
@@ -118,11 +118,11 @@ export function InputDate(state: Reactive<Date>) {
   const input = (
     <input
       type="date"
-      value={state.get().toISOString().split('T')[0]}
+      value={state.get().toISOString().split("T")[0]}
       oninput={(e) => {
         const dateString = (e.target as HTMLInputElement).value;
         if (dateString) {
-          const date = new Date(dateString + 'T00:00:00');
+          const date = new Date(dateString + "T00:00:00");
           state.set(date);
         }
       }}
@@ -131,7 +131,7 @@ export function InputDate(state: Reactive<Date>) {
 
   state.subscribe(() => {
     const currentValue = state.get();
-    const isoString = currentValue.toISOString().split('T')[0];
+    const isoString = currentValue.toISOString().split("T")[0];
     if (input.value !== isoString) {
       input.value = isoString;
     }

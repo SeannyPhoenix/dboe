@@ -1,11 +1,11 @@
-import { ValueType } from '../../../db/types/types';
-import { getAppState } from '../../appState/appState';
-import { reactiveComponent } from '../../reactive/component';
-import { createReactive } from '../../reactive/reactive';
-import { InputText } from '../form/input/Input';
-import { Select, SelectOption } from '../form/select/Select';
-import { setValueType } from '../valuetype';
-import { deleteValueType } from '../valuetype';
+import { ValueType } from "../../../db/types/types";
+import { getAppState } from "../../appState/appState";
+import { reactiveComponent } from "../../reactive/component";
+import { createReactive } from "../../reactive/reactive";
+import { InputText } from "../form/input/Input";
+import { Select, SelectOption } from "../form/select/Select";
+import { setValueType } from "../valuetype";
+import { deleteValueType } from "../valuetype";
 
 type Props = {
   valueType: ValueType;
@@ -39,9 +39,9 @@ export function ValueTypeDisplay({
   });
 
   const serdeOptions: SelectOption[] = [
-    { label: 'string', value: 'string' },
-    { label: 'number', value: 'number' },
-    { label: 'boolean', value: 'boolean' },
+    { label: "string", value: "string" },
+    { label: "number", value: "number" },
+    { label: "boolean", value: "boolean" },
   ];
 
   const saveDeleteButton = (
@@ -69,7 +69,7 @@ export function ValueTypeDisplay({
         }
       }}
     >
-      {shouldEdit.get() ? 'Save' : 'Delete'}
+      {shouldEdit.get() ? "Save" : "Delete"}
     </button>
   ) as HTMLButtonElement;
 
@@ -83,13 +83,13 @@ export function ValueTypeDisplay({
     }
   });
   shouldEdit.subscribe(() => {
-    const label = shouldEdit.get() ? 'Save' : 'Delete';
+    const label = shouldEdit.get() ? "Save" : "Delete";
     if (saveDeleteButton.innerText !== label) {
       saveDeleteButton.innerText = label;
     }
   });
 
-  return reactiveComponent([state, shouldEdit], () => {
+  return reactiveComponent([state, shouldEdit], {}, () => {
     const isEditing = shouldEdit.get();
 
     return (
@@ -113,7 +113,7 @@ export function ValueTypeDisplay({
             shouldEdit.set(!isEditing);
           }}
         >
-          {isEditing ? 'Cancel' : 'Edit'}
+          {isEditing ? "Cancel" : "Edit"}
         </button>
         {saveDeleteButton}
       </div>

@@ -1,6 +1,6 @@
-import { Temporal } from 'temporal-polyfill';
+import { Temporal } from "temporal-polyfill";
 
-import type { Link, LinkType, Tombstone, Value, ValueType } from '../types/types';
+import type { Link, LinkType, Tombstone, Value, ValueType } from "../types/types";
 import type {
   DBITombstone,
   DBIValueType,
@@ -8,7 +8,7 @@ import type {
   DBIValue,
   DBILink,
   DBIEntity,
-} from './types';
+} from "./types";
 
 function newEntity(id: string): DBIEntity {
   return {

@@ -1,13 +1,13 @@
-import { v7 as uuidv7 } from 'uuid';
+import { v7 as uuidv7 } from "uuid";
 
-import { initializePortal, removePortal, startPortal } from './portal';
+import { initializePortal, removePortal, startPortal } from "./portal";
 
 export default class DBOEPortalElement extends HTMLElement {
   id = uuidv7();
 
   constructor() {
     super();
-    this.setAttribute('tabindex', '0'); // Make element focusable
+    this.setAttribute("tabindex", "0"); // Make element focusable
   }
 
   async connectedCallback() {
@@ -15,7 +15,7 @@ export default class DBOEPortalElement extends HTMLElement {
       await initializePortal(this);
       startPortal(this.id);
     } catch (error) {
-      throw new Error('Error connecting portal element', { cause: error });
+      throw new Error("Error connecting portal element", { cause: error });
     }
   }
 

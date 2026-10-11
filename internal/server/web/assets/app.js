@@ -200,7 +200,7 @@ function Menu({ portal, x, y }) {
     /* @__PURE__ */ jsx(
       "button",
       {
-        onclick: (event) => {
+        onclick: () => {
           console.log("Make New Entity");
           const menu = document.getElementById("meta-menu");
           if (menu) {
@@ -213,7 +213,7 @@ function Menu({ portal, x, y }) {
     /* @__PURE__ */ jsx(
       "button",
       {
-        onclick: (event) => {
+        onclick: () => {
           console.log("Open Search Screen");
           const menu = document.getElementById("meta-menu");
           if (menu) {

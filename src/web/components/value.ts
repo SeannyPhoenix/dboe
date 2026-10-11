@@ -1,7 +1,8 @@
-import { v7 as uuidV7 } from 'uuid';
+import { Temporal } from "temporal-polyfill";
+import { v7 as uuidV7 } from "uuid";
 
-import { Value, ID } from '../../db/types/types';
-import { AppState } from '../appState/appState';
+import { Value, ID } from "../../db/types/types";
+import { AppState } from "../appState/appState";
 
 type ValueComponents = {
   entity?: string;
@@ -16,7 +17,7 @@ export function newValue(state: AppState, { entity, type, value }: ValueComponen
 
   const newVal = {
     id: uuidV7(),
-    timestamp: new Date(),
+    timestamp: Temporal.Now.instant(),
     entity,
     type,
     value,

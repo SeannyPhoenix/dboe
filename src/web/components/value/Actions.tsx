@@ -1,5 +1,5 @@
-import { DBIValue } from '../../../db/DBIndex/types';
-import { createReactive } from '../../reactive/reactive';
+import { DBIValue } from "../../../db/DBIndex/types";
+import { createReactive } from "../../reactive/reactive";
 
 type Props = {
   value: DBIValue;
@@ -7,17 +7,17 @@ type Props = {
 
 export default function Actions({ value }: Props) {
   const valueString = String(value.value);
-  const buttonText = createReactive('Copy');
+  const buttonText = createReactive("Copy");
 
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(valueString);
-      buttonText.set('✓');
-      setTimeout(() => buttonText.set('Copy'), 2000);
+      buttonText.set("✓");
+      setTimeout(() => buttonText.set("Copy"), 2000);
     } catch (err) {
-      console.error('Failed to copy text: ', err);
-      buttonText.set('x');
-      setTimeout(() => buttonText.set('Copy'), 2000);
+      console.error("Failed to copy text: ", err);
+      buttonText.set("x");
+      setTimeout(() => buttonText.set("Copy"), 2000);
     }
   };
 

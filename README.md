@@ -13,8 +13,8 @@ A very popular data example used in teaching programming is `Person`. Following 
 ```go
 type Person struct {
 	Name     string
-  Birthday time.Time
-  Email    string
+	Birthday time.Time
+	Email    string
 }
 ```
 
@@ -22,9 +22,9 @@ Immediately we can see a compression of data. Take the `name` field for example.
 
 ```go
 type Name struct {
-  First  string
-  Middle string
-  Last   string
+	First  string
+	Middle string
+	Last   string
 }
 ```
 
@@ -32,9 +32,9 @@ But most people don't actually go by their full name. In fact, many people have 
 
 ```go
 type Name struct {
-  ...
-  RegularName string
-  Nickname    string
+	// ...
+	RegularName string
+	Nickname    string
 }
 ```
 
@@ -42,8 +42,8 @@ But that only covers one culture of names. What about a Japanese name?
 
 ```go
 type JapaneseName struct {
-  Family string
-  Given  string
+	Family string
+	Given  string
 }
 ```
 

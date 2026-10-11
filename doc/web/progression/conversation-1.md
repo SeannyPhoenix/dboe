@@ -224,7 +224,7 @@ The backend is built on **record-log graph semantics**, not traditional relation
 Mirror the backend in TypeScript:
 
 ```typescript
-type RecordType = 'entity' | 'value' | 'link' | 'tombstone';
+type RecordType = "entity" | "value" | "link" | "tombstone";
 
 interface Record {
   t: RecordType;

@@ -1,7 +1,7 @@
-import { start } from './start';
+import { start } from "./start";
 
-if (!('SharedWorkerGlobalScope' in self && self instanceof SharedWorkerGlobalScope)) {
-  throw new Error('Not running in SharedWorkerGlobalScope');
+if (!("SharedWorkerGlobalScope" in self && self instanceof SharedWorkerGlobalScope)) {
+  throw new Error("Not running in SharedWorkerGlobalScope");
 }
 
 self.onconnect = (event: MessageEvent) => {
@@ -51,7 +51,7 @@ const handlers = {
 type APIRequest<H extends Handlers> = {
   [N in keyof H]: {
     name: N;
-    data: Parameters<H[N]>[0]['data'];
+    data: Parameters<H[N]>[0]["data"];
   };
 }[keyof H];
 

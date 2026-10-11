@@ -1,8 +1,8 @@
-import { Temporal } from 'temporal-polyfill';
+import { Temporal } from "temporal-polyfill";
 
 export type ID = string;
 
-export const serDes = ['string', 'number', 'boolean'] as const;
+export const serDes = ["string", "number", "boolean"] as const;
 
 export type ValueType = {
   id: ID;

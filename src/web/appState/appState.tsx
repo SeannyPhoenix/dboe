@@ -1,7 +1,7 @@
-import { DBIndex } from '../../db/DBIndex/DBIndex';
-import { Database } from '../../db/localStorage/database';
-import { readTombstones, readValueTypes, readValues } from '../../db/localStorage/journal';
-import { createReactive, type Reactive } from '../reactive/reactive';
+import { DBIndex } from "../../db/DBIndex/DBIndex";
+import { Database } from "../../db/localStorage/database";
+import { readTombstones, readValueTypes, readValues } from "../../db/localStorage/journal";
+import { createReactive, type Reactive } from "../reactive/reactive";
 
 export type AppStateData = {
   database: Database;
@@ -39,7 +39,7 @@ export function getAppState(): AppState {
 export function exportDatabase() {
   const state = getAppState();
   const data = JSON.stringify(state.get().database.getData());
-  const blob = new Blob([data], { type: 'application/json' });
+  const blob = new Blob([data], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const name = `DBOE ${new Date().toISOString()}.json`;
   const a = (<a href={url} download={name} />) as HTMLAnchorElement;

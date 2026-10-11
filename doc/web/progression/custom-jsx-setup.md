@@ -84,14 +84,14 @@ Minimal shape:
 ```ts
 export function jsx(type: unknown, props: Record<string, unknown>): Node {
   // create element/component result
-  throw new Error('implement');
+  throw new Error("implement");
 }
 
 export const jsxs = jsx;
 
 export function Fragment(props: { children?: unknown }): Node {
   // build and return fragment
-  throw new Error('implement');
+  throw new Error("implement");
 }
 ```
 
@@ -104,7 +104,7 @@ If your runtime keeps JSX types in a separate file, re-export them from the runt
 Example:
 
 ```ts
-import { JSX } from './html';
+import { JSX } from "./html";
 export type { JSX };
 ```
 
@@ -146,13 +146,13 @@ Create a quick TSX file and run the repository type check/build command.
 Example component:
 
 ```tsx
-import { JSX } from '#client/jsx-runtime';
+import { JSX } from "#client/jsx-runtime";
 
 export function Smoke(): JSX.Element {
   return (
     <>
       <h1>ok</h1>
-      <button onClick={() => console.log('clicked')}>Run</button>
+      <button onClick={() => console.log("clicked")}>Run</button>
     </>
   );
 }

@@ -1,13 +1,13 @@
-import { Temporal } from 'temporal-polyfill';
+import { Temporal } from "temporal-polyfill";
 
-import type { DBIEntity, DBIValue } from '../../../db/DBIndex/types';
-import { createReactive } from '../../reactive/reactive';
-import { Select, SelectOption } from '../form/select/Select';
-import ValueDisplay from '../value/ValueDisplay';
+import type { DBIEntity, DBIValue } from "../../../db/DBIndex/types";
+import { createReactive } from "../../reactive/reactive";
+import { Select, SelectOption } from "../form/select/Select";
+import ValueDisplay from "../value/ValueDisplay";
 
-const BY_TIMESTAMP = 'by timestamp';
-const BY_TYPE_DESCRIPTION = 'by type description';
-const BY_VALUE = 'by value';
+const BY_TIMESTAMP = "by timestamp";
+const BY_TYPE_DESCRIPTION = "by type description";
+const BY_VALUE = "by value";
 type SortBy = typeof BY_TIMESTAMP | typeof BY_TYPE_DESCRIPTION | typeof BY_VALUE;
 
 const sortBySelectorOptions: SelectOption[] = [

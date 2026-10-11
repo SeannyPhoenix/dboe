@@ -1,5 +1,5 @@
-import { getAppState } from '../../appState/appState';
-import EntityDisplay from './EntityDisplay';
+import { getAppState } from "../../appState/appState";
+import EntityDisplay from "./EntityDisplay";
 
 export default function EntityList() {
   const { index } = getAppState().get();

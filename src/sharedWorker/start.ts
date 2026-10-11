@@ -1,4 +1,4 @@
-import type { HandlerProps } from './dboe.shared';
+import type { HandlerProps } from "./dboe.shared";
 
 export async function start({ port }: HandlerProps<null>) {
   port.postMessage({

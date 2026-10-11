@@ -1,6 +1,6 @@
-import { Temporal } from 'temporal-polyfill';
+import { Temporal } from "temporal-polyfill";
 
-import { Value, ID, ValueType, Tombstone } from '../types/types';
+import { Value, ID, ValueType, Tombstone } from "../types/types";
 
 type DB = {
   values: Record<ID, Value>;
@@ -97,23 +97,23 @@ export class Database {
   }
 
   load(): void {
-    const data = localStorage.getItem('database');
+    const data = localStorage.getItem("database");
     if (data) {
       try {
         this.data = JSON.parse(data);
       } catch (error) {
-        console.error('Failed to load database from localStorage:', error);
+        console.error("Failed to load database from localStorage:", error);
       }
     }
   }
 
   save(): void {
-    localStorage.setItem('database', JSON.stringify(this.data));
-    localStorage.setItem('valueTypes', JSON.stringify(Object.values(this.data.valueTypes)));
-    localStorage.setItem('values', JSON.stringify(Object.values(this.data.values)));
-    localStorage.setItem('tombstones', '[]');
-    localStorage.setItem('links', '[]');
-    localStorage.setItem('linkTypes', '[]');
-    localStorage.setItem('history', JSON.stringify(this.data.history));
+    localStorage.setItem("database", JSON.stringify(this.data));
+    localStorage.setItem("valueTypes", JSON.stringify(Object.values(this.data.valueTypes)));
+    localStorage.setItem("values", JSON.stringify(Object.values(this.data.values)));
+    localStorage.setItem("tombstones", "[]");
+    localStorage.setItem("links", "[]");
+    localStorage.setItem("linkTypes", "[]");
+    localStorage.setItem("history", JSON.stringify(this.data.history));
   }
 }

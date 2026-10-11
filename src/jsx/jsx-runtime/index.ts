@@ -1,4 +1,4 @@
-import { JSX, SVG_ELEMENTS, SVG_NS } from './html';
+import { JSX, SVG_ELEMENTS, SVG_NS } from "./html";
 export type { JSX };
 export interface ElementFactory {
   createElement(localName: string): HTMLElement;
@@ -15,12 +15,12 @@ export function setElementFactory(factory: ElementFactory): void {
 
 export function getElementFactory(): ElementFactory {
   if (!elementFactory) {
-    throw new Error('Element factory not set');
+    throw new Error("Element factory not set");
   }
   return elementFactory;
 }
 
-if ('document' in globalThis) {
+if ("document" in globalThis) {
   setElementFactory({
     createElement(localName: string): HTMLElement {
       return document.createElement(localName);
@@ -52,21 +52,21 @@ function jsxElement(type: string, props: JSX.ComponentProps): Node {
     const value = props[name];
 
     switch (name) {
-      case 'children':
+      case "children":
         appendChildren(element, value);
         continue;
-      case 'disabled':
-        if (typeof value === 'boolean') {
+      case "disabled":
+        if (typeof value === "boolean") {
           if (value) {
-            element.setAttribute('disabled', '');
+            element.setAttribute("disabled", "");
           } else {
-            element.removeAttribute('disabled');
+            element.removeAttribute("disabled");
           }
         }
         continue;
-      case 'style':
+      case "style":
         if (
-          typeof value === 'object' &&
+          typeof value === "object" &&
           (element instanceof HTMLElement ||
             element instanceof SVGElement ||
             element instanceof MathMLElement)
@@ -77,7 +77,7 @@ function jsxElement(type: string, props: JSX.ComponentProps): Node {
       default:
     }
 
-    if (name.startsWith('on') && typeof value === 'function') {
+    if (name.startsWith("on") && typeof value === "function") {
       const eventName = name.slice(2).toLowerCase() as keyof HTMLElementEventMap;
       element.addEventListener(eventName, value as EventListener);
       continue;
@@ -95,10 +95,10 @@ export type Type = keyof JSX.IntrinsicElements | JSX.Component;
 
 export function jsx(type: Type, props: JSX.ComponentProps): JSX.Element {
   switch (typeof type) {
-    case 'function':
+    case "function":
       const component = type(props);
       return component ?? Fragment({});
-    case 'string':
+    case "string":
       return jsxElement(type, props);
     default:
       throw new Error(`Unsupported JSX type: ${String(type)}`);

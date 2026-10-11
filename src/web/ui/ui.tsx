@@ -1,5 +1,5 @@
-import Menu from '../components/Menu';
-import DBOEPortalElement from '../portal/DBOEPortalElement';
+import Menu from "../components/Menu";
+import DBOEPortalElement from "../portal/DBOEPortalElement";
 
 export type MouseState = {
   x: number;
@@ -19,7 +19,7 @@ export function updateMouseState(mouse: MouseState, event: MouseEvent) {
 }
 
 export async function initInputController(portal: DBOEPortalElement) {
-  console.log('Initializing input control');
+  console.log("Initializing input control");
   const inputState: InputController = {
     mouse: {
       x: 0,
@@ -35,7 +35,7 @@ export async function initInputController(portal: DBOEPortalElement) {
 
   portal.onmousedown = (event) => {
     updateMouseState(inputState.mouse, event);
-    if (inputState.keys.has('Meta')) {
+    if (inputState.keys.has("Meta")) {
       const { x, y } = inputState.mouse;
       const menu = <Menu portal={portal} x={x} y={y} />;
       if (menu) {
@@ -61,8 +61,8 @@ export async function initInputController(portal: DBOEPortalElement) {
 
   portal.onkeydown = (event) => {
     inputState.keys.add(event.key);
-    if (inputState.keys.has('Escape')) {
-      const menu = document.getElementById('meta-menu');
+    if (inputState.keys.has("Escape")) {
+      const menu = document.getElementById("meta-menu");
       if (menu) {
         portal.removeChild(menu);
       }

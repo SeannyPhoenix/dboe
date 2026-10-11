@@ -1,18 +1,18 @@
-import { Temporal } from 'temporal-polyfill';
-import { v7 as uuidV7 } from 'uuid';
+import { Temporal } from "temporal-polyfill";
+import { v7 as uuidV7 } from "uuid";
 
-import { ValueType } from '../../../db/types/types';
-import { getAppState } from '../../appState/appState';
-import { reactiveComponent } from '../../reactive/component';
-import { createReactive } from '../../reactive/reactive';
-import { ValueTypeDisplay } from './ValueTypeDisplay';
+import { ValueType } from "../../../db/types/types";
+import { getAppState } from "../../appState/appState";
+import { reactiveComponent } from "../../reactive/component";
+import { createReactive } from "../../reactive/reactive";
+import { ValueTypeDisplay } from "./ValueTypeDisplay";
 
 export default function ValueTypes() {
   const state = getAppState();
 
   const draftValueType = createReactive<ValueType | null>(null);
 
-  return reactiveComponent([state, draftValueType], () => {
+  return reactiveComponent([state, draftValueType], {}, () => {
     const draft = draftValueType.get();
 
     return (
@@ -22,11 +22,11 @@ export default function ValueTypes() {
             draftValueType.set({
               id: uuidV7(),
               timestamp: Temporal.Now.instant(),
-              description: '',
-              serde: 'string',
+              description: "",
+              serde: "string",
             });
           }}
-          // disabled={draft !== null}
+        // disabled={draft !== null}
         >
           New Value Type
         </button>

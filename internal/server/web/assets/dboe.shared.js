@@ -11,7 +11,7 @@ if (!("SharedWorkerGlobalScope" in self && self instanceof SharedWorkerGlobalSco
   throw new Error("Not running in SharedWorkerGlobalScope");
 }
 self.onconnect = (event) => {
-  const port = event.ports[0];
+  const [port] = event.ports;
   port.onmessage = (event2) => {
     async function handleRequest({ name, data }, handlers2) {
       try {
@@ -25,7 +25,7 @@ self.onconnect = (event) => {
       }
     }
     const req = event2.data;
-    handleRequest(req, handlers);
+    void handleRequest(req, handlers);
   };
   port.start();
 };
