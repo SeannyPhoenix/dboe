@@ -5,7 +5,7 @@ if (!('SharedWorkerGlobalScope' in self && self instanceof SharedWorkerGlobalSco
 }
 
 self.onconnect = (event: MessageEvent) => {
-  const port = event.ports[0];
+  const [port] = event.ports;
 
   port.onmessage = (event: MessageEvent<APIRequest<any>>) => {
     async function handleRequest({ name, data }: APIRequest<any>, handlers: Handlers) {
@@ -21,7 +21,7 @@ self.onconnect = (event: MessageEvent) => {
       }
     }
     const req = event.data;
-    handleRequest(req, handlers);
+    void handleRequest(req, handlers);
   };
 
   port.start();
