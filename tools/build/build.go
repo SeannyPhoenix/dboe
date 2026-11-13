@@ -18,8 +18,9 @@ func build() int {
 
 	opt := api.BuildOptions{
 		EntryPoints: []string{
-			filepath.Join(root, "src/web/app.tsx"),
+			filepath.Join(root, "src/web/dboe.ts"),
 			filepath.Join(root, "src/sharedWorker/dboe.shared.ts"),
+			filepath.Join(root, "src/serviceWorker/dboe.service.ts"),
 			filepath.Join(root, "src/web/index.html"),
 			filepath.Join(root, "src/web/dboeportal.webmanifest"),
 			filepath.Join(root, "src/web/icons/dboe-portal-icon.svg"),
