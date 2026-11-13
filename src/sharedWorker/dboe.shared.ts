@@ -1,3 +1,4 @@
+import { initDB, deleteDatabase } from "./initDB";
 import { start } from "./start";
 
 if (!("SharedWorkerGlobalScope" in self && self instanceof SharedWorkerGlobalScope)) {
@@ -32,20 +33,21 @@ export type HandlerProps<Data extends Record<string, unknown> | null> = {
   data: Data;
 };
 
-type Handler<Data extends Record<string, unknown>> = ({ port, data }: HandlerProps<Data>) => void;
+export type EmptyData = Record<string, never>;
+
+export type Handler<
+  P extends Record<string, unknown> | null,
+  R extends Record<string, unknown> | void,
+> = ({ port, data }: HandlerProps<P>) => R;
 
 type Handlers = {
-  [name: string]: Handler<any>;
+  [name: string]: Handler<any, any>;
 };
 
 const handlers = {
   start,
-  time: async ({ port }: HandlerProps<null>) => {
-    port.postMessage({
-      success: true,
-      data: new Date().toISOString(),
-    });
-  },
+  initDB,
+  deleteDatabase,
 } as const satisfies Handlers;
 
 type APIRequest<H extends Handlers> = {

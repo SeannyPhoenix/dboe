@@ -1,13 +1,10 @@
-import { v7 as uuidv7 } from "uuid";
-
-import { initializePortal, removePortal, startPortal } from "./portal";
+import { DBOEPortalData, initializePortal, removePortal, startPortal } from "./portal";
 
 export default class DBOEPortalElement extends HTMLElement {
-  id = uuidv7();
+  dboePortalData: DBOEPortalData | null = null;
 
   constructor() {
     super();
-    this.setAttribute("tabindex", "0"); // Make element focusable
   }
 
   async connectedCallback() {
@@ -20,6 +17,8 @@ export default class DBOEPortalElement extends HTMLElement {
   }
 
   disconnectedCallback() {
-    removePortal(this.id);
+    if (this.id) {
+      removePortal(this.id);
+    }
   }
 }

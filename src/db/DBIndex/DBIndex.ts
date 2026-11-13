@@ -1,5 +1,6 @@
 import { Temporal } from "temporal-polyfill";
 
+import { RecordSet } from "../recordSet";
 import type { Link, LinkType, Tombstone, Value, ValueType } from "../types/types";
 import type {
   DBITombstone,
@@ -24,6 +25,12 @@ export class DBIndex {
   private valueTypes: Map<string, DBIValueType> = new Map();
   private linkTypes: Map<string, DBILinkType> = new Map();
   private entities: Map<string, DBIEntity> = new Map();
+
+  constructor(rs?: RecordSet) {
+    if (rs) {
+      this.addRecordSet(rs);
+    }
+  }
 
   addTombstone(t: Tombstone) {
     if (this.isTombstoned(t.id)) {
@@ -179,6 +186,14 @@ export class DBIndex {
     for (const l of ls) {
       this.addLink(l);
     }
+  }
+
+  addRecordSet({ tombstones: tombsones, valueTypes, values, linkTypes, links }: RecordSet) {
+    this.addTombstones(tombsones);
+    this.addValueTypes(valueTypes);
+    this.addValues(values);
+    this.addLinkTypes(linkTypes);
+    this.addLinks(links);
   }
 
   isTombstoned(id: string): boolean {
