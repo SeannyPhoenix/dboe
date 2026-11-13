@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg width="512" height="512" viewBox="0 0 512 512" version="1.1" id="svg1"
+   inkscape:version="1.4 (e7c3feb1, 2024-10-09)" sodipodi:docname="dboe-portal-icon.svg"
+   inkscape:export-filename="192.png" inkscape:export-xdpi="36" inkscape:export-ydpi="36"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+   <sodipodi:namedview id="namedview1" pagecolor="#505050" bordercolor="#eeeeee" borderopacity="1"
+      inkscape:showpageshadow="0" inkscape:pageopacity="0" inkscape:pagecheckerboard="0" inkscape:deskcolor="#505050"
+      inkscape:document-units="px" inkscape:zoom="0.56740177" inkscape:cx="271.41262" inkscape:cy="219.42124"
+      inkscape:window-width="1200" inkscape:window-height="808" inkscape:window-x="2043" inkscape:window-y="1648"
+      inkscape:window-maximized="0" inkscape:current-layer="layer1" />
+   <defs id="defs1" />
+   <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1">
+      <circle style="fill:#000000;stroke:#000000;stroke-width:5.27275" id="path1" cx="155.92358" cy="328.7142"
+         r="101.28722" />
+      <circle style="fill:#000000;stroke:#000000;stroke-width:2.63637" id="path1-4" cx="303.12033" cy="158.94609"
+         r="50.643612" />
+      <ellipse style="fill:#ffffff;stroke:#000000;stroke-width:2.34718" id="path2" cx="202.06754" cy="274.59769"
+         rx="11.816855" ry="11.816856" />
+      <ellipse style="fill:#ffffff;stroke:#000000;stroke-width:2.34718" id="path2-4" cx="285.13565" cy="183.36812"
+         rx="11.816855" ry="11.816856" />
+      <ellipse style="fill:#ffffff;stroke:#000000;stroke-width:2.34718" id="path2-30" cx="332.68237" cy="147.16098"
+         rx="11.816855" ry="11.816856" />
+      <ellipse style="fill:#ffffff;stroke:#000000;stroke-width:2.34718" id="path2-5" cx="310.58905" cy="129.10342"
+         rx="11.816855" ry="11.816856" />
+      <ellipse style="fill:#ffffff;stroke:#000000;stroke-width:2.34718" id="path2-3" cx="228.35696" cy="304.49866"
+         rx="11.816855" ry="11.816856" />
+      <ellipse style="fill:#ffffff;stroke:#000000;stroke-width:2.34718" id="path2-3-6" cx="228.44901" cy="347.95129"
+         rx="11.816855" ry="11.816856" />
+      <ellipse style="fill:#ffffff;stroke:#000000;stroke-width:2.34718" id="path2-3-4" cx="202.31323" cy="385.50745"
+         rx="11.816855" ry="11.816856" />
+      <rect style="fill:#000000;stroke:#000000;stroke-width:5.19618" id="rect5" width="133.70459" height="21.978838"
+         x="279.59058" y="383.25735" />
+      <rect style="fill:#000000;stroke:#000000;stroke-width:5.19618" id="rect5-5" width="133.70459" height="21.978838"
+         x="280.1123" y="344.5126" />
+      <rect style="fill:#000000;stroke:#000000;stroke-width:4.31823" id="rect5-5-4" width="88.793297" height="22.856781"
+         x="367.69193" y="82.159119" />
+      <rect style="fill:#000000;stroke:#000000;stroke-width:4.31823" id="rect5-5-4-3" width="88.793297"
+         height="22.856781" x="369.04761" y="127.79134" />
+      <rect style="fill:#000000;stroke:#000000;stroke-width:5.19618" id="rect5-59" width="133.70459" height="21.978838"
+         x="280.1123" y="293.34317" />
+      <path style="fill:#000000;stroke:#000000;stroke-width:5.19618" d="m 228.30657,300.83671 67.76808,1.83157"
+         id="path5" />
+      <path style="fill:#000000;stroke:#000000;stroke-width:5.19618" d="m 231.50784,349.83352 67.76808,1.83157"
+         id="path5-3" />
+      <path style="fill:#000000;stroke:#000000;stroke-width:5.19618" d="m 210.61987,388.13036 67.76808,1.83158"
+         id="path5-8" />
+      <path style="fill:#000000;stroke:#000000;stroke-width:5.19618" d="M 200.83302,266.03687 281.4221,183.61623"
+         id="path6" />
+      <path style="fill:#000000;stroke:#000000;stroke-width:5.19618" d="M 308.89564,119.5113 374.83215,92.037755"
+         id="path7" />
+      <path style="fill:#000000;stroke:#000000;stroke-width:5.19618" d="m 332.70605,143.3217 40.29452,-5.49471"
+         id="path8" />
+   </g>
+</svg>

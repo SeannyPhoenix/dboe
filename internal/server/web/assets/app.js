@@ -126,17 +126,6 @@ function Fragment(props) {
 function jsxElement(type, props) {
   const factory = getElementFactory();
   const element = type in SVG_ELEMENTS ? factory.createElementNS(SVG_NS, type) : factory.createElement(type);
-  switch (type) {
-    case "dboe-view":
-      if (!(element instanceof HTMLElement)) {
-        throw new Error("dboe-view must be an HTMLElement");
-      }
-      if ("recordSet" in props) {
-        element.dboeViewData.records = props.recordSet;
-        delete props.recordSet;
-      }
-      break;
-  }
   for (const name in props) {
     const value = props[name];
     switch (name) {
