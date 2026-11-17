@@ -2,34 +2,67 @@
 if (!("ServiceWorkerGlobalScope" in self && self instanceof ServiceWorkerGlobalScope)) {
   throw new Error("Not running in ServiceWorkerGlobalScope");
 }
-var addResourcesToCache = async (resources) => {
-  const cache = await caches.open("v1");
-  await cache.addAll(resources);
-  console.log("Resources added to cache:", resources);
-};
-self.oninstall = (event) => {
-  event.waitUntil(
-    addResourcesToCache([
-      "/",
-      "/index.html",
-      "/dboe.js",
-      "/dboe.css",
-      "/dboe.shared.js",
-      "/dboeportal.webmanifest"
-    ])
-  );
-};
-self.onfetch = async (event) => {
-  event.respondWith(intercept(event.request));
-};
-async function intercept(request) {
-  try {
-    const match = await caches.match(request);
-    if (match) {
-      return match;
-    }
-  } catch (error) {
-    console.error("Error intercepting request:", error);
+var sw = self;
+var CACHE_VERSION = 1;
+var CACHE_PREFIX = "dboe-";
+var CACHE_NAME = `${CACHE_PREFIX}v${CACHE_VERSION}`;
+var PRECACHE_URLS = [
+  "/",
+  "/index.html",
+  "/dboe.js",
+  "/dboe.css",
+  "/dboe.shared.js",
+  "/dboe.webmanifest",
+  "/dboe-icon-192.png",
+  "/dboe-icon-512.png",
+  "/Monaspace Xenon Var.woff2",
+  "/Monaspace Neon Var.woff2"
+];
+sw.addEventListener("install", (event) => {
+  console.log("Service worker installing...");
+  event.waitUntil(precache().then(() => sw.skipWaiting()));
+});
+sw.addEventListener("activate", (event) => {
+  console.log("Service worker activating...");
+  event.waitUntil(deleteOldCaches().then(() => sw.clients.claim()));
+});
+sw.addEventListener("fetch", (event) => {
+  const { request } = event;
+  if (request.method !== "GET" || new URL(request.url).origin !== sw.location.origin) {
+    return;
   }
-  return fetch(request);
+  event.respondWith(intercept(event));
+});
+async function precache() {
+  const cache = await caches.open(CACHE_NAME);
+  await cache.addAll(PRECACHE_URLS);
+}
+async function deleteOldCaches() {
+  const keys = await caches.keys();
+  await Promise.all(
+    keys.filter((key) => key.startsWith(CACHE_PREFIX) && key !== CACHE_NAME).map((key) => caches.delete(key))
+  );
+}
+async function intercept(event) {
+  const { request } = event;
+  const cache = await caches.open(CACHE_NAME);
+  const cached = await cache.match(request);
+  if (cached) {
+    return cached;
+  }
+  try {
+    const response = await fetch(request);
+    if (response.ok && response.type === "basic") {
+      event.waitUntil(cache.put(request, response.clone()));
+    }
+    return response;
+  } catch (error) {
+    if (request.mode === "navigate") {
+      const fallback = await cache.match("/index.html");
+      if (fallback) {
+        return fallback;
+      }
+    }
+    throw error;
+  }
 }

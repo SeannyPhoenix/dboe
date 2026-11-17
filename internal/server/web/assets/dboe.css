@@ -54,13 +54,13 @@ h6 {
 /* src/web/styles/fonts/fonts.css */
 @font-face {
   font-family: "Monaspace Xenon";
-  src: url("./Monaspace Xenon Var-EMPXSUJW.woff2") format("woff2");
+  src: url("./Monaspace Xenon Var.woff2") format("woff2");
   font-weight: 200 800;
   font-stretch: 100 125;
 }
 @font-face {
   font-family: "Monaspace Neon";
-  src: url("./Monaspace Neon Var-PHOGLE6K.woff2") format("woff2");
+  src: url("./Monaspace Neon Var.woff2") format("woff2");
   font-weight: 200 800;
   font-stretch: 100 125;
 }
