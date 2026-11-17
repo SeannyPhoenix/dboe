@@ -79,6 +79,9 @@ h6 {
   background-color: #333333;
   font-family: "Monaspace Neon", monospace;
 }
+dboe-portal {
+  font-family: "Monaspace Neon", monospace;
+}
 .surface {
   display: flex;
   position: absolute;
