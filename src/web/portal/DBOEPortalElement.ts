@@ -1,4 +1,4 @@
-import { DBOEPortalData, initializePortal, removePortal, startPortal } from "./portal";
+import { DBOEPortalData, initializePortal, startPortal } from "./portal";
 
 export default class DBOEPortalElement extends HTMLElement {
   dboePortalData: DBOEPortalData | null = null;
@@ -10,15 +10,15 @@ export default class DBOEPortalElement extends HTMLElement {
   async connectedCallback() {
     try {
       await initializePortal(this);
-      startPortal(this.id);
+      startPortal(this);
     } catch (error) {
       throw new Error("Error connecting portal element", { cause: error });
     }
   }
 
-  disconnectedCallback() {
-    if (this.id) {
-      removePortal(this.id);
-    }
+  disconnectedCallback() {}
+
+  isInitialized() {
+    return !!this.dboePortalData && !!this.id;
   }
 }

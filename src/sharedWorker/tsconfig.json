@@ -6,7 +6,10 @@
   "include": ["**/*.ts"],
   "references": [
     {
-      "path": "../db"
+      "path": "../idb",
+    },
+    {
+      "path": "../dboe"
     }
   ]
 }

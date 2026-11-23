@@ -6,5 +6,8 @@ export default defineConfig({
     typeAware: true,
     typeCheck: true,
   },
+  rules: {
+    "no-param-reassign": "error",
+  },
   ignorePatterns: ["internal/server/web"],
 });

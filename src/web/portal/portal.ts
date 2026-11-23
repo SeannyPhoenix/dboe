@@ -1,6 +1,7 @@
-import { v7 as uuidV7 } from "uuid";
+import { v7 as uuidV7, validate } from "uuid";
 
 import type { APIRequestH } from "../../sharedWorker/dboe.shared";
+import { debugError, debugLog } from "../logging/log";
 import { initInputController, type InputController } from "../ui/ui";
 import { DBOEViewData } from "../view/view";
 import DBOEPortalElement from "./DBOEPortalElement";
@@ -12,18 +13,22 @@ export type DBOEPortalData = {
   views: DBOEViewData[];
 };
 
-const portals = new Map<string, DBOEPortalData>();
-
-export function newPortalId(): string {
-  return `portal_${uuidV7()}`;
-}
+const SINGLETON_PORTAL_ERROR = new Error("Only one portal may exist in the DOM at a time");
 
 export async function initializePortal(portalElement: DBOEPortalElement) {
-  const id = newPortalId();
-  portalElement.id = id;
-  portalElement.setAttribute("tabindex", "0"); // Make element focusable
+  const portals = document.getElementsByTagName("dboe-portal");
+  if (portals.length > 1) {
+    debugError(SINGLETON_PORTAL_ERROR.message);
+    portalElement.remove();
+    throw SINGLETON_PORTAL_ERROR;
+  }
 
-  console.log("Initializing portal with ID:", id);
+  if (!validate(portalElement.id)) {
+    portalElement.id = uuidV7();
+  }
+  debugLog(`Initializing portal with ID ${portalElement.id}`);
+
+  portalElement.setAttribute("tabindex", "0"); // Make element focusable
 
   const sharedWorkerPromise = initSharedWorker();
   const inputControlPromise = initInputController(portalElement);
@@ -44,7 +49,6 @@ export async function initializePortal(portalElement: DBOEPortalElement) {
         inputControl,
         views: [],
       };
-      portals.set(id, portalData);
       portalElement.dboePortalData = portalData;
     }
   } catch (error) {
@@ -85,47 +89,21 @@ async function initSharedWorker() {
   }
 }
 
-export function removePortal(id: string) {
-  const portal = portals.get(id);
-  if (!portal) {
-    throw new Error(`No portal found with ID: ${id}`);
+export function startPortal(portalElement: DBOEPortalElement) {
+  if (!portalElement.isInitialized()) {
+    throw new Error("Portal element is not initialized");
   }
 
-  portal.sharedWorker.port.close();
-  portals.delete(id);
-  console.log("Portal removed with ID:", id);
-}
+  const id = portalElement.id;
 
-export function startPortal(id: string) {
-  const portal = portals.get(id);
-  if (!portal) {
-    throw new Error(`No portal found with ID: ${id}`);
-  }
-
-  const { port } = portal.sharedWorker;
+  const { port } = portalElement.dboePortalData!.sharedWorker;
   port.onmessage = (event) => {
     console.log(event.data);
   };
   port.start();
 
-  const initDBReq: APIRequestH = { name: "initDB", data: {} };
+  const initDBReq: APIRequestH = { name: "ensureDB", data: {} };
 
   port.postMessage(initDBReq);
   console.log("Portal started with ID:", id);
-}
-
-export function getPortal(id: string) {
-  const portal = portals.get(id);
-  if (!portal) {
-    throw new Error(`No portal found with ID: ${id}`);
-  }
-  return portal;
-}
-
-export function getLocalPortal() {
-  const portal = document.getElementsByTagName("dboe-portal");
-  if (portal.length === 0) {
-    throw new Error("No local portal found");
-  }
-  return getPortal(portal[0].id);
 }

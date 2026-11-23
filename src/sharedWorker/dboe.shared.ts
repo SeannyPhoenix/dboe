@@ -1,13 +1,10 @@
-import { initDB, deleteDatabase } from "./initDB";
 import { start } from "./start";
 
 if (!("SharedWorkerGlobalScope" in self && self instanceof SharedWorkerGlobalScope)) {
   throw new Error("Not running in SharedWorkerGlobalScope");
 }
 
-self.onconnect = (event: MessageEvent) => {
-  const [port] = event.ports;
-
+self.onconnect = ({ ports: [port] }: MessageEvent) => {
   port.onmessage = (event: MessageEvent<APIRequest<any>>) => {
     async function handleRequest({ name, data }: APIRequest<any>, handlers: Handlers) {
       try {
@@ -21,11 +18,9 @@ self.onconnect = (event: MessageEvent) => {
         port.postMessage({ error: (error as Error).message });
       }
     }
-    const req = event.data;
-    void handleRequest(req, handlers);
-  };
 
-  port.start();
+    void handleRequest(event.data, handlers);
+  };
 };
 
 export type HandlerProps<Data extends Record<string, unknown> | null> = {
@@ -46,8 +41,6 @@ type Handlers = {
 
 const handlers = {
   start,
-  initDB,
-  deleteDatabase,
 } as const satisfies Handlers;
 
 type APIRequest<H extends Handlers> = {
